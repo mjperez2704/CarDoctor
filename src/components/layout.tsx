@@ -1,7 +1,6 @@
 import {
   Briefcase,
   Calculator,
-  History,
   LayoutDashboard,
   Package,
   PanelLeft,
@@ -10,7 +9,8 @@ import {
   Users,
   Wrench,
 } from "lucide-react";
-
+import Link from "next/link";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -20,15 +20,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import Link from "next/link";
-import { Dashboard } from "@/components/dashboard";
-import { getAuditLogs, getInventory } from "@/lib/data";
 
-export default async function HomePage() {
-  const inventoryData = getInventory();
-  const auditLogsData = getAuditLogs();
-
+export function AppLayout({
+  children,
+  title,
+}: {
+  children: React.ReactNode;
+  title: string;
+}) {
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
@@ -42,7 +41,7 @@ export default async function HomePage() {
           </Link>
           <Link
             href="/"
-            className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
             title="Dashboard"
           >
             <LayoutDashboard className="h-5 w-5" />
@@ -51,7 +50,7 @@ export default async function HomePage() {
           <Link
             href="/employees"
             className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-             title="Empleados"
+            title="Empleados"
           >
             <Users className="h-5 w-5" />
             <span className="sr-only">Empleados</span>
@@ -72,7 +71,7 @@ export default async function HomePage() {
             <Wrench className="h-5 w-5" />
             <span className="sr-only">Reparaciones</span>
           </Link>
-           <Link
+          <Link
             href="/purchases"
             className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
             title="Compras"
@@ -119,7 +118,7 @@ export default async function HomePage() {
                 </Link>
                 <Link
                   href="/"
-                  className="flex items-center gap-4 px-2.5 text-foreground"
+                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                 >
                   <LayoutDashboard className="h-5 w-5" />
                   Dashboard
@@ -145,7 +144,7 @@ export default async function HomePage() {
                   <Wrench className="h-5 w-5" />
                   Reparaciones
                 </Link>
-                <Link
+                 <Link
                   href="/purchases"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                 >
@@ -170,7 +169,7 @@ export default async function HomePage() {
             </SheetContent>
           </Sheet>
           <div className="relative ml-auto flex-1 md:grow-0">
-            <h1 className="text-lg font-semibold">TrackFlow</h1>
+            <h1 className="text-lg font-semibold">{title}</h1>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -193,10 +192,7 @@ export default async function HomePage() {
           </DropdownMenu>
         </header>
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-          <Dashboard
-            initialInventory={inventoryData}
-            initialAuditLogs={auditLogsData}
-          />
+          {children}
         </main>
       </div>
     </div>
