@@ -32,11 +32,11 @@ import type { InventoryItem, MovementLog } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
-  itemId: z.string().min(1, "Please select an item."),
-  quantity: z.coerce.number().int().min(1, "Quantity must be at least 1."),
-  origin: z.string().min(1, "Origin is required."),
-  destination: z.string().min(1, "Destination is required."),
-  reason: z.string().min(1, "Reason is required."),
+  itemId: z.string().min(1, "Por favor seleccione un artículo."),
+  quantity: z.coerce.number().int().min(1, "La cantidad debe ser al menos 1."),
+  origin: z.string().min(1, "El origen es requerido."),
+  destination: z.string().min(1, "El destino es requerido."),
+  reason: z.string().min(1, "La razón es requerida."),
   osId: z.string().optional(),
 });
 
@@ -63,13 +63,13 @@ export function MovementForm({ inventory, onSave }: MovementFormProps) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Selected item not found.",
+        description: "Artículo seleccionado no encontrado.",
       });
       return;
     }
 
     const { updatedItem, newLog } = addMovement(selectedItem, values.quantity, {
-      user: "user",
+      user: "usuario",
       origin: values.origin,
       destination: values.destination,
       reason: values.reason,
@@ -79,8 +79,8 @@ export function MovementForm({ inventory, onSave }: MovementFormProps) {
     onSave(updatedItem, newLog);
 
     toast({
-      title: "Movement Saved",
-      description: `Logged movement of ${values.quantity} x ${selectedItem.name}.`,
+      title: "Movimiento Guardado",
+      description: `Se registró el movimiento de ${values.quantity} x ${selectedItem.name}.`,
     });
     form.reset();
   }
@@ -88,9 +88,9 @@ export function MovementForm({ inventory, onSave }: MovementFormProps) {
   return (
     <>
       <SheetHeader>
-        <SheetTitle>Add Inventory Movement</SheetTitle>
+        <SheetTitle>Agregar Movimiento de Inventario</SheetTitle>
         <SheetDescription>
-          Log a new stock movement for any item.
+          Registra un nuevo movimiento de stock para cualquier artículo.
         </SheetDescription>
       </SheetHeader>
       <Form {...form}>
@@ -103,14 +103,14 @@ export function MovementForm({ inventory, onSave }: MovementFormProps) {
             name="itemId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Object/Item</FormLabel>
+                <FormLabel>Objeto/Artículo</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select an item" />
+                      <SelectValue placeholder="Seleccione un artículo" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -131,7 +131,7 @@ export function MovementForm({ inventory, onSave }: MovementFormProps) {
             name="quantity"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Quantity</FormLabel>
+                <FormLabel>Cantidad</FormLabel>
                 <FormControl>
                   <Input type="number" {...field} />
                 </FormControl>
@@ -145,14 +145,14 @@ export function MovementForm({ inventory, onSave }: MovementFormProps) {
             name="origin"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Origin</FormLabel>
+                <FormLabel>Origen</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select origin" />
+                      <SelectValue placeholder="Seleccione el origen" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -160,8 +160,8 @@ export function MovementForm({ inventory, onSave }: MovementFormProps) {
                     <SelectItem value="Vitrina">Vitrina</SelectItem>
                     <SelectItem value="Estaciones">Estaciones</SelectItem>
                     <SelectItem value="Almacén">Almacén</SelectItem>
-                    <SelectItem value="Supplier">Supplier</SelectItem>
-                    <SelectItem value="Repair Bay">Repair Bay</SelectItem>
+                    <SelectItem value="Proveedor">Proveedor</SelectItem>
+                    <SelectItem value="Bahía de Reparación">Bahía de Reparación</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -174,14 +174,14 @@ export function MovementForm({ inventory, onSave }: MovementFormProps) {
             name="destination"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Destination</FormLabel>
+                <FormLabel>Destino</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select destination" />
+                      <SelectValue placeholder="Seleccione el destino" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -189,8 +189,8 @@ export function MovementForm({ inventory, onSave }: MovementFormProps) {
                     <SelectItem value="Vitrina">Vitrina</SelectItem>
                     <SelectItem value="Estaciones">Estaciones</SelectItem>
                     <SelectItem value="Almacén">Almacén</SelectItem>
-                    <SelectItem value="Repair Bay">Repair Bay</SelectItem>
-                    <SelectItem value="Customer">Customer</SelectItem>
+                    <SelectItem value="Bahía de Reparación">Bahía de Reparación</SelectItem>
+                    <SelectItem value="Cliente">Cliente</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -203,22 +203,22 @@ export function MovementForm({ inventory, onSave }: MovementFormProps) {
             name="reason"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Reason</FormLabel>
+                <FormLabel>Razón</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a reason" />
+                      <SelectValue placeholder="Seleccione una razón" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="Initial Stock">Initial Stock</SelectItem>
-                    <SelectItem value="Sale">Sale</SelectItem>
-                    <SelectItem value="Return">Return</SelectItem>
-                    <SelectItem value="Adjustment">Adjustment</SelectItem>
-                    <SelectItem value="Transfer">Transfer</SelectItem>
+                    <SelectItem value="Stock Inicial">Stock Inicial</SelectItem>
+                    <SelectItem value="Venta">Venta</SelectItem>
+                    <SelectItem value="Devolución">Devolución</SelectItem>
+                    <SelectItem value="Ajuste">Ajuste</SelectItem>
+                    <SelectItem value="Transferencia">Transferencia</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -231,16 +231,16 @@ export function MovementForm({ inventory, onSave }: MovementFormProps) {
             name="osId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>OS ID (Optional)</FormLabel>
+                <FormLabel>ID de OS (Opcional)</FormLabel>
                 <FormControl>
-                  <Input placeholder="e.g., OS-12345" {...field} />
+                  <Input placeholder="ej., OS-12345" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
           <SheetFooter>
-            <Button type="submit">Save Movement</Button>
+            <Button type="submit">Guardar Movimiento</Button>
           </SheetFooter>
         </form>
       </Form>

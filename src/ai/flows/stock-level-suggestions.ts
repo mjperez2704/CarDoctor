@@ -12,19 +12,19 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const SuggestStockLevelsInputSchema = z.object({
-  location: z.string().describe('The location for which to suggest stock levels.'),
-  objectType: z.string().describe('The type of object (e.g., part, accessory, SIM, equipment).'),
-  historicalData: z.string().describe('Historical data of stock movements, as a string.'),
+  location: z.string().describe('La ubicación para la que se sugieren los niveles de stock.'),
+  objectType: z.string().describe('El tipo de objeto (por ejemplo, parte, accesorio, SIM, equipo).'),
+  historicalData: z.string().describe('Datos históricos de movimientos de stock, como una cadena de texto.'),
 });
 export type SuggestStockLevelsInput = z.infer<typeof SuggestStockLevelsInputSchema>;
 
 const SuggestStockLevelsOutputSchema = z.object({
   suggestedLevel: z
     .number()
-    .describe('The suggested optimal stock level for the location.'),
+    .describe('El nivel de stock óptimo sugerido para la ubicación.'),
   reasoning: z
     .string()
-    .describe('The reasoning behind the suggested stock level.'),
+    .describe('El razonamiento detrás del nivel de stock sugerido.'),
 });
 export type SuggestStockLevelsOutput = z.infer<typeof SuggestStockLevelsOutputSchema>;
 
@@ -38,13 +38,13 @@ const prompt = ai.definePrompt({
   name: 'suggestStockLevelsPrompt',
   input: {schema: SuggestStockLevelsInputSchema},
   output: {schema: SuggestStockLevelsOutputSchema},
-  prompt: `You are an expert inventory manager. Analyze the historical stock movement data for the following location and object type to suggest an optimal stock level.
+  prompt: `Eres un experto en gestión de inventario. Analiza los datos históricos de movimiento de stock para la siguiente ubicación y tipo de objeto para sugerir un nivel de stock óptimo.
 
-Location: {{location}}
-Object Type: {{objectType}}
-Historical Data: {{historicalData}}
+Ubicación: {{location}}
+Tipo de objeto: {{objectType}}
+Datos Históricos: {{historicalData}}
 
-Based on this data, what is the optimal stock level to minimize shortages and overstocking? Explain your reasoning.
+Basado en estos datos, ¿cuál es el nivel de stock óptimo para minimizar la escasez y el exceso de existencias? Explica tu razonamiento.
 `,
 });
 

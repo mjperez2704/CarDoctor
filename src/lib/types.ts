@@ -1,7 +1,7 @@
 export type InventoryItem = {
   id: string;
   name: string;
-  type: "Part" | "Accessory" | "SIM" | "Equipment";
+  type: "Parte" | "Accesorio" | "SIM" | "Equipo";
   location: "Tablero" | "Vitrina" | "Estaciones" | "Almacén";
   quantity: number;
   substate: string;

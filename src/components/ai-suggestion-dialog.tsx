@@ -47,7 +47,7 @@ export function AiSuggestionDialog({
           }
         })
         .catch(() => {
-          setError("An unexpected error occurred.");
+          setError("Ocurrió un error inesperado.");
         })
         .finally(() => {
           setIsLoading(false);
@@ -60,10 +60,10 @@ export function AiSuggestionDialog({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Bot className="h-6 w-6" /> AI Stock Suggestion
+            <Bot className="h-6 w-6" /> Sugerencia de Stock por IA
           </DialogTitle>
           <DialogDescription>
-            For item: <strong>{item.name}</strong> at{" "}
+            Para el artículo: <strong>{item.name}</strong> en{" "}
             <strong>{item.location}</strong>
           </DialogDescription>
         </DialogHeader>
@@ -72,7 +72,7 @@ export function AiSuggestionDialog({
             <div className="flex flex-col items-center justify-center gap-4">
               <Loader2 className="h-12 w-12 animate-spin text-primary" />
               <p className="text-muted-foreground">
-                Analyzing historical data...
+                Analizando datos históricos...
               </p>
             </div>
           )}
@@ -86,13 +86,13 @@ export function AiSuggestionDialog({
           {!isLoading && !error && suggestion !== null && (
             <div className="space-y-4">
               <div className="text-center">
-                <p className="text-sm text-muted-foreground">Suggested Stock Level</p>
+                <p className="text-sm text-muted-foreground">Nivel de Stock Sugerido</p>
                 <p className="text-5xl font-bold text-primary">{suggestion}</p>
               </div>
               <div className="rounded-lg border bg-muted/50 p-4">
                 <h4 className="flex items-center gap-2 font-semibold">
                   <Lightbulb className="h-4 w-4" />
-                  Reasoning
+                  Razonamiento
                 </h4>
                 <p className="mt-2 text-sm text-muted-foreground">
                   {reasoning}
@@ -102,7 +102,7 @@ export function AiSuggestionDialog({
           )}
         </div>
         <DialogFooter>
-          <Button onClick={() => onOpenChange(false)}>Close</Button>
+          <Button onClick={() => onOpenChange(false)}>Cerrar</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

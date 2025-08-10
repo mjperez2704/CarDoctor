@@ -3,21 +3,21 @@ import type { InventoryItem, MovementLog } from "./types";
 const now = new Date();
 
 let inventory: InventoryItem[] = [
-  { id: '1', name: 'iPhone 15 Screen', type: 'Part', location: 'Tablero', quantity: 15, substate: 'New', usage: 'Repair' },
-  { id: '2', name: 'USB-C Cable', type: 'Accessory', location: 'Vitrina', quantity: 50, substate: 'New', usage: 'Sale' },
-  { id: '3', name: 'Prepaid SIM Card', type: 'SIM', location: 'Estaciones', quantity: 200, substate: 'Active', usage: 'Activation' },
-  { id: '4', name: 'Samsung Galaxy S24', type: 'Equipment', location: 'Almacén', quantity: 5, substate: 'Refurbished', usage: 'Loaner' },
-  { id: '5', name: 'iPhone 15 Battery', type: 'Part', location: 'Tablero', quantity: 4, substate: 'New', usage: 'Repair' },
-  { id: '6', name: 'Fast Charger', type: 'Accessory', location: 'Vitrina', quantity: 30, substate: 'New', usage: 'Sale' },
-  { id: '7', name: 'Postpaid SIM Card', type: 'SIM', location: 'Estaciones', quantity: 8, substate: 'Active', usage: 'Activation' },
-  { id: '8', name: 'iPhone 14', type: 'Equipment', location: 'Almacén', quantity: 0, substate: 'New', usage: 'Sale' },
+  { id: '1', name: 'Pantalla iPhone 15', type: 'Parte', location: 'Tablero', quantity: 15, substate: 'Nuevo', usage: 'Reparación' },
+  { id: '2', name: 'Cable USB-C', type: 'Accesorio', location: 'Vitrina', quantity: 50, substate: 'Nuevo', usage: 'Venta' },
+  { id: '3', name: 'SIM Prepago', type: 'SIM', location: 'Estaciones', quantity: 200, substate: 'Activo', usage: 'Activación' },
+  { id: '4', name: 'Samsung Galaxy S24', type: 'Equipo', location: 'Almacén', quantity: 5, substate: 'Reacondicionado', usage: 'Préstamo' },
+  { id: '5', name: 'Batería iPhone 15', type: 'Parte', location: 'Tablero', quantity: 4, substate: 'Nuevo', usage: 'Reparación' },
+  { id: '6', name: 'Cargador Rápido', type: 'Accesorio', location: 'Vitrina', quantity: 30, substate: 'Nuevo', usage: 'Venta' },
+  { id: '7', name: 'SIM Postpago', type: 'SIM', location: 'Estaciones', quantity: 8, substate: 'Activo', usage: 'Activación' },
+  { id: '8', name: 'iPhone 14', type: 'Equipo', location: 'Almacén', quantity: 0, substate: 'Nuevo', usage: 'Venta' },
 ];
 
 let auditLogs: MovementLog[] = [
-    { id: 'log1', timestamp: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000), user: 'admin', itemName: 'iPhone 15 Screen', itemType: 'Part', quantityChange: 20, origin: 'Supplier', destination: 'Tablero', reason: 'Initial Stock' },
-    { id: 'log2', timestamp: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000), user: 'tech1', itemName: 'iPhone 15 Screen', itemType: 'Part', quantityChange: -5, origin: 'Tablero', destination: 'Repair Bay', reason: 'Sale' },
-    { id: 'log3', timestamp: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000), user: 'admin', itemName: 'iPhone 15 Battery', itemType: 'Part', quantityChange: 10, origin: 'Supplier', destination: 'Tablero', reason: 'Initial Stock' },
-    { id: 'log4', timestamp: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000), user: 'tech2', itemName: 'iPhone 15 Battery', itemType: 'Part', quantityChange: -6, origin: 'Tablero', destination: 'Repair Bay', reason: 'Sale' },
+    { id: 'log1', timestamp: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000), user: 'admin', itemName: 'Pantalla iPhone 15', itemType: 'Parte', quantityChange: 20, origin: 'Proveedor', destination: 'Tablero', reason: 'Stock Inicial' },
+    { id: 'log2', timestamp: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000), user: 'tech1', itemName: 'Pantalla iPhone 15', itemType: 'Parte', quantityChange: -5, origin: 'Tablero', destination: 'Bahía de Reparación', reason: 'Venta' },
+    { id: 'log3', timestamp: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000), user: 'admin', itemName: 'Batería iPhone 15', itemType: 'Parte', quantityChange: 10, origin: 'Proveedor', destination: 'Tablero', reason: 'Stock Inicial' },
+    { id: 'log4', timestamp: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000), user: 'tech2', itemName: 'Batería iPhone 15', itemType: 'Parte', quantityChange: -6, origin: 'Tablero', destination: 'Bahía de Reparación', reason: 'Venta' },
 ];
 
 export const getInventory = (): InventoryItem[] => inventory;

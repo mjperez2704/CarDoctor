@@ -52,15 +52,15 @@ const StatusBadge = ({ quantity }: { quantity: number }) => {
   if (quantity === 0) {
     status = "out";
     variant = "destructive";
-    text = "Out of Stock";
+    text = "Agotado";
   } else if (quantity <= 10) {
     status = "low";
     variant = "secondary";
-    text = "Low Stock";
+    text = "Stock bajo";
   } else {
     status = "ok";
     variant = "outline";
-    text = "In Stock";
+    text = "En Stock";
   }
 
   return <Badge variant={variant}>{text}</Badge>;
@@ -100,13 +100,13 @@ export function Dashboard({
     const newLog: MovementLog = {
       id: `log${Date.now()}`,
       timestamp: new Date(),
-      user: 'user', // Replace with actual user
+      user: 'usuario', // Reemplazar con usuario real
       itemName: item.name,
       itemType: item.type,
       quantityChange: change,
       origin: item.location,
       destination: item.location,
-      reason: `Quick Action`,
+      reason: `Acción rápida`,
       osId: item.osId
     };
     setAuditLogs((prev) => [newLog, ...prev]);
@@ -117,8 +117,8 @@ export function Dashboard({
       <Tabs defaultValue="inventory">
         <div className="flex items-center">
           <TabsList>
-            <TabsTrigger value="inventory">Inventory</TabsTrigger>
-            <TabsTrigger value="audit">Audit Trail</TabsTrigger>
+            <TabsTrigger value="inventory">Inventario</TabsTrigger>
+            <TabsTrigger value="audit">Auditoría</TabsTrigger>
           </TabsList>
           <div className="ml-auto flex items-center gap-2">
             <DropdownMenu>
@@ -126,21 +126,21 @@ export function Dashboard({
                 <Button variant="outline" size="sm" className="h-7 gap-1">
                   <ListFilter className="h-3.5 w-3.5" />
                   <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                    Filter
+                    Filtrar
                   </span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                <DropdownMenuItem>Location</DropdownMenuItem>
-                <DropdownMenuItem>Type</DropdownMenuItem>
-                <DropdownMenuItem>Status</DropdownMenuItem>
+                <DropdownMenuLabel>Filtrar por</DropdownMenuLabel>
+                <DropdownMenuItem>Ubicación</DropdownMenuItem>
+                <DropdownMenuItem>Tipo</DropdownMenuItem>
+                <DropdownMenuItem>Estado</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <Button size="sm" variant="outline" className="h-7 gap-1">
               <File className="h-3.5 w-3.5" />
               <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Export
+                Exportar
               </span>
             </Button>
             <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
@@ -148,7 +148,7 @@ export function Dashboard({
                 <Button size="sm" className="h-7 gap-1">
                   <PlusCircle className="h-3.5 w-3.5" />
                   <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                    Add Movement
+                    Agregar Movimiento
                   </span>
                 </Button>
               </SheetTrigger>
@@ -164,22 +164,22 @@ export function Dashboard({
         <TabsContent value="inventory">
           <Card>
             <CardHeader>
-              <CardTitle>Inventory</CardTitle>
+              <CardTitle>Inventario</CardTitle>
               <CardDescription>
-                Manage your parts, accessories, SIMs, and equipment.
+                Gestiona tus partes, accesorios, SIMs y equipos.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Location</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Quantity</TableHead>
+                    <TableHead>Nombre</TableHead>
+                    <TableHead>Tipo</TableHead>
+                    <TableHead>Ubicación</TableHead>
+                    <TableHead>Estado</TableHead>
+                    <TableHead className="text-right">Cantidad</TableHead>
                     <TableHead>
-                      <span className="sr-only">Actions</span>
+                      <span className="sr-only">Acciones</span>
                     </TableHead>
                   </TableRow>
                 </TableHeader>
@@ -212,20 +212,20 @@ export function Dashboard({
                               variant="ghost"
                             >
                               <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Toggle menu</span>
+                              <span className="sr-only">Abrir menú</span>
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>Edit</DropdownMenuItem>
+                            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                            <DropdownMenuItem>Editar</DropdownMenuItem>
                             <DropdownMenuItem
                               onSelect={() => setSelectedItemForSuggestion(item)}
                             >
                               <Bot className="mr-2 h-4 w-4" />
-                              Get AI Suggestion
+                              Obtener Sugerencia IA
                             </DropdownMenuItem>
                             <DropdownMenuItem className="text-destructive">
-                              Delete
+                              Eliminar
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -237,8 +237,8 @@ export function Dashboard({
             </CardContent>
             <CardFooter>
               <div className="text-xs text-muted-foreground">
-                Showing <strong>1-{inventory.length}</strong> of{" "}
-                <strong>{inventory.length}</strong> products
+                Mostrando <strong>1-{inventory.length}</strong> de{" "}
+                <strong>{inventory.length}</strong> productos
               </div>
             </CardFooter>
           </Card>
@@ -246,20 +246,20 @@ export function Dashboard({
         <TabsContent value="audit">
           <Card>
             <CardHeader>
-              <CardTitle>Audit Trail</CardTitle>
+              <CardTitle>Registro de Auditoría</CardTitle>
               <CardDescription>
-                A comprehensive log of all inventory movements.
+                Un registro completo de todos los movimientos de inventario.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Item</TableHead>
-                    <TableHead>Change</TableHead>
-                    <TableHead>Reason</TableHead>
-                    <TableHead>User</TableHead>
-                    <TableHead>Timestamp</TableHead>
+                    <TableHead>Artículo</TableHead>
+                    <TableHead>Cambio</TableHead>
+                    <TableHead>Razón</TableHead>
+                    <TableHead>Usuario</TableHead>
+                    <TableHead>Fecha y Hora</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -290,8 +290,8 @@ export function Dashboard({
             </CardContent>
              <CardFooter>
               <div className="text-xs text-muted-foreground">
-                Showing <strong>1-{auditLogs.length}</strong> of{" "}
-                <strong>{auditLogs.length}</strong> log entries
+                Mostrando <strong>1-{auditLogs.length}</strong> de{" "}
+                <strong>{auditLogs.length}</strong> entradas de registro
               </div>
             </CardFooter>
           </Card>

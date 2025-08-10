@@ -11,7 +11,7 @@ export async function getAiSuggestionAction(
   const item = inventory.find((i) => i.id === itemId);
 
   if (!item) {
-    return { error: "Item not found." };
+    return { error: "Artículo no encontrado." };
   }
 
   const auditLogs = getAuditLogs();
@@ -19,16 +19,16 @@ export async function getAiSuggestionAction(
 
   if (itemLogs.length < 2) {
     return {
-      error: "Not enough historical data to make a suggestion.",
+      error: "No hay suficientes datos históricos para hacer una sugerencia.",
     };
   }
 
   const historicalData = itemLogs
     .map(
       (log) =>
-        `Date: ${log.timestamp.toISOString().split("T")[0]}, Change: ${
+        `Fecha: ${log.timestamp.toISOString().split("T")[0]}, Cambio: ${
           log.quantityChange
-        }, Reason: ${log.reason}`
+        }, Razón: ${log.reason}`
     )
     .join("; ");
 
@@ -41,6 +41,6 @@ export async function getAiSuggestionAction(
     return suggestion;
   } catch (error) {
     console.error(error);
-    return { error: "Failed to get suggestion from AI." };
+    return { error: "No se pudo obtener la sugerencia de la IA." };
   }
 }
