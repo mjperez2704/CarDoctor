@@ -1,16 +1,16 @@
-import type { InventoryItem, MovementLog } from "./types";
+import type { InventoryItem, MovementLog, Warehouse } from "./types";
 
 const now = new Date();
 
 let inventory: InventoryItem[] = [
-  { id: '1', name: 'Pantalla iPhone 15', type: 'Parte', location: 'Tablero', quantity: 15, substate: 'Nuevo', usage: 'Reparación' },
-  { id: '2', name: 'Cable USB-C', type: 'Accesorio', location: 'Vitrina', quantity: 50, substate: 'Nuevo', usage: 'Venta' },
-  { id: '3', name: 'SIM Prepago', type: 'SIM', location: 'Estaciones', quantity: 200, substate: 'Activo', usage: 'Activación' },
-  { id: '4', name: 'Samsung Galaxy S24', type: 'Equipo', location: 'Almacén', quantity: 5, substate: 'Reacondicionado', usage: 'Préstamo' },
-  { id: '5', name: 'Batería iPhone 15', type: 'Parte', location: 'Tablero', quantity: 4, substate: 'Nuevo', usage: 'Reparación' },
-  { id: '6', name: 'Cargador Rápido', type: 'Accesorio', location: 'Vitrina', quantity: 30, substate: 'Nuevo', usage: 'Venta' },
-  { id: '7', name: 'SIM Postpago', type: 'SIM', location: 'Estaciones', quantity: 8, substate: 'Activo', usage: 'Activación' },
-  { id: '8', name: 'iPhone 14', type: 'Equipo', location: 'Almacén', quantity: 0, substate: 'Nuevo', usage: 'Venta' },
+  { id: '1', name: 'Pantalla iPhone 15', type: 'Parte', location: 'Tablero', quantity: 15, status: 'Nuevo', usage: 'Reparación', stockType: 'Stock', brand: 'Apple' },
+  { id: '2', name: 'Cable USB-C', type: 'Accesorio', location: 'Vitrina', quantity: 50, status: 'Nuevo', usage: 'Venta', stockType: 'Stock', brand: 'Genérico' },
+  { id: '3', name: 'SIM Prepago', type: 'SIM', location: 'Estaciones', quantity: 200, status: 'Nuevo', usage: 'Activación', stockType: 'Stock' },
+  { id: '4', name: 'Samsung Galaxy S24', type: 'Equipo', location: 'Almacén', quantity: 5, status: 'Reacondicionado', usage: 'Préstamo', stockType: 'Stock', brand: 'Samsung' },
+  { id: '5', name: 'Batería iPhone 15', type: 'Parte', location: 'Tablero', quantity: 4, status: 'Nuevo', usage: 'Reparación', stockType: 'Stock', brand: 'Apple' },
+  { id: '6', name: 'Cargador Rápido', type: 'Accesorio', location: 'Vitrina', quantity: 30, status: 'Nuevo', usage: 'Venta', stockType: 'Stock', brand: 'Samsung' },
+  { id: '7', name: 'SIM Postpago', type: 'SIM', location: 'Estaciones', quantity: 8, status: 'Nuevo', usage: 'Activación', stockType: 'Stock' },
+  { id: '8', name: 'iPhone 14', type: 'Equipo', location: 'Almacén', quantity: 0, status: 'Nuevo', usage: 'Venta', stockType: 'Sobre Pedido', brand: 'Apple' },
 ];
 
 let auditLogs: MovementLog[] = [
@@ -20,9 +20,43 @@ let auditLogs: MovementLog[] = [
     { id: 'log4', timestamp: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000), user: 'tech2', itemName: 'Batería iPhone 15', itemType: 'Parte', quantityChange: -6, origin: 'Tablero', destination: 'Bahía de Reparación', reason: 'Venta' },
 ];
 
-export const getInventory = (): InventoryItem[] => inventory;
+let warehouse: Warehouse[] = [
+    {
+        id: 'wh1',
+        name: 'Almacén Principal',
+        sections: [
+            {
+                id: 'sec1',
+                name: 'Componentes Apple',
+                rules: {
+                    brand: ['Apple'],
+                    type: ['Parte'],
+                },
+                lots: [
+                    { id: 'lot1a', name: 'Lote A1', items: [] },
+                    { id: 'lot1b', name: 'Lote A2', items: [] },
+                ]
+            },
+            {
+                id: 'sec2',
+                name: 'Accesorios de Venta',
+                rules: {
+                    usage: ['Venta'],
+                    type: ['Accesorio'],
+                },
+                lots: [
+                    { id: 'lot2a', name: 'Lote B1', items: [] },
+                ]
+            }
+        ]
+    }
+];
 
+
+export const getInventory = (): InventoryItem[] => inventory;
 export const getAuditLogs = (): MovementLog[] => auditLogs;
+export const getWarehouseData = (): Warehouse[] => warehouse;
+
 
 export const addMovement = (
   item: InventoryItem,

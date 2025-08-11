@@ -1,7 +1,7 @@
 import {
   Briefcase,
   Calculator,
-  History,
+  Warehouse,
   LayoutDashboard,
   Package,
   PanelLeft,
@@ -47,6 +47,14 @@ export default async function HomePage() {
           >
             <LayoutDashboard className="h-5 w-5" />
             <span className="sr-only">Dashboard</span>
+          </Link>
+           <Link
+            href="/warehouse"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+            title="Almacén"
+          >
+            <Warehouse className="h-5 w-5" />
+            <span className="sr-only">Almacén</span>
           </Link>
           <Link
             href="/employees"
@@ -124,6 +132,13 @@ export default async function HomePage() {
                 >
                   <LayoutDashboard className="h-5 w-5" />
                   Dashboard
+                </Link>
+                <Link
+                  href="/warehouse"
+                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                >
+                  <Warehouse className="h-5 w-5" />
+                  Almacén
                 </Link>
                 <Link
                   href="/employees"
