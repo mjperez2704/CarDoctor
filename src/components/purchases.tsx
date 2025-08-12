@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import {
   Card,
   CardContent,
@@ -15,36 +16,105 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { MoreHorizontal, PlusCircle, File, ListFilter } from "lucide-react";
+import type { Purchase, Provider } from "@/lib/types";
 
-export function Purchases() {
+export function Purchases({
+  initialPurchases,
+  initialProviders,
+}: {
+  initialPurchases: Purchase[];
+  initialProviders: Provider[];
+}) {
+  const [purchases, setPurchases] = React.useState(initialPurchases);
+  const [providers, setProviders] = React.useState(initialProviders);
+
+  const getProviderName = (providerId: string) => {
+    return providers.find((p) => p.id === providerId)?.name || "N/A";
+  };
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Compras</CardTitle>
-        <CardDescription>
-          Administra las compras a proveedores.
-        </CardDescription>
+        <div className="flex justify-between items-center">
+          <div>
+            <CardTitle>Compras</CardTitle>
+            <CardDescription>
+              Administra las compras a proveedores.
+            </CardDescription>
+          </div>
+           <div className="flex gap-2">
+           <Button variant="outline" size="sm" className="h-7 gap-1">
+              <ListFilter className="h-3.5 w-3.5" />
+              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                Filtrar
+              </span>
+            </Button>
+            <Button size="sm" variant="outline" className="h-7 gap-1">
+              <File className="h-3.5 w-3.5" />
+              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                Exportar
+              </span>
+            </Button>
+            <Button size="sm" className="h-7 gap-1">
+              <PlusCircle className="h-3.5 w-3.5" />
+              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                Registrar Compra
+              </span>
+            </Button>
+          </div>
+        </div>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>ID Compra</TableHead>
               <TableHead>Proveedor</TableHead>
               <TableHead>Fecha</TableHead>
-              <TableHead>Total</TableHead>
+              <TableHead className="text-right">Total</TableHead>
+              <TableHead>
+                <span className="sr-only">Acciones</span>
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>Proveedor A</TableCell>
-              <TableCell>2024-07-28</TableCell>
-              <TableCell>$1200.00</TableCell>
-            </TableRow>
-             <TableRow>
-              <TableCell>Proveedor B</TableCell>
-              <TableCell>2024-07-25</TableCell>
-              <TableCell>$850.50</TableCell>
-            </TableRow>
+            {purchases.map((purchase) => (
+              <TableRow key={purchase.id}>
+                <TableCell className="font-medium">{purchase.id}</TableCell>
+                <TableCell>{getProviderName(purchase.providerId)}</TableCell>
+                <TableCell>{purchase.date}</TableCell>
+                <TableCell className="text-right">
+                  ${purchase.total.toFixed(2)}
+                </TableCell>
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button aria-haspopup="true" size="icon" variant="ghost">
+                        <MoreHorizontal className="h-4 w-4" />
+                        <span className="sr-only">Abrir menú</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                      <DropdownMenuItem>Ver Detalles</DropdownMenuItem>
+                      <DropdownMenuItem>Editar</DropdownMenuItem>
+                      <DropdownMenuItem className="text-destructive">
+                        Eliminar
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </CardContent>

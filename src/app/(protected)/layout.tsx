@@ -9,7 +9,8 @@ import {
   ShoppingCart,
   Users,
   Wrench,
-  Warehouse
+  Warehouse,
+  Truck
 } from "lucide-react";
 import Link from "next/link";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -63,6 +64,14 @@ export default function ProtectedLayout({
           >
             <Users className="h-5 w-5" />
             <span className="sr-only">Empleados</span>
+          </Link>
+           <Link
+            href="/providers"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+            title="Proveedores"
+          >
+            <Truck className="h-5 w-5" />
+            <span className="sr-only">Proveedores</span>
           </Link>
           <Link
             href="/quotes"
@@ -146,6 +155,13 @@ export default function ProtectedLayout({
                 >
                   <Users className="h-5 w-5" />
                   Empleados
+                </Link>
+                 <Link
+                  href="/providers"
+                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                >
+                  <Truck className="h-5 w-5" />
+                  Proveedores
                 </Link>
                 <Link
                   href="/quotes"

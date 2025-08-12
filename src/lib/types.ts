@@ -7,6 +7,26 @@ export type Employee = {
   role: Role;
 };
 
+export type Provider = {
+  id: string;
+  name: string;
+  contactName: string;
+  phone: string;
+  email: string;
+};
+
+export type Purchase = {
+  id: string;
+  providerId: string;
+  date: string;
+  total: number;
+  items: {
+    name: string;
+    quantity: number;
+    price: number;
+  }[];
+};
+
 export type InventoryItem = {
   id: string;
   name: string;
@@ -22,7 +42,7 @@ export type InventoryItem = {
 };
 
 export type MovementLog = {
-  id: string;
+  id:string;
   timestamp: Date;
   user: string;
   itemName: string;

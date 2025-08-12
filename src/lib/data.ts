@@ -1,4 +1,4 @@
-import type { InventoryItem, MovementLog, Warehouse, Employee, Role } from "./types";
+import type { InventoryItem, MovementLog, Warehouse, Employee, Role, Provider, Purchase } from "./types";
 
 const now = new Date();
 
@@ -6,6 +6,34 @@ let employees: Employee[] = [
     { id: '1', name: 'Admin User', email: 'admin@example.com', role: 'Admin' },
     { id: '2', name: 'Juan Pérez', email: 'juan.perez@example.com', role: 'Técnico' },
     { id: '3', name: 'Maria Rodriguez', email: 'maria.rodriguez@example.com', role: 'Ventas' },
+];
+
+let providers: Provider[] = [
+    { id: 'prov1', name: 'Partes Express', contactName: 'Carlos Sánchez', phone: '555-1234', email: 'contacto@partesexpress.com' },
+    { id: 'prov2', name: 'Accesorios Móviles GAMA', contactName: 'Ana Gómez', phone: '555-5678', email: 'ventas@gama.com' },
+];
+
+let purchases: Purchase[] = [
+    { 
+        id: 'compra1', 
+        providerId: 'prov1', 
+        date: '2024-07-28', 
+        total: 1200.00,
+        items: [
+            { name: 'Pantalla iPhone 15', quantity: 10, price: 100 },
+            { name: 'Batería iPhone 15', quantity: 5, price: 40 }
+        ]
+    },
+    { 
+        id: 'compra2', 
+        providerId: 'prov2', 
+        date: '2024-07-25', 
+        total: 850.50,
+        items: [
+            { name: 'Cable USB-C', quantity: 50, price: 10 },
+            { name: 'Cargador Rápido', quantity: 15, price: 23.36 }
+        ]
+    },
 ];
 
 let inventory: InventoryItem[] = [
@@ -59,6 +87,8 @@ let warehouse: Warehouse[] = [
 ];
 
 export const getEmployees = (): Employee[] => employees;
+export const getProviders = (): Provider[] => providers;
+export const getPurchases = (): Purchase[] => purchases;
 export const getInventory = (): InventoryItem[] => inventory;
 export const getAuditLogs = (): MovementLog[] => auditLogs;
 export const getWarehouseData = (): Warehouse[] => warehouse;
