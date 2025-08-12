@@ -1,6 +1,12 @@
-import type { InventoryItem, MovementLog, Warehouse } from "./types";
+import type { InventoryItem, MovementLog, Warehouse, Employee, Role } from "./types";
 
 const now = new Date();
+
+let employees: Employee[] = [
+    { id: '1', name: 'Admin User', email: 'admin@example.com', role: 'Admin' },
+    { id: '2', name: 'Juan Pérez', email: 'juan.perez@example.com', role: 'Técnico' },
+    { id: '3', name: 'Maria Rodriguez', email: 'maria.rodriguez@example.com', role: 'Ventas' },
+];
 
 let inventory: InventoryItem[] = [
   { id: '1', name: 'Pantalla iPhone 15', type: 'Parte', location: 'Tablero', quantity: 15, status: 'Nuevo', usage: 'Reparación', stockType: 'Stock', brand: 'Apple' },
@@ -52,7 +58,7 @@ let warehouse: Warehouse[] = [
     }
 ];
 
-
+export const getEmployees = (): Employee[] => employees;
 export const getInventory = (): InventoryItem[] => inventory;
 export const getAuditLogs = (): MovementLog[] => auditLogs;
 export const getWarehouseData = (): Warehouse[] => warehouse;

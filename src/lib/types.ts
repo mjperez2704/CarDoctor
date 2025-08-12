@@ -1,3 +1,12 @@
+export type Role = "Admin" | "Técnico" | "Ventas";
+
+export type Employee = {
+  id: string;
+  name: string;
+  email: string;
+  role: Role;
+};
+
 export type InventoryItem = {
   id: string;
   name: string;
