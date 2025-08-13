@@ -15,6 +15,14 @@ export type Provider = {
   email: string;
 };
 
+export type Customer = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  createdAt: string;
+};
+
 export type Purchase = {
   id: string;
   providerId: string;

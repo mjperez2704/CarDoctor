@@ -1,4 +1,4 @@
-import type { InventoryItem, MovementLog, Warehouse, Employee, Role, Provider, Purchase } from "./types";
+import type { InventoryItem, MovementLog, Warehouse, Employee, Role, Provider, Purchase, Customer } from "./types";
 
 const now = new Date();
 
@@ -12,6 +12,13 @@ let providers: Provider[] = [
     { id: 'prov1', name: 'Partes Express', contactName: 'Carlos Sánchez', phone: '555-1234', email: 'contacto@partesexpress.com' },
     { id: 'prov2', name: 'Accesorios Móviles GAMA', contactName: 'Ana Gómez', phone: '555-5678', email: 'ventas@gama.com' },
 ];
+
+let customers: Customer[] = [
+    { id: 'cust1', name: 'Ana Torres', email: 'ana.torres@email.com', phone: '555-8765', createdAt: '2023-10-15' },
+    { id: 'cust2', name: 'Luis Morales', email: 'luis.m@email.com', phone: '555-4321', createdAt: '2023-11-20' },
+    { id: 'cust3', name: 'Sofía Castro', email: 'sofia.castro@email.com', phone: '555-1122', createdAt: '2024-01-05' },
+];
+
 
 let purchases: Purchase[] = [
     { 
@@ -88,6 +95,7 @@ let warehouse: Warehouse[] = [
 
 export const getEmployees = (): Employee[] => employees;
 export const getProviders = (): Provider[] => providers;
+export const getCustomers = (): Customer[] => customers;
 export const getPurchases = (): Purchase[] => purchases;
 export const getInventory = (): InventoryItem[] => inventory;
 export const getAuditLogs = (): MovementLog[] => auditLogs;
