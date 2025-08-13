@@ -1,9 +1,9 @@
 import { AppLayout } from "@/components/layout";
 import { Vendedores } from "@/components/vendedores";
-import { getEmployees } from "@/lib/data";
+import { getEmpleados } from "@/lib/data";
 
 export default function VendedoresPage() {
-  const employees = getEmployees();
+  const employees = getEmpleados();
   return (
     <AppLayout title="Gestión de Vendedores">
       <Vendedores initialVendedores={employees} />
