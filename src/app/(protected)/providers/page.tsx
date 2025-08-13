@@ -1,9 +1,9 @@
 import { AppLayout } from "@/components/layout";
 import { Providers } from "@/components/providers";
-import { getProviders } from "@/lib/data";
+import { getProveedores } from "@/lib/mock-data";
 
 export default function ProvidersPage() {
-  const providers = getProviders();
+  const providers = getProveedores();
   return (
     <AppLayout title="Proveedores">
       <Providers initialProviders={providers} />

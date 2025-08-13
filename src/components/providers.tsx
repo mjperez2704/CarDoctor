@@ -25,9 +25,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, PlusCircle } from "lucide-react";
-import type { Provider } from "@/lib/types";
+import type { Proveedor } from "@/lib/types";
 
-export function Providers({ initialProviders }: { initialProviders: Provider[] }) {
+export function Providers({ initialProviders }: { initialProviders: Proveedor[] }) {
   const [providers, setProviders] = React.useState(initialProviders);
 
   return (
@@ -50,10 +50,11 @@ export function Providers({ initialProviders }: { initialProviders: Provider[] }
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Nombre del Proveedor</TableHead>
-              <TableHead>Contacto</TableHead>
+              <TableHead>Razón Social</TableHead>
+              <TableHead>RFC</TableHead>
               <TableHead>Teléfono</TableHead>
               <TableHead>Email</TableHead>
+              <TableHead>Días de Crédito</TableHead>
               <TableHead>
                 <span className="sr-only">Acciones</span>
               </TableHead>
@@ -62,10 +63,11 @@ export function Providers({ initialProviders }: { initialProviders: Provider[] }
           <TableBody>
             {providers.map((provider) => (
               <TableRow key={provider.id}>
-                <TableCell className="font-medium">{provider.name}</TableCell>
-                <TableCell>{provider.contactName}</TableCell>
-                <TableCell>{provider.phone}</TableCell>
+                <TableCell className="font-medium">{provider.razon_social}</TableCell>
+                <TableCell>{provider.rfc}</TableCell>
+                <TableCell>{provider.telefono}</TableCell>
                 <TableCell>{provider.email}</TableCell>
+                 <TableCell>{provider.dias_credito}</TableCell>
                 <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

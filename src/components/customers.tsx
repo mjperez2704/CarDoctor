@@ -25,9 +25,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, PlusCircle } from "lucide-react";
-import type { Customer } from "@/lib/types";
+import type { Cliente } from "@/lib/types";
 
-export function Customers({ initialCustomers }: { initialCustomers: Customer[] }) {
+export function Customers({ initialCustomers }: { initialCustomers: Cliente[] }) {
   const [customers, setCustomers] = React.useState(initialCustomers);
 
   return (
@@ -50,10 +50,11 @@ export function Customers({ initialCustomers }: { initialCustomers: Customer[] }
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Nombre del Cliente</TableHead>
+              <TableHead>Razón Social</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Teléfono</TableHead>
-              <TableHead>Miembro desde</TableHead>
+              <TableHead>RFC</TableHead>
+              <TableHead>Fecha de Registro</TableHead>
               <TableHead>
                 <span className="sr-only">Acciones</span>
               </TableHead>
@@ -62,10 +63,11 @@ export function Customers({ initialCustomers }: { initialCustomers: Customer[] }
           <TableBody>
             {customers.map((customer) => (
               <TableRow key={customer.id}>
-                <TableCell className="font-medium">{customer.name}</TableCell>
+                <TableCell className="font-medium">{customer.razon_social}</TableCell>
                 <TableCell>{customer.email}</TableCell>
-                <TableCell>{customer.phone}</TableCell>
-                <TableCell>{new Date(customer.createdAt).toLocaleDateString()}</TableCell>
+                <TableCell>{customer.telefono}</TableCell>
+                <TableCell>{customer.rfc}</TableCell>
+                <TableCell>{new Date(customer.fecha_registro).toLocaleDateString()}</TableCell>
                 <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { Button } from "@/components/ui/button";
@@ -21,8 +22,8 @@ import { Loader2 } from "lucide-react";
 export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("admin@example.com");
+  const [password, setPassword] = useState("password123");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -47,10 +48,13 @@ export default function LoginPage() {
     <div className="flex items-center justify-center min-h-screen bg-muted/40">
       <Card className="w-full max-w-sm">
         <form onSubmit={handleLogin}>
-          <CardHeader>
-            <CardTitle className="text-2xl">Iniciar Sesión</CardTitle>
+          <CardHeader className="text-center">
+            <div className="flex justify-center mb-4">
+                <Image src="/logo.png" alt="Logo" width={64} height={64} />
+            </div>
+            <CardTitle className="text-2xl">Hospital del Móvil</CardTitle>
             <CardDescription>
-              Ingresa tu correo electrónico y contraseña para acceder a tu cuenta.
+              Ingresa tus credenciales para acceder al sistema.
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">

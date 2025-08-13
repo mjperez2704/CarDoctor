@@ -4,7 +4,15 @@ import { Loader2 } from "lucide-react";
 import { redirect } from "next/navigation";
 
 export default function Home() {
-  const { user } = useSession();
+  const { user, loading } = useSession();
+  
+  if(loading) {
+    return (
+       <div className="flex h-screen items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    )
+  }
 
   if (user) {
     redirect("/dashboard");
@@ -12,9 +20,5 @@ export default function Home() {
     redirect("/login");
   }
 
-  return (
-    <div className="flex h-screen items-center justify-center">
-      <Loader2 className="h-12 w-12 animate-spin text-primary" />
-    </div>
-  );
+  return null;
 }

@@ -1,9 +1,9 @@
 import { AppLayout } from "@/components/layout";
 import { Employees } from "@/components/employees";
-import { getEmployees } from "@/lib/data";
+import { getEmpleados } from "@/lib/mock-data";
 
 export default function EmployeesPage() {
-  const employees = getEmployees();
+  const employees = getEmpleados();
   return (
     <AppLayout title="Empleados">
       <Employees initialEmployees={employees} />

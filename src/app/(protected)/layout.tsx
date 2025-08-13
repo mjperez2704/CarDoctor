@@ -14,20 +14,245 @@ import {
   FileText,
   LineChart,
   UsersRound,
-  Megaphone
+  Megaphone,
+  User,
+  Shield,
+  Book,
+  Contact,
+  Building,
+  FileCog,
+  Landmark,
+  Home,
+  Menu,
+  HeartHandshake,
+  ArrowRightLeft,
+  FileArchive,
+  BookUser,
+  BadgePercent,
+  MessageSquare,
+  ClipboardList,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { UserAvatar } from "@/components/user-avatar";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { NavLink } from "@/components/nav-link";
+
+const NavMenu = () => (
+  <Accordion type="multiple" className="w-full">
+    {/* Seguridad */}
+    <AccordionItem value="seguridad">
+      <AccordionTrigger>
+        <div className="flex items-center gap-3">
+          <Shield className="h-5 w-5" />
+          <span>Seguridad</span>
+        </div>
+      </AccordionTrigger>
+      <AccordionContent className="pl-4">
+        <nav className="grid items-start gap-1">
+          <NavLink href="/users">
+            <User className="h-4 w-4" /> Usuarios
+          </NavLink>
+          <NavLink href="/roles">
+            <UsersRound className="h-4 w-4" /> Roles y Permisos
+          </NavLink>
+        </nav>
+      </AccordionContent>
+    </AccordionItem>
+
+    {/* Catálogos */}
+    <AccordionItem value="catalogos">
+      <AccordionTrigger>
+        <div className="flex items-center gap-3">
+          <Book className="h-5 w-5" />
+          <span>Catálogos</span>
+        </div>
+      </AccordionTrigger>
+      <AccordionContent className="pl-4">
+        <nav className="grid items-start gap-1">
+          <NavLink href="/catalogs/products">
+            <Package className="h-4 w-4" /> Productos
+          </NavLink>
+          <NavLink href="/catalogs/brands">
+            <BadgePercent className="h-4 w-4" /> Marcas y Modelos
+          </NavLink>
+           <NavLink href="/catalogs/tools">
+            <Wrench className="h-4 w-4" /> Herramientas
+          </NavLink>
+        </nav>
+      </AccordionContent>
+    </AccordionItem>
+
+    {/* Contactos */}
+    <AccordionItem value="contactos">
+      <AccordionTrigger>
+        <div className="flex items-center gap-3">
+          <Contact className="h-5 w-5" />
+          <span>Contactos</span>
+        </div>
+      </AccordionTrigger>
+      <AccordionContent className="pl-4">
+        <nav className="grid items-start gap-1">
+          <NavLink href="/customers">
+            <Users className="h-4 w-4" /> Clientes
+          </NavLink>
+          <NavLink href="/providers">
+            <Truck className="h-4 w-4" /> Proveedores
+          </NavLink>
+        </nav>
+      </AccordionContent>
+    </AccordionItem>
+
+    {/* Operaciones */}
+    <AccordionItem value="operaciones">
+      <AccordionTrigger>
+        <div className="flex items-center gap-3">
+          <Settings className="h-5 w-5" />
+          <span>Operaciones</span>
+        </div>
+      </AccordionTrigger>
+      <AccordionContent className="pl-4">
+        <nav className="grid items-start gap-1">
+          <NavLink href="/sales">
+            <Briefcase className="h-4 w-4" /> Ventas y Presupuestos
+          </NavLink>
+          <NavLink href="/purchases">
+            <ShoppingCart className="h-4 w-4" /> Compras
+          </NavLink>
+          <NavLink href="/repairs">
+            <Wrench className="h-4 w-4" /> Reparaciones
+          </NavLink>
+        </nav>
+      </AccordionContent>
+    </AccordionItem>
+
+    {/* Inventario */}
+    <AccordionItem value="inventario">
+      <AccordionTrigger>
+        <div className="flex items-center gap-3">
+          <Warehouse className="h-5 w-5" />
+          <span>Inventario</span>
+        </div>
+      </AccordionTrigger>
+      <AccordionContent className="pl-4">
+        <nav className="grid items-start gap-1">
+           <NavLink href="/inventory">
+            <Package className="h-4 w-4" /> Inventario General
+          </NavLink>
+          <NavLink href="/warehouse">
+            <Home className="h-4 w-4" /> Almacenes y Lotes
+          </NavLink>
+          <NavLink href="/transfers">
+            <ArrowRightLeft className="h-4 w-4" /> Traslados
+          </NavLink>
+          <NavLink href="/adjustments">
+            <FileCog className="h-4 w-4" /> Ajustes
+          </NavLink>
+        </nav>
+      </AccordionContent>
+    </AccordionItem>
+
+    {/* Administración */}
+    <AccordionItem value="administracion">
+      <AccordionTrigger>
+        <div className="flex items-center gap-3">
+          <Landmark className="h-5 w-5" />
+          <span>Administración</span>
+        </div>
+      </AccordionTrigger>
+      <AccordionContent className="pl-4">
+        <nav className="grid items-start gap-1">
+          <NavLink href="/employees">
+            <BookUser className="h-4 w-4" /> Empleados
+          </NavLink>
+          <NavLink href="/billing">
+            <FileText className="h-4 w-4" /> Facturación
+          </NavLink>
+          <NavLink href="/finances/expenses">
+            <Calculator className="h-4 w-4" /> Gastos
+          </NavLink>
+          <NavLink href="/finances/cxc">
+            <FileArchive className="h-4 w-4" /> Cuentas por Cobrar
+          </NavLink>
+           <NavLink href="/finances/cxp">
+            <FileArchive className="h-4 w-4" /> Cuentas por Pagar
+          </NavLink>
+        </nav>
+      </AccordionContent>
+    </AccordionItem>
+
+     {/* CRM */}
+    <AccordionItem value="crm">
+      <AccordionTrigger>
+        <div className="flex items-center gap-3">
+          <HeartHandshake className="h-5 w-5" />
+          <span>CRM</span>
+        </div>
+      </AccordionTrigger>
+      <AccordionContent className="pl-4">
+        <nav className="grid items-start gap-1">
+          <NavLink href="/crm/opportunities">
+            <Briefcase className="h-4 w-4" /> Oportunidades
+          </NavLink>
+          <NavLink href="/crm/marketing">
+            <Megaphone className="h-4 w-4" /> Marketing
+          </NavLink>
+           <NavLink href="/crm/support">
+            <MessageSquare className="h-4 w-4" /> Soporte y Quejas
+          </NavLink>
+        </nav>
+      </AccordionContent>
+    </AccordionItem>
+
+    {/* Reportes */}
+    <AccordionItem value="reportes">
+      <AccordionTrigger>
+        <div className="flex items-center gap-3">
+          <LineChart className="h-5 w-5" />
+          <span>Reportes</span>
+        </div>
+      </AccordionTrigger>
+      <AccordionContent className="pl-4">
+         <nav className="grid items-start gap-1">
+          <NavLink href="/reports/predetermined">
+            <FileText className="h-4 w-4" /> Predeterminados
+          </NavLink>
+          <NavLink href="/reports/custom">
+            <FileCog className="h-4 w-4" /> Personalizados
+          </NavLink>
+        </nav>
+      </AccordionContent>
+    </AccordionItem>
+    
+    {/* Comunicación Interna */}
+    <AccordionItem value="comunicacion">
+      <AccordionTrigger>
+        <div className="flex items-center gap-3">
+            <Building className="h-5 w-5" />
+            <span>Comunicación</span>
+        </div>
+      </AccordionTrigger>
+      <AccordionContent className="pl-4">
+        <nav className="grid items-start gap-1">
+            <NavLink href="/internal/log">
+                <ClipboardList className="h-4 w-4" /> Bitácora
+            </NavLink>
+            <NavLink href="/internal/requests">
+                <MessageSquare className="h-4 w-4" /> Solicitudes
+            </NavLink>
+        </nav>
+      </AccordionContent>
+    </AccordionItem>
+  </Accordion>
+);
+
 
 export default function ProtectedLayout({
   children,
@@ -36,132 +261,23 @@ export default function ProtectedLayout({
 }) {
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
-        <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
-          <Link
-            href="/"
-            className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
-          >
-            <Package className="h-4 w-4 transition-all group-hover:scale-110" />
-            <span className="sr-only">TrackFlow</span>
-          </Link>
-          <Link
-            href="/"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-            title="Dashboard"
-          >
-            <LayoutDashboard className="h-5 w-5" />
-            <span className="sr-only">Dashboard</span>
-          </Link>
-           <Link
-            href="/warehouse"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-            title="Almacén"
-          >
-            <Warehouse className="h-5 w-5" />
-            <span className="sr-only">Almacén</span>
-          </Link>
-          <Link
-            href="/employees"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-            title="Empleados"
-          >
-            <Users className="h-5 w-5" />
-            <span className="sr-only">Empleados</span>
-          </Link>
-           <Link
-            href="/providers"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-            title="Proveedores"
-          >
-            <Truck className="h-5 w-5" />
-            <span className="sr-only">Proveedores</span>
-          </Link>
-          <Link
-            href="/purchases"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-            title="Compras"
-          >
-            <ShoppingCart className="h-5 w-5" />
-            <span className="sr-only">Compras</span>
-          </Link>
-          <Link
-            href="/sales"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-            title="Ventas"
-          >
-            <Briefcase className="h-5 w-5" />
-            <span className="sr-only">Ventas</span>
-          </Link>
-           <Link
-            href="/vendedores"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-            title="Vendedores"
-          >
-            <Users className="h-5 w-5" />
-            <span className="sr-only">Vendedores</span>
-          </Link>
-           <Link
-            href="/quotes"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-            title="Cotizaciones"
-          >
-            <Calculator className="h-5 w-5" />
-            <span className="sr-only">Cotizaciones</span>
-          </Link>
-          <Link
-            href="/repairs"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-            title="Reparaciones"
-          >
-            <Wrench className="h-5 w-5" />
-            <span className="sr-only">Reparaciones</span>
-          </Link>
-          <Link
-            href="/billing"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-            title="Facturación"
-          >
-            <FileText className="h-5 w-5" />
-            <span className="sr-only">Facturación</span>
-          </Link>
-          <Link
-            href="/reports"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-            title="Reportes"
-          >
-            <LineChart className="h-5 w-5" />
-            <span className="sr-only">Reportes</span>
-          </Link>
-          <Link
-            href="/customers"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-            title="Clientes"
-          >
-            <UsersRound className="h-5 w-5" />
-            <span className="sr-only">Clientes</span>
-          </Link>
-          <Link
-            href="/marketing"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-            title="Marketing"
-          >
-            <Megaphone className="h-5 w-5" />
-            <span className="sr-only">Marketing</span>
-          </Link>
-        </nav>
-        <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
-          <Link
-            href="#"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-            title="Configuración"
-          >
-            <Settings className="h-5 w-5" />
-            <span className="sr-only">Configuración</span>
-          </Link>
-        </nav>
+      <aside className="fixed inset-y-0 left-0 z-10 hidden w-64 flex-col border-r bg-background sm:flex">
+        <div className="flex h-16 items-center gap-2 border-b px-4 lg:px-6">
+            <Link href="/" className="flex items-center gap-2 font-semibold">
+                <Image src="/logo.png" alt="Logo" width={32} height={32} />
+                <span className="text-lg">Hospital del Móvil</span>
+            </Link>
+        </div>
+        <div className="flex-1 overflow-auto py-2">
+            <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+                <NavLink href="/">
+                    <LayoutDashboard className="h-5 w-5" /> Dashboard
+                </NavLink>
+                <NavMenu />
+            </nav>
+        </div>
       </aside>
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-64">
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
           <Sheet>
             <SheetTrigger asChild>
@@ -171,113 +287,20 @@ export default function ProtectedLayout({
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="sm:max-w-xs">
-              <nav className="grid gap-6 text-lg font-medium">
-                <Link
-                  href="#"
-                  className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
-                >
-                  <Package className="h-5 w-5 transition-all group-hover:scale-110" />
-                  <span className="sr-only">TrackFlow</span>
-                </Link>
-                <Link
-                  href="/"
-                  className="flex items-center gap-4 px-2.5 text-foreground"
-                >
-                  <LayoutDashboard className="h-5 w-5" />
-                  Dashboard
-                </Link>
-                 <Link
-                  href="/warehouse"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <Warehouse className="h-5 w-5" />
-                  Almacén
-                </Link>
-                <Link
-                  href="/employees"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <Users className="h-5 w-5" />
-                  Empleados
-                </Link>
-                 <Link
-                  href="/providers"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <Truck className="h-5 w-5" />
-                  Proveedores
-                </Link>
-                 <Link
-                  href="/purchases"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <ShoppingCart className="h-5 w-5" />
-                  Compras
-                </Link>
-                <Link
-                  href="/sales"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <Briefcase className="h-5 w-5" />
-                  Ventas
-                </Link>
-                <Link
-                  href="/vendedores"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <Users className="h-5 w-5" />
-                  Vendedores
-                </Link>
-                <Link
-                  href="/quotes"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <Calculator className="h-5 w-5" />
-                  Cotizaciones
-                </Link>
-                <Link
-                  href="/repairs"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <Wrench className="h-5 w-5" />
-                  Reparaciones
-                </Link>
-                <Link
-                  href="/billing"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <FileText className="h-5 w-5" />
-                  Facturación
-                </Link>
-                <Link
-                  href="/reports"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <LineChart className="h-5 w-5" />
-                  Reportes
-                </Link>
-                <Link
-                  href="/customers"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <UsersRound className="h-5 w-5" />
-                  Clientes
-                </Link>
-                <Link
-                  href="/marketing"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <Megaphone className="h-5 w-5" />
-                  Marketing
-                </Link>
-                <Link
-                  href="#"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <Settings className="h-5 w-5" />
-                  Configuración
-                </Link>
-              </nav>
+              <div className="flex h-16 items-center gap-2 border-b px-4">
+                  <Link href="/" className="flex items-center gap-2 font-semibold">
+                      <Image src="/logo.png" alt="Logo" width={24} height={24} />
+                      <span className="">Hospital del Móvil</span>
+                  </Link>
+              </div>
+              <div className="flex-1 overflow-auto py-2">
+                <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+                  <NavLink href="/">
+                      <LayoutDashboard className="h-5 w-5" /> Dashboard
+                  </NavLink>
+                  <NavMenu />
+                </nav>
+              </div>
             </SheetContent>
           </Sheet>
           <div className="relative ml-auto flex-1 md:grow-0">

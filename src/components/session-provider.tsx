@@ -6,8 +6,9 @@ import { auth } from "@/lib/firebase";
 import { usePathname, useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
-export const SessionContext = createContext<{ user: User | null }>({
+export const SessionContext = createContext<{ user: User | null, loading: boolean }>({
   user: null,
+  loading: true,
 });
 
 export function SessionProvider({ children }: { children: React.ReactNode }) {
@@ -46,12 +47,17 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   }
 
   // Evita renderizar el contenido protegido en la página de login
-  if (!user && pathname !== "/login") {
-    return null; 
+  // y no renderiza nada hasta que se sepa el estado de autenticación
+  if ((!user && pathname !== "/login") || loading) {
+    return (
+       <div className="flex items-center justify-center h-screen">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    );
   }
 
   return (
-    <SessionContext.Provider value={{ user }}>
+    <SessionContext.Provider value={{ user, loading }}>
       {children}
     </SessionContext.Provider>
   );

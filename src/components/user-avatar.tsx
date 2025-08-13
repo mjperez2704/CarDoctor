@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, User } from "lucide-react";
+import { LogOut, User, Settings, LifeBuoy } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,12 +12,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/firebase";
 import { useSession } from "@/hooks/use-session";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export function UserAvatar() {
   const { user } = useSession();
   const handleSignOut = () => {
     auth.signOut();
   };
+  
+  const getInitials = (email: string | null | undefined) => {
+    if (!email) return "?";
+    return email.substring(0, 2).toUpperCase();
+  }
 
   return (
     <DropdownMenu>
@@ -27,14 +33,23 @@ export function UserAvatar() {
           size="icon"
           className="overflow-hidden rounded-full"
         >
-          <User className="h-6 w-6" />
+          <Avatar>
+            <AvatarImage src={user?.photoURL ?? undefined} alt={user?.displayName ?? "Avatar"} />
+            <AvatarFallback>{getInitials(user?.email)}</AvatarFallback>
+          </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>{user?.email || "Mi Cuenta"}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Configuración</DropdownMenuItem>
-        <DropdownMenuItem>Soporte</DropdownMenuItem>
+        <DropdownMenuItem>
+            <Settings className="mr-2 h-4 w-4" />
+            Configuración
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+            <LifeBuoy className="mr-2 h-4 w-4" />
+            Soporte
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
           <LogOut className="mr-2 h-4 w-4" />

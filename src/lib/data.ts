@@ -1,128 +1,156 @@
-import type { InventoryItem, MovementLog, Warehouse, Employee, Role, Provider, Purchase, Customer } from "./types";
+import type {
+  Usuario,
+  Rol,
+  Permiso,
+  Empleado,
+  Proveedor,
+  Cliente,
+  OrdenCompra,
+  OrdenServicio,
+  Producto,
+  Almacen,
+  Seccion,
+  Lote
+} from "./types";
 
 const now = new Date();
 
-let employees: Employee[] = [
-    { id: '1', name: 'Admin User', email: 'admin@example.com', role: 'Admin' },
-    { id: '2', name: 'Juan Pérez', email: 'juan.perez@example.com', role: 'Técnico' },
-    { id: '3', name: 'Maria Rodriguez', email: 'maria.rodriguez@example.com', role: 'Ventas', salesQuota: 15000 },
+// ============================================================
+// Datos de Muestra (Mock Data)
+// ============================================================
+
+// --------------------
+// SEGURIDAD
+// --------------------
+export const roles: Rol[] = [
+  { id: 1, nombre: 'Admin', descripcion: 'Acceso total al sistema' },
+  { id: 2, nombre: 'Técnico', descripcion: 'Acceso a reparaciones e inventario' },
+  { id: 3, nombre: 'Vendedor', descripcion: 'Acceso a ventas y clientes' },
 ];
 
-let providers: Provider[] = [
-    { id: 'prov1', name: 'Partes Express', contactName: 'Carlos Sánchez', phone: '555-1234', email: 'contacto@partesexpress.com' },
-    { id: 'prov2', name: 'Accesorios Móviles GAMA', contactName: 'Ana Gómez', phone: '555-5678', email: 'ventas@gama.com' },
+export const usuarios: Usuario[] = [
+  { 
+    id: 1, 
+    username: 'admin',
+    email: 'admin@example.com', 
+    nombre: 'Admin',
+    apellido_p: 'Principal',
+    password_hash: 'hashed_password', // En un caso real, esto estaría hasheado
+    activo: true,
+    created_at: now.toISOString(),
+    updated_at: now.toISOString(),
+    roles: [roles[0]]
+  },
+  { 
+    id: 2, 
+    username: 'jperez',
+    email: 'juan.perez@example.com', 
+    nombre: 'Juan',
+    apellido_p: 'Pérez',
+    password_hash: 'hashed_password',
+    activo: true,
+    created_at: now.toISOString(),
+    updated_at: now.toISOString(),
+    roles: [roles[1]]
+  },
+  { 
+    id: 3, 
+    username: 'mrodriguez',
+    email: 'maria.rodriguez@example.com', 
+    nombre: 'Maria',
+    apellido_p: 'Rodriguez',
+    password_hash: 'hashed_password',
+    activo: true,
+    created_at: now.toISOString(),
+    updated_at: now.toISOString(),
+    roles: [roles[2]]
+  },
 ];
 
-let customers: Customer[] = [
-    { id: 'cust1', name: 'Ana Torres', email: 'ana.torres@email.com', phone: '555-8765', createdAt: '2023-10-15' },
-    { id: 'cust2', name: 'Luis Morales', email: 'luis.m@email.com', phone: '555-4321', createdAt: '2023-11-20' },
-    { id: 'cust3', name: 'Sofía Castro', email: 'sofia.castro@email.com', phone: '555-1122', createdAt: '2024-01-05' },
+// --------------------
+// EMPLEADOS
+// --------------------
+export const empleados: Empleado[] = [
+    { id: 1, nombre: 'Admin User', apellido_p: 'System', email: 'admin@example.com', puesto: 'Administrador', usuario_id: 1 },
+    { id: 2, nombre: 'Juan', apellido_p: 'Pérez', email: 'juan.perez@example.com', puesto: 'Técnico Líder', usuario_id: 2 },
+    { id: 3, nombre: 'Maria', apellido_p: 'Rodriguez', email: 'maria.rodriguez@example.com', puesto: 'Ejecutiva de Ventas', usuario_id: 3 },
 ];
 
-
-let purchases: Purchase[] = [
-    { 
-        id: 'compra1', 
-        providerId: 'prov1', 
-        date: '2024-07-28', 
-        total: 1200.00,
-        items: [
-            { name: 'Pantalla iPhone 15', quantity: 10, price: 100 },
-            { name: 'Batería iPhone 15', quantity: 5, price: 40 }
-        ],
-        status: "Pendiente"
-    },
-    { 
-        id: 'compra2', 
-        providerId: 'prov2', 
-        date: '2024-07-25', 
-        total: 850.50,
-        items: [
-            { name: 'Cable USB-C', quantity: 50, price: 10 },
-            { name: 'Cargador Rápido', quantity: 15, price: 23.36 }
-        ],
-        status: "Recibida Completa"
-    },
+// --------------------
+// CONTACTOS
+// --------------------
+export const proveedores: Proveedor[] = [
+    { id: 1, razon_social: 'Partes Express S.A. de C.V.', rfc: 'PEXS880101ABC', email: 'contacto@partesexpress.com', dias_credito: 30 },
+    { id: 2, razon_social: 'Accesorios Móviles GAMA', rfc: 'AMGB920505XYZ', email: 'ventas@gama.com', dias_credito: 0 },
 ];
 
-let inventory: InventoryItem[] = [
-  { id: '1', name: 'Pantalla iPhone 15', type: 'Parte', location: 'Tablero', quantity: 15, status: 'Nuevo', usage: 'Reparación', stockType: 'Stock', brand: 'Apple' },
-  { id: '2', name: 'Cable USB-C', type: 'Accesorio', location: 'Vitrina', quantity: 50, status: 'Nuevo', usage: 'Venta', stockType: 'Stock', brand: 'Genérico' },
-  { id: '3', name: 'SIM Prepago', type: 'SIM', location: 'Estaciones', quantity: 200, status: 'Nuevo', usage: 'Activación', stockType: 'Stock' },
-  { id: '4', name: 'Samsung Galaxy S24', type: 'Equipo', location: 'Almacén', quantity: 5, status: 'Reacondicionado', usage: 'Préstamo', stockType: 'Stock', brand: 'Samsung' },
-  { id: '5', name: 'Batería iPhone 15', type: 'Parte', location: 'Tablero', quantity: 4, status: 'Nuevo', usage: 'Reparación', stockType: 'Stock', brand: 'Apple' },
-  { id: '6', name: 'Cargador Rápido', type: 'Accesorio', location: 'Vitrina', quantity: 30, status: 'Nuevo', usage: 'Venta', stockType: 'Stock', brand: 'Samsung' },
-  { id: '7', name: 'SIM Postpago', type: 'SIM', location: 'Estaciones', quantity: 8, status: 'Nuevo', usage: 'Activación', stockType: 'Stock' },
-  { id: '8', name: 'iPhone 14', type: 'Equipo', location: 'Almacén', quantity: 0, status: 'Nuevo', usage: 'Venta', stockType: 'Sobre Pedido', brand: 'Apple' },
+export const clientes: Cliente[] = [
+    { id: 1, tipo_id: 1, razon_social: 'Ana Torres', rfc: 'TOAN850404LFG', email: 'ana.torres@email.com', fecha_registro: '2023-10-15T10:00:00Z' },
+    { id: 2, tipo_id: 1, razon_social: 'Luis Morales', rfc: 'MOLU791120HJC', email: 'luis.m@email.com', fecha_registro: '2023-11-20T11:30:00Z' },
+    { id: 3, tipo_id: 2, razon_social: 'Consultoría Digital SC', rfc: 'CDI120220E45', email: 'contacto@consultoria.com', fecha_registro: '2024-01-05T15:00:00Z' },
 ];
 
-let auditLogs: MovementLog[] = [
-    { id: 'log1', timestamp: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000), user: 'admin', itemName: 'Pantalla iPhone 15', itemType: 'Parte', quantityChange: 20, origin: 'Proveedor', destination: 'Tablero', reason: 'Stock Inicial' },
-    { id: 'log2', timestamp: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000), user: 'tech1', itemName: 'Pantalla iPhone 15', itemType: 'Parte', quantityChange: -5, origin: 'Tablero', destination: 'Bahía de Reparación', reason: 'Venta' },
-    { id: 'log3', timestamp: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000), user: 'admin', itemName: 'Batería iPhone 15', itemType: 'Parte', quantityChange: 10, origin: 'Proveedor', destination: 'Tablero', reason: 'Stock Inicial' },
-    { id: 'log4', timestamp: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000), user: 'tech2', itemName: 'Batería iPhone 15', itemType: 'Parte', quantityChange: -6, origin: 'Tablero', destination: 'Bahía de Reparación', reason: 'Venta' },
+// --------------------
+// PRODUCTOS
+// --------------------
+export const productos: Producto[] = [
+  { id: 1, sku: 'PAR-IP15-PAN', nombre: 'Pantalla iPhone 15', categoria_id: 2, marca_id: 1, modelo_id: 1, activo: true, es_serie: false, precio_lista: 150.00, costo_promedio: 100.00, unidad: 'PZA' },
+  { id: 2, sku: 'ACC-CAB-USBC', nombre: 'Cable USB-C 1m', categoria_id: 3, activo: true, es_serie: false, precio_lista: 25.00, costo_promedio: 10.00, unidad: 'PZA' },
+  { id: 3, sku: 'EQU-SAM-S24', nombre: 'Samsung Galaxy S24', categoria_id: 1, marca_id: 2, modelo_id: 2, activo: true, es_serie: true, precio_lista: 1200.00, costo_promedio: 950.00, unidad: 'PZA' },
+  { id: 4, sku: 'HER-DES-01', nombre: 'Kit Desarmadores Precisión', categoria_id: 4, activo: true, es_serie: false, precio_lista: 40.00, costo_promedio: 25.00, unidad: 'KIT' },
+  { id: 5, sku: 'SRV-DIAG-01', nombre: 'Servicio de Diagnóstico', categoria_id: 5, activo: true, es_serie: false, precio_lista: 20.00, costo_promedio: 0.00, unidad: 'SRV' },
 ];
 
-let warehouse: Warehouse[] = [
+// --------------------
+// ALMACÉN
+// --------------------
+export const almacenes: Almacen[] = [
     {
-        id: 'wh1',
-        name: 'Almacén Principal',
-        sections: [
-            {
-                id: 'sec1',
-                name: 'Componentes Apple',
-                rules: {
-                    brand: ['Apple'],
-                    type: ['Parte'],
-                },
-                lots: [
-                    { id: 'lot1a', name: 'Lote A1', items: [] },
-                    { id: 'lot1b', name: 'Lote A2', items: [] },
-                ]
-            },
-            {
-                id: 'sec2',
-                name: 'Accesorios de Venta',
-                rules: {
-                    usage: ['Venta'],
-                    type: ['Accesorio'],
-                },
-                lots: [
-                    { id: 'lot2a', name: 'Lote B1', items: [] },
-                ]
-            }
+        id: 1,
+        clave: 'PRINCIPAL',
+        nombre: 'Almacén Principal',
+        tipo: 'PRINCIPAL',
+        secciones: [
+            { id: 1, almacen_id: 1, clave: 'A1', nombre: 'Refacciones Apple' },
+            { id: 2, almacen_id: 1, clave: 'B1', nombre: 'Accesorios Venta' },
         ]
     }
 ];
 
-export const getEmployees = (): Employee[] => employees;
-export const getProviders = (): Provider[] => providers;
-export const getCustomers = (): Customer[] => customers;
-export const getPurchases = (): Purchase[] => purchases;
-export const getInventory = (): InventoryItem[] => inventory;
-export const getAuditLogs = (): MovementLog[] => auditLogs;
-export const getWarehouseData = (): Warehouse[] => warehouse;
+// --------------------
+// COMPRAS Y VENTAS
+// --------------------
+export const ordenesCompra: OrdenCompra[] = [
+    { 
+        id: 1, 
+        folio: 'OC-2024-001',
+        proveedor_id: 1, 
+        fecha: '2024-07-28T10:00:00Z', 
+        total: 1200.00,
+        estado: "ENVIADA",
+        moneda: 'USD',
+        subtotal: 1200,
+        impuestos: 0,
+        items: [
+            { orden_compra_id: 1, id: 1, producto_id: 1, cantidad: 10, precio_unitario: 100 },
+            { orden_compra_id: 1, id: 2, producto_id: 2, cantidad: 5, precio_unitario: 40 }
+        ]
+    },
+];
+
+export const ordenesServicio: OrdenServicio[] = [
+    { id: 1, folio: 'OS-2024-001', fecha: '2024-07-30T12:00:00Z', cliente_id: 1, equipo_id: 1, estado: 'EN_REPARACION', tecnico_id: 2 },
+    { id: 2, folio: 'OS-2024-002', fecha: '2024-07-31T10:00:00Z', cliente_id: 2, equipo_id: 2, estado: 'DIAGNOSTICO', tecnico_id: 2 },
+];
 
 
-export const addMovement = (
-  item: InventoryItem,
-  quantityChange: number,
-  movementDetails: Omit<MovementLog, 'id' | 'timestamp' | 'itemName' | 'itemType' | 'quantityChange'>
-): { updatedItem: InventoryItem, newLog: MovementLog } => {
-  const updatedItem = { ...item, quantity: item.quantity + quantityChange };
-  
-  inventory = inventory.map(i => i.id === item.id ? updatedItem : i);
-
-  const newLog: MovementLog = {
-    id: `log${Date.now()}`,
-    timestamp: new Date(),
-    itemName: item.name,
-    itemType: item.type,
-    quantityChange,
-    ...movementDetails,
-  };
-
-  auditLogs.unshift(newLog);
-
-  return { updatedItem, newLog };
-};
+// Funciones "simuladas" para obtener datos
+export const getUsuarios = (): Usuario[] => usuarios;
+export const getRoles = (): Rol[] => roles;
+export const getEmpleados = (): Empleado[] => empleados;
+export const getProveedores = (): Proveedor[] => proveedores;
+export const getClientes = (): Cliente[] => clientes;
+export const getProductos = (): Producto[] => productos;
+export const getAlmacenes = (): Almacen[] => almacenes;
+export const getOrdenesCompra = (): OrdenCompra[] => ordenesCompra;
+export const getOrdenesServicio = (): OrdenServicio[] => ordenesServicio;

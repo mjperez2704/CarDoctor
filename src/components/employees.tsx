@@ -26,16 +26,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal, PlusCircle } from "lucide-react";
-import type { Employee, Role } from "@/lib/types";
+import type { Empleado } from "@/lib/types";
 import { Badge } from "./ui/badge";
 
-const roleVariant: Record<Role, "default" | "secondary" | "outline"> = {
-    Admin: "default",
-    Técnico: "secondary",
-    Ventas: "outline",
-}
-
-export function Employees({ initialEmployees }: { initialEmployees: Employee[] }) {
+export function Employees({ initialEmployees }: { initialEmployees: Empleado[] }) {
   const [employees, setEmployees] = React.useState(initialEmployees);
 
   return (
@@ -60,7 +54,7 @@ export function Employees({ initialEmployees }: { initialEmployees: Employee[] }
             <TableRow>
               <TableHead>Nombre</TableHead>
               <TableHead>Email</TableHead>
-              <TableHead>Rol</TableHead>
+              <TableHead>Puesto</TableHead>
               <TableHead>
                 <span className="sr-only">Acciones</span>
               </TableHead>
@@ -69,10 +63,10 @@ export function Employees({ initialEmployees }: { initialEmployees: Employee[] }
           <TableBody>
             {employees.map((employee) => (
               <TableRow key={employee.id}>
-                <TableCell className="font-medium">{employee.name}</TableCell>
+                <TableCell className="font-medium">{employee.nombre} {employee.apellido_p}</TableCell>
                 <TableCell>{employee.email}</TableCell>
                 <TableCell>
-                    <Badge variant={roleVariant[employee.role]}>{employee.role}</Badge>
+                    <Badge variant="outline">{employee.puesto}</Badge>
                 </TableCell>
                 <TableCell>
                   <DropdownMenu>
@@ -85,12 +79,6 @@ export function Employees({ initialEmployees }: { initialEmployees: Employee[] }
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                       <DropdownMenuItem>Editar</DropdownMenuItem>
-                       <DropdownMenuSeparator />
-                      <DropdownMenuLabel>Cambiar Rol</DropdownMenuLabel>
-                      <DropdownMenuItem>a Administrador</DropdownMenuItem>
-                      <DropdownMenuItem>a Técnico</DropdownMenuItem>
-                      <DropdownMenuItem>a Ventas</DropdownMenuItem>
-                      <DropdownMenuSeparator />
                       <DropdownMenuItem className="text-destructive">
                         Eliminar
                       </DropdownMenuItem>
