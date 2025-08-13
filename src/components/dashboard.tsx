@@ -39,26 +39,20 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { MovementForm } from "./movement-form";
-import type { InventoryItem, MovementLog } from "@/lib/types";
-import { AiSuggestionDialog } from "./ai-suggestion-dialog";
-
-type Status = "ok" | "low" | "out";
+import type { Producto, MovimientoInventario } from "@/lib/types";
+// import { AiSuggestionDialog } from "./ai-suggestion-dialog"; // AI-Suggestion needs to be updated for new data models
 
 const StatusBadge = ({ quantity }: { quantity: number }) => {
-  let status: Status;
   let variant: "outline" | "secondary" | "destructive";
   let text: string;
 
   if (quantity === 0) {
-    status = "out";
     variant = "destructive";
     text = "Agotado";
   } else if (quantity <= 10) {
-    status = "low";
     variant = "secondary";
     text = "Stock bajo";
   } else {
-    status = "ok";
     variant = "outline";
     text = "En Stock";
   }
@@ -70,46 +64,37 @@ export function Dashboard({
   initialInventory,
   initialAuditLogs,
 }: {
-  initialInventory: InventoryItem[];
-  initialAuditLogs: MovementLog[];
+  initialInventory: Producto[];
+  initialAuditLogs: MovimientoInventario[];
 }) {
   const [inventory, setInventory] =
-    React.useState<InventoryItem[]>(initialInventory);
+    React.useState<Producto[]>(initialInventory);
   const [auditLogs, setAuditLogs] =
-    React.useState<MovementLog[]>(initialAuditLogs);
+    React.useState<MovimientoInventario[]>(initialAuditLogs);
   const [isSheetOpen, setSheetOpen] = React.useState(false);
-  const [selectedItemForSuggestion, setSelectedItemForSuggestion] =
-    React.useState<InventoryItem | null>(null);
+  // const [selectedItemForSuggestion, setSelectedItemForSuggestion] =
+  //   React.useState<Producto | null>(null);
 
   const handleMovementSave = (
-    updatedItem: InventoryItem,
-    newLog: MovementLog
+    // updatedItem: Producto,
+    // newLog: MovimientoInventario
   ) => {
-    setInventory((prev) =>
-      prev.map((item) => (item.id === updatedItem.id ? updatedItem : item))
-    );
-    setAuditLogs((prev) => [newLog, ...prev]);
+    // setInventory((prev) =>
+    //   prev.map((item) => (item.id === updatedItem.id ? updatedItem : item))
+    // );
+    // setAuditLogs((prev) => [newLog, ...prev]);
     setSheetOpen(false);
   };
 
-  const handleQuickQuantityChange = (item: InventoryItem, change: number) => {
-    const updatedItem = { ...item, quantity: Math.max(0, item.quantity + change) };
-    setInventory((prev) =>
-      prev.map((i) => (i.id === item.id ? updatedItem : i))
-    );
-    const newLog: MovementLog = {
-      id: `log${Date.now()}`,
-      timestamp: new Date(),
-      user: 'usuario', // Reemplazar con usuario real
-      itemName: item.name,
-      itemType: item.type,
-      quantityChange: change,
-      origin: item.location,
-      destination: item.location,
-      reason: `Acción rápida`,
-      osId: item.osId
-    };
-    setAuditLogs((prev) => [newLog, ...prev]);
+  const handleQuickQuantityChange = (item: Producto, change: number) => {
+    // const updatedItem = { ...item, stock: Math.max(0, (item.stock || 0) + change) };
+    // setInventory((prev) =>
+    //   prev.map((i) => (i.id === item.id ? updatedItem : i))
+    // );
+    // const newLog: MovimientoInventario = {
+    //   // ... create a new log entry
+    // };
+    // setAuditLogs((prev) => [newLog, ...prev]);
   };
 
   return (
@@ -166,18 +151,18 @@ export function Dashboard({
             <CardHeader>
               <CardTitle>Inventario</CardTitle>
               <CardDescription>
-                Gestiona tus partes, accesorios, SIMs y equipos.
+                Gestiona tus productos, refacciones, accesorios y equipos.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead>SKU</TableHead>
                     <TableHead>Nombre</TableHead>
-                    <TableHead>Tipo</TableHead>
-                    <TableHead>Ubicación</TableHead>
-                    <TableHead>Estado</TableHead>
-                    <TableHead className="text-right">Cantidad</TableHead>
+                    <TableHead>Unidad</TableHead>
+                    <TableHead>Precio</TableHead>
+                    <TableHead className="text-right">Costo Promedio</TableHead>
                     <TableHead>
                       <span className="sr-only">Acciones</span>
                     </TableHead>
@@ -186,23 +171,11 @@ export function Dashboard({
                 <TableBody>
                   {inventory.map((item) => (
                     <TableRow key={item.id}>
-                      <TableCell className="font-medium">{item.name}</TableCell>
-                      <TableCell>{item.type}</TableCell>
-                      <TableCell>{item.location}</TableCell>
-                      <TableCell>
-                        <StatusBadge quantity={item.quantity} />
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleQuickQuantityChange(item, -1)}>
-                            <Minus className="h-4 w-4"/>
-                          </Button>
-                          <span>{item.quantity}</span>
-                          <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleQuickQuantityChange(item, 1)}>
-                            <Plus className="h-4 w-4"/>
-                          </Button>
-                        </div>
-                      </TableCell>
+                      <TableCell className="font-medium">{item.sku}</TableCell>
+                      <TableCell>{item.nombre}</TableCell>
+                      <TableCell>{item.unidad}</TableCell>
+                      <TableCell>${item.precio_lista.toFixed(2)}</TableCell>
+                      <TableCell className="text-right">${item.costo_promedio.toFixed(4)}</TableCell>
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -219,7 +192,7 @@ export function Dashboard({
                             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                             <DropdownMenuItem>Editar</DropdownMenuItem>
                             <DropdownMenuItem
-                              onSelect={() => setSelectedItemForSuggestion(item)}
+                              // onSelect={() => setSelectedItemForSuggestion(item)}
                             >
                               <Bot className="mr-2 h-4 w-4" />
                               Obtener Sugerencia IA
@@ -252,52 +225,12 @@ export function Dashboard({
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Artículo</TableHead>
-                    <TableHead>Cambio</TableHead>
-                    <TableHead>Razón</TableHead>
-                    <TableHead>Usuario</TableHead>
-                    <TableHead>Fecha y Hora</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {auditLogs.map((log) => (
-                    <TableRow key={log.id}>
-                      <TableCell className="font-medium">
-                        {log.itemName}
-                      </TableCell>
-                      <TableCell
-                        className={
-                          log.quantityChange > 0
-                            ? "text-green-600"
-                            : "text-red-600"
-                        }
-                      >
-                        {log.quantityChange > 0 ? "+" : ""}
-                        {log.quantityChange}
-                      </TableCell>
-                      <TableCell>{log.reason}</TableCell>
-                      <TableCell>{log.user}</TableCell>
-                      <TableCell>
-                        {new Date(log.timestamp).toLocaleString()}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              <p>El registro de auditoría se implementará en un paso posterior.</p>
             </CardContent>
-             <CardFooter>
-              <div className="text-xs text-muted-foreground">
-                Mostrando <strong>1-{auditLogs.length}</strong> de{" "}
-                <strong>{auditLogs.length}</strong> entradas de registro
-              </div>
-            </CardFooter>
           </Card>
         </TabsContent>
       </Tabs>
-      {selectedItemForSuggestion && (
+      {/* {selectedItemForSuggestion && (
         <AiSuggestionDialog
           item={selectedItemForSuggestion}
           open={!!selectedItemForSuggestion}
@@ -307,7 +240,7 @@ export function Dashboard({
             }
           }}
         />
-      )}
+      )} */}
     </>
   );
 }

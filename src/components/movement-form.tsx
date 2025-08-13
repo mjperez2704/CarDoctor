@@ -27,8 +27,7 @@ import {
   SheetDescription,
   SheetFooter,
 } from "@/components/ui/sheet";
-import { addMovement } from "@/lib/data";
-import type { InventoryItem, MovementLog } from "@/lib/types";
+import type { Producto } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
@@ -41,8 +40,8 @@ const formSchema = z.object({
 });
 
 type MovementFormProps = {
-  inventory: InventoryItem[];
-  onSave: (updatedItem: InventoryItem, newLog: MovementLog) => void;
+  inventory: Producto[];
+  onSave: (updatedItem: any, newLog: any) => void;
 };
 
 export function MovementForm({ inventory, onSave }: MovementFormProps) {
@@ -56,7 +55,7 @@ export function MovementForm({ inventory, onSave }: MovementFormProps) {
   });
 
   const selectedItemId = form.watch("itemId");
-  const selectedItem = inventory.find((item) => item.id === selectedItemId);
+  const selectedItem = inventory.find((item) => String(item.id) === selectedItemId);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (!selectedItem) {
@@ -68,20 +67,17 @@ export function MovementForm({ inventory, onSave }: MovementFormProps) {
       return;
     }
 
-    const { updatedItem, newLog } = addMovement(selectedItem, values.quantity, {
-      user: "usuario",
-      origin: values.origin,
-      destination: values.destination,
-      reason: values.reason,
-      osId: values.osId,
-    });
+    // TODO: Re-implement save logic with the new data structure
+    console.log("Valores del formulario de movimiento:", values);
     
-    onSave(updatedItem, newLog);
-
     toast({
-      title: "Movimiento Guardado",
-      description: `Se registró el movimiento de ${values.quantity} x ${selectedItem.name}.`,
+      title: "Movimiento Guardado (Simulado)",
+      description: `Se registró el movimiento de ${values.quantity} x ${selectedItem.nombre}.`,
     });
+
+    // Esta es una simulación. La lógica real necesitaría actualizar el estado.
+    // onSave(updatedItem, newLog);
+
     form.reset();
   }
 
@@ -115,8 +111,8 @@ export function MovementForm({ inventory, onSave }: MovementFormProps) {
                   </FormControl>
                   <SelectContent>
                     {inventory.map((item) => (
-                      <SelectItem key={item.id} value={item.id}>
-                        {item.name} ({item.location})
+                      <SelectItem key={item.id} value={String(item.id)}>
+                        {item.nombre}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -205,7 +201,7 @@ export function MovementForm({ inventory, onSave }: MovementFormProps) {
               <FormItem>
                 <FormLabel>Razón</FormLabel>
                 <Select
-                  onValueChange={field.onChange}
+                  onValuechange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
