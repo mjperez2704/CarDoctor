@@ -7,11 +7,8 @@ import {
   MoreHorizontal,
   PlusCircle,
   Bot,
-  Minus,
-  Plus,
 } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -40,25 +37,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { MovementForm } from "./movement-form";
 import type { Producto, MovimientoInventario } from "@/lib/types";
-// import { AiSuggestionDialog } from "./ai-suggestion-dialog"; // AI-Suggestion needs to be updated for new data models
-
-const StatusBadge = ({ quantity }: { quantity: number }) => {
-  let variant: "outline" | "secondary" | "destructive";
-  let text: string;
-
-  if (quantity === 0) {
-    variant = "destructive";
-    text = "Agotado";
-  } else if (quantity <= 10) {
-    variant = "secondary";
-    text = "Stock bajo";
-  } else {
-    variant = "outline";
-    text = "En Stock";
-  }
-
-  return <Badge variant={variant}>{text}</Badge>;
-};
 
 export function Dashboard({
   initialInventory,
@@ -72,29 +50,9 @@ export function Dashboard({
   const [auditLogs, setAuditLogs] =
     React.useState<MovimientoInventario[]>(initialAuditLogs);
   const [isSheetOpen, setSheetOpen] = React.useState(false);
-  // const [selectedItemForSuggestion, setSelectedItemForSuggestion] =
-  //   React.useState<Producto | null>(null);
 
-  const handleMovementSave = (
-    // updatedItem: Producto,
-    // newLog: MovimientoInventario
-  ) => {
-    // setInventory((prev) =>
-    //   prev.map((item) => (item.id === updatedItem.id ? updatedItem : item))
-    // );
-    // setAuditLogs((prev) => [newLog, ...prev]);
+  const handleMovementSave = () => {
     setSheetOpen(false);
-  };
-
-  const handleQuickQuantityChange = (item: Producto, change: number) => {
-    // const updatedItem = { ...item, stock: Math.max(0, (item.stock || 0) + change) };
-    // setInventory((prev) =>
-    //   prev.map((i) => (i.id === item.id ? updatedItem : i))
-    // );
-    // const newLog: MovimientoInventario = {
-    //   // ... create a new log entry
-    // };
-    // setAuditLogs((prev) => [newLog, ...prev]);
   };
 
   return (
@@ -117,9 +75,8 @@ export function Dashboard({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Filtrar por</DropdownMenuLabel>
-                <DropdownMenuItem>Ubicación</DropdownMenuItem>
-                <DropdownMenuItem>Tipo</DropdownMenuItem>
-                <DropdownMenuItem>Estado</DropdownMenuItem>
+                <DropdownMenuItem>Categoría</DropdownMenuItem>
+                <DropdownMenuItem>Marca</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <Button size="sm" variant="outline" className="h-7 gap-1">
@@ -191,9 +148,7 @@ export function Dashboard({
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                             <DropdownMenuItem>Editar</DropdownMenuItem>
-                            <DropdownMenuItem
-                              // onSelect={() => setSelectedItemForSuggestion(item)}
-                            >
+                            <DropdownMenuItem>
                               <Bot className="mr-2 h-4 w-4" />
                               Obtener Sugerencia IA
                             </DropdownMenuItem>
@@ -230,17 +185,6 @@ export function Dashboard({
           </Card>
         </TabsContent>
       </Tabs>
-      {/* {selectedItemForSuggestion && (
-        <AiSuggestionDialog
-          item={selectedItemForSuggestion}
-          open={!!selectedItemForSuggestion}
-          onOpenChange={(open) => {
-            if (!open) {
-              setSelectedItemForSuggestion(null);
-            }
-          }}
-        />
-      )} */}
     </>
   );
 }

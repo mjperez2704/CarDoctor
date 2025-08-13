@@ -1,5 +1,5 @@
 import { Dashboard } from "@/components/dashboard";
-import { getProductos } from "@/lib/mock-data";
+import { getProductos } from "@/lib/data";
 
 export default async function DashboardPage() {
   const inventoryData = getProductos();

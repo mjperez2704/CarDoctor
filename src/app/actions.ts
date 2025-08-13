@@ -1,21 +1,22 @@
 "use server";
 
 import { suggestStockLevels } from "@/ai/flows/stock-level-suggestions";
-import { getAuditLogs, getInventory } from "@/lib/data";
-import type { InventoryItem } from "@/lib/types";
+import { getProductos } from "@/lib/data";
+import type { Producto, MovimientoInventario } from "@/lib/types";
 
 export async function getAiSuggestionAction(
   itemId: string
 ): Promise<{ suggestedLevel: number; reasoning: string } | { error: string }> {
-  const inventory = getInventory();
-  const item = inventory.find((i) => i.id === itemId);
+  const inventory = getProductos();
+  const item = inventory.find((i) => String(i.id) === itemId);
 
   if (!item) {
     return { error: "Artículo no encontrado." };
   }
 
-  const auditLogs = getAuditLogs();
-  const itemLogs = auditLogs.filter((log) => log.itemName === item.name);
+  // TODO: Implementar la obtención de registros de auditoría reales
+  const auditLogs: MovimientoInventario[] = []; 
+  const itemLogs = auditLogs.filter((log) => log.producto_id === item.id);
 
   if (itemLogs.length < 2) {
     return {
@@ -26,16 +27,16 @@ export async function getAiSuggestionAction(
   const historicalData = itemLogs
     .map(
       (log) =>
-        `Fecha: ${log.timestamp.toISOString().split("T")[0]}, Cambio: ${
-          log.quantityChange
-        }, Razón: ${log.reason}`
+        `Fecha: ${new Date(log.fecha).toISOString().split("T")[0]}, Cambio: ${
+          log.cantidad
+        }, Razón: ${log.referencia}`
     )
     .join("; ");
 
   try {
     const suggestion = await suggestStockLevels({
-      location: item.location,
-      objectType: item.type,
+      location: "Almacén Principal", // TODO: Usar ubicación real
+      objectType: item.sku,
       historicalData,
     });
     return suggestion;

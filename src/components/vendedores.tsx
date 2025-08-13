@@ -24,13 +24,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, PlusCircle } from "lucide-react";
-import type { Employee } from "@/lib/types";
+import { MoreHorizontal } from "lucide-react";
+import type { Empleado } from "@/lib/types";
 import { Input } from "./ui/input";
 
-export function Vendedores({ initialVendedores }: { initialVendedores: Employee[] }) {
+export function Vendedores({ initialVendedores }: { initialVendedores: Empleado[] }) {
   const [vendedores, setVendedores] = React.useState(
-    initialVendedores.filter((e) => e.role === "Ventas")
+    initialVendedores.filter((e) => e.puesto === "Ejecutiva de Ventas") // TODO: Filter by role ID
   );
 
   return (
@@ -60,14 +60,14 @@ export function Vendedores({ initialVendedores }: { initialVendedores: Employee[
           <TableBody>
             {vendedores.map((vendedor) => (
               <TableRow key={vendedor.id}>
-                <TableCell className="font-medium">{vendedor.name}</TableCell>
+                <TableCell className="font-medium">{vendedor.nombre}</TableCell>
                 <TableCell>{vendedor.email}</TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <span>$</span>
                     <Input
                       type="number"
-                      defaultValue={vendedor.salesQuota || 0}
+                      defaultValue={0} // TODO: Add sales quota to employee type
                       className="w-32"
                     />
                   </div>
