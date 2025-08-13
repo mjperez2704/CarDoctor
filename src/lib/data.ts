@@ -5,7 +5,7 @@ const now = new Date();
 let employees: Employee[] = [
     { id: '1', name: 'Admin User', email: 'admin@example.com', role: 'Admin' },
     { id: '2', name: 'Juan Pérez', email: 'juan.perez@example.com', role: 'Técnico' },
-    { id: '3', name: 'Maria Rodriguez', email: 'maria.rodriguez@example.com', role: 'Ventas' },
+    { id: '3', name: 'Maria Rodriguez', email: 'maria.rodriguez@example.com', role: 'Ventas', salesQuota: 15000 },
 ];
 
 let providers: Provider[] = [

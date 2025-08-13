@@ -94,6 +94,14 @@ export default function ProtectedLayout({
             <span className="sr-only">Ventas</span>
           </Link>
            <Link
+            href="/vendedores"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+            title="Vendedores"
+          >
+            <Users className="h-5 w-5" />
+            <span className="sr-only">Vendedores</span>
+          </Link>
+           <Link
             href="/quotes"
             className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
             title="Cotizaciones"
@@ -212,6 +220,13 @@ export default function ProtectedLayout({
                 >
                   <Briefcase className="h-5 w-5" />
                   Ventas
+                </Link>
+                <Link
+                  href="/vendedores"
+                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                >
+                  <Users className="h-5 w-5" />
+                  Vendedores
                 </Link>
                 <Link
                   href="/quotes"

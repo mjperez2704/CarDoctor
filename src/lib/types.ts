@@ -5,6 +5,7 @@ export type Employee = {
   name: string;
   email: string;
   role: Role;
+  salesQuota?: number;
 };
 
 export type Provider = {
