@@ -24,8 +24,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, PlusCircle, File, ListFilter } from "lucide-react";
+import { MoreHorizontal, PlusCircle, File, ListFilter, Truck } from "lucide-react";
 import type { Purchase, Provider } from "@/lib/types";
+import { Badge } from "./ui/badge";
+import { ReceptionModal } from "./reception-modal";
 
 export function Purchases({
   initialPurchases,
@@ -36,12 +38,26 @@ export function Purchases({
 }) {
   const [purchases, setPurchases] = React.useState(initialPurchases);
   const [providers, setProviders] = React.useState(initialProviders);
+  const [selectedPurchase, setSelectedPurchase] = React.useState<Purchase | null>(null);
+  const [isReceptionModalOpen, setReceptionModalOpen] = React.useState(false);
 
   const getProviderName = (providerId: string) => {
     return providers.find((p) => p.id === providerId)?.name || "N/A";
   };
+  
+  const handleOpenReception = (purchase: Purchase) => {
+    setSelectedPurchase(purchase);
+    setReceptionModalOpen(true);
+  }
+
+  const statusVariant: Record<Purchase["status"], "default" | "secondary" | "outline"> = {
+    "Pendiente": "secondary",
+    "Recibida Parcial": "outline",
+    "Recibida Completa": "default"
+  }
 
   return (
+    <>
     <Card>
       <CardHeader>
         <div className="flex justify-between items-center">
@@ -80,6 +96,7 @@ export function Purchases({
               <TableHead>ID Compra</TableHead>
               <TableHead>Proveedor</TableHead>
               <TableHead>Fecha</TableHead>
+              <TableHead>Estado</TableHead>
               <TableHead className="text-right">Total</TableHead>
               <TableHead>
                 <span className="sr-only">Acciones</span>
@@ -92,6 +109,9 @@ export function Purchases({
                 <TableCell className="font-medium">{purchase.id}</TableCell>
                 <TableCell>{getProviderName(purchase.providerId)}</TableCell>
                 <TableCell>{purchase.date}</TableCell>
+                <TableCell>
+                  <Badge variant={statusVariant[purchase.status]}>{purchase.status}</Badge>
+                </TableCell>
                 <TableCell className="text-right">
                   ${purchase.total.toFixed(2)}
                 </TableCell>
@@ -106,6 +126,10 @@ export function Purchases({
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                       <DropdownMenuItem>Ver Detalles</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleOpenReception(purchase)}>
+                        <Truck className="mr-2 h-4 w-4" />
+                        Recibir Mercancía
+                      </DropdownMenuItem>
                       <DropdownMenuItem>Editar</DropdownMenuItem>
                       <DropdownMenuItem className="text-destructive">
                         Eliminar
@@ -119,5 +143,13 @@ export function Purchases({
         </Table>
       </CardContent>
     </Card>
+     {selectedPurchase && (
+        <ReceptionModal
+          isOpen={isReceptionModalOpen}
+          onClose={() => setReceptionModalOpen(false)}
+          purchase={selectedPurchase}
+        />
+      )}
+    </>
   );
 }

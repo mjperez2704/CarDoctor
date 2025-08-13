@@ -29,7 +29,8 @@ let purchases: Purchase[] = [
         items: [
             { name: 'Pantalla iPhone 15', quantity: 10, price: 100 },
             { name: 'Batería iPhone 15', quantity: 5, price: 40 }
-        ]
+        ],
+        status: "Pendiente"
     },
     { 
         id: 'compra2', 
@@ -39,7 +40,8 @@ let purchases: Purchase[] = [
         items: [
             { name: 'Cable USB-C', quantity: 50, price: 10 },
             { name: 'Cargador Rápido', quantity: 15, price: 23.36 }
-        ]
+        ],
+        status: "Recibida Completa"
     },
 ];
 

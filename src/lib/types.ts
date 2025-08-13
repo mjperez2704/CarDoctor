@@ -23,16 +23,19 @@ export type Customer = {
   createdAt: string;
 };
 
+export type PurchaseItem = {
+    name: string;
+    quantity: number;
+    price: number;
+};
+
 export type Purchase = {
   id: string;
   providerId: string;
   date: string;
   total: number;
-  items: {
-    name: string;
-    quantity: number;
-    price: number;
-  }[];
+  items: PurchaseItem[];
+  status: "Pendiente" | "Recibida Parcial" | "Recibida Completa";
 };
 
 export type InventoryItem = {
@@ -87,4 +90,12 @@ export type Warehouse = {
   id: string;
   name: string;
   sections: Section[];
+};
+
+export type ReceptionItem = {
+  name: string;
+  orderedQuantity: number;
+  unitCost: number;
+  receivedQuantity: number;
+  isComplete: boolean;
 };
