@@ -10,7 +10,11 @@ import {
   Users,
   Wrench,
   Warehouse,
-  Truck
+  Truck,
+  FileText,
+  LineChart,
+  UsersRound,
+  Megaphone
 } from "lucide-react";
 import Link from "next/link";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -74,6 +78,22 @@ export default function ProtectedLayout({
             <span className="sr-only">Proveedores</span>
           </Link>
           <Link
+            href="/purchases"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+            title="Compras"
+          >
+            <ShoppingCart className="h-5 w-5" />
+            <span className="sr-only">Compras</span>
+          </Link>
+          <Link
+            href="/sales"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+            title="Ventas"
+          >
+            <Briefcase className="h-5 w-5" />
+            <span className="sr-only">Ventas</span>
+          </Link>
+           <Link
             href="/quotes"
             className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
             title="Cotizaciones"
@@ -90,20 +110,36 @@ export default function ProtectedLayout({
             <span className="sr-only">Reparaciones</span>
           </Link>
           <Link
-            href="/purchases"
+            href="/billing"
             className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-            title="Compras"
+            title="Facturación"
           >
-            <ShoppingCart className="h-5 w-5" />
-            <span className="sr-only">Compras</span>
+            <FileText className="h-5 w-5" />
+            <span className="sr-only">Facturación</span>
           </Link>
           <Link
-            href="/sales"
+            href="/reports"
             className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-            title="Ventas"
+            title="Reportes"
           >
-            <Briefcase className="h-5 w-5" />
-            <span className="sr-only">Ventas</span>
+            <LineChart className="h-5 w-5" />
+            <span className="sr-only">Reportes</span>
+          </Link>
+          <Link
+            href="/customers"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+            title="Clientes"
+          >
+            <UsersRound className="h-5 w-5" />
+            <span className="sr-only">Clientes</span>
+          </Link>
+          <Link
+            href="/marketing"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+            title="Marketing"
+          >
+            <Megaphone className="h-5 w-5" />
+            <span className="sr-only">Marketing</span>
           </Link>
         </nav>
         <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
@@ -163,6 +199,20 @@ export default function ProtectedLayout({
                   <Truck className="h-5 w-5" />
                   Proveedores
                 </Link>
+                 <Link
+                  href="/purchases"
+                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                >
+                  <ShoppingCart className="h-5 w-5" />
+                  Compras
+                </Link>
+                <Link
+                  href="/sales"
+                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                >
+                  <Briefcase className="h-5 w-5" />
+                  Ventas
+                </Link>
                 <Link
                   href="/quotes"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
@@ -177,19 +227,33 @@ export default function ProtectedLayout({
                   <Wrench className="h-5 w-5" />
                   Reparaciones
                 </Link>
-                 <Link
-                  href="/purchases"
+                <Link
+                  href="/billing"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                 >
-                  <ShoppingCart className="h-5 w-5" />
-                  Compras
+                  <FileText className="h-5 w-5" />
+                  Facturación
                 </Link>
                 <Link
-                  href="/sales"
+                  href="/reports"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                 >
-                  <Briefcase className="h-5 w-5" />
-                  Ventas
+                  <LineChart className="h-5 w-5" />
+                  Reportes
+                </Link>
+                <Link
+                  href="/customers"
+                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                >
+                  <UsersRound className="h-5 w-5" />
+                  Clientes
+                </Link>
+                <Link
+                  href="/marketing"
+                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                >
+                  <Megaphone className="h-5 w-5" />
+                  Marketing
                 </Link>
                 <Link
                   href="#"
