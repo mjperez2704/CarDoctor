@@ -2,6 +2,7 @@
 import { useSession } from "@/hooks/use-session";
 import { Loader2 } from "lucide-react";
 import { redirect } from "next/navigation";
+import HomePage from "./(protected)/page";
 
 export default function Home() {
   const { user, loading } = useSession();
@@ -15,7 +16,8 @@ export default function Home() {
   }
 
   if (user) {
-    redirect("/dashboard");
+    // Si el usuario está logueado, se renderiza la página principal protegida
+    return <HomePage />;
   } else {
     redirect("/login");
   }

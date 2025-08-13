@@ -11,11 +11,11 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "./ui/button";
 import { Loader2, Bot, Lightbulb } from "lucide-react";
-import type { InventoryItem } from "@/lib/types";
+import type { Producto } from "@/lib/types";
 import { getAiSuggestionAction } from "@/app/actions";
 
 type AiSuggestionDialogProps = {
-  item: InventoryItem;
+  item: Producto;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 };
@@ -37,7 +37,7 @@ export function AiSuggestionDialog({
       setSuggestion(null);
       setReasoning(null);
       
-      getAiSuggestionAction(item.id)
+      getAiSuggestionAction(String(item.id))
         .then((result) => {
           if ("error" in result) {
             setError(result.error);
@@ -63,8 +63,7 @@ export function AiSuggestionDialog({
             <Bot className="h-6 w-6" /> Sugerencia de Stock por IA
           </DialogTitle>
           <DialogDescription>
-            Para el artículo: <strong>{item.name}</strong> en{" "}
-            <strong>{item.location}</strong>
+            Para el artículo: <strong>{item.nombre}</strong> (SKU: {item.sku})
           </DialogDescription>
         </DialogHeader>
         <div className="py-4">

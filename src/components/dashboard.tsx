@@ -37,6 +37,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { MovementForm } from "./movement-form";
 import type { Producto, MovimientoInventario } from "@/lib/types";
+import { AiSuggestionDialog } from "./ai-suggestion-dialog";
 
 export function Dashboard({
   initialInventory,
@@ -51,9 +52,18 @@ export function Dashboard({
     React.useState<MovimientoInventario[]>(initialAuditLogs);
   const [isSheetOpen, setSheetOpen] = React.useState(false);
 
+  const [selectedItemForAI, setSelectedItemForAI] = React.useState<Producto | null>(null);
+  const [isAIDialogOpen, setAIDialogOpen] = React.useState(false);
+
   const handleMovementSave = () => {
+    // TODO: Refresh data
     setSheetOpen(false);
   };
+  
+  const handleOpenAISuggestion = (item: Producto) => {
+    setSelectedItemForAI(item);
+    setAIDialogOpen(true);
+  }
 
   return (
     <>
@@ -148,7 +158,7 @@ export function Dashboard({
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                             <DropdownMenuItem>Editar</DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleOpenAISuggestion(item)}>
                               <Bot className="mr-2 h-4 w-4" />
                               Obtener Sugerencia IA
                             </DropdownMenuItem>
@@ -185,6 +195,13 @@ export function Dashboard({
           </Card>
         </TabsContent>
       </Tabs>
+      {selectedItemForAI && (
+        <AiSuggestionDialog
+          item={selectedItemForAI}
+          open={isAIDialogOpen}
+          onOpenChange={setAIDialogOpen}
+        />
+      )}
     </>
   );
 }
