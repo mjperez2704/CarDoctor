@@ -199,6 +199,28 @@ export type MovimientoInventario = {
 // --------------------
 // 6) COMPRAS
 // --------------------
+export type Purchase = {
+  id: string;
+  providerId: string;
+  date: string;
+  total: number;
+  status: "Pendiente" | "Recibida Parcial" | "Recibida Completa";
+  items: {
+    name: string;
+    quantity: number;
+    price: number;
+  }[];
+};
+
+export type ReceptionItem = {
+  name: string;
+  orderedQuantity: number;
+  unitCost: number;
+  receivedQuantity: number;
+  isComplete: boolean;
+};
+
+
 export type OrdenCompra = {
   id: number;
   folio: string;

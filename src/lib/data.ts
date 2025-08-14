@@ -14,6 +14,7 @@ import type {
   Marca,
   Modelo,
   SolicitudInterna,
+  Purchase,
 } from "./types";
 
 const now = new Date();
@@ -82,6 +83,10 @@ export const empleados: Empleado[] = [
 // --------------------
 // CONTACTOS
 // --------------------
+const providers = [
+    { id: 'PROV-001', name: 'Partes Express S.A. de C.V.'},
+    { id: 'PROV-002', name: 'Accesorios Móviles GAMA'},
+];
 export const proveedores: Proveedor[] = [
     { id: 1, razon_social: 'Partes Express S.A. de C.V.', rfc: 'PEXS880101ABC', email: 'contacto@partesexpress.com', dias_credito: 30 },
     { id: 2, razon_social: 'Accesorios Móviles GAMA', rfc: 'AMGB920505XYZ', email: 'ventas@gama.com', dias_credito: 0 },
@@ -134,12 +139,46 @@ export const almacenes: Almacen[] = [
             { id: 1, almacen_id: 1, clave: 'A1', nombre: 'Refacciones Apple' },
             { id: 2, almacen_id: 1, clave: 'B1', nombre: 'Accesorios Venta' },
         ]
+    },
+     {
+        id: 2,
+        clave: 'VITRINA',
+        nombre: 'Vitrina de Exhibición',
+        tipo: 'SUCURSAL',
+        secciones: [
+            { id: 3, almacen_id: 2, clave: 'EX-GEN', nombre: 'Exhibidor General' },
+        ]
     }
 ];
 
 // --------------------
 // COMPRAS Y VENTAS
 // --------------------
+export const purchases: Purchase[] = [
+  {
+    id: "OC-2024-001",
+    providerId: "PROV-001",
+    date: "2024-07-28",
+    total: 1200.0,
+    status: "Pendiente",
+    items: [
+      { name: "Pantalla iPhone 15", quantity: 10, price: 100.0 },
+      { name: "Batería Samsung S22", quantity: 5, price: 40.0 },
+    ],
+  },
+  {
+    id: "OC-2024-002",
+    providerId: "PROV-002",
+    date: "2024-07-29",
+    total: 350.0,
+    status: "Recibida Parcial",
+    items: [
+        { name: "Cable USB-C 1m", quantity: 50, price: 5.0},
+        { name: "Cargador 30W", quantity: 20, price: 10.0}
+    ]
+  },
+];
+
 export const ordenesCompra: OrdenCompra[] = [
     { 
         id: 1, 
@@ -204,6 +243,7 @@ export const solicitudesInternas: SolicitudInterna[] = [
   },
 ];
 
+
 // Funciones "simuladas" para obtener datos
 export const getUsuarios = (): Usuario[] => usuarios;
 export const getRoles = (): Rol[] => roles;
@@ -214,6 +254,28 @@ export const getMarcas = (): Marca[] => marcas;
 export const getModelos = (): Modelo[] => modelos;
 export const getProductos = (): Producto[] => productos;
 export const getAlmacenes = (): Almacen[] => almacenes;
+export const getPurchases = (): Purchase[] => purchases;
 export const getOrdenesCompra = (): OrdenCompra[] => ordenesCompra;
 export const getOrdenesServicio = (): OrdenServicio[] => ordenesServicio;
 export const getSolicitudesInternas = (): SolicitudInterna[] => solicitudesInternas;
+
+// Helper para obtener todos los permisos (simulado)
+export const getAllPermissions = (): Permiso[] => {
+    // En una aplicación real, esto vendría de una tabla de permisos.
+    // Aquí simulamos un conjunto de permisos posibles.
+    const modulos = ['Usuarios', 'Roles', 'Clientes', 'Inventario', 'Ventas', 'Reparaciones', 'Compras', 'Reportes'];
+    const acciones = ['ver', 'crear', 'editar', 'eliminar'];
+    let permisos: Permiso[] = [];
+    let id = 1;
+    modulos.forEach(modulo => {
+        acciones.forEach(accion => {
+            permisos.push({
+                id: id++,
+                modulo: modulo,
+                clave: `${modulo.toLowerCase()}.${accion}`,
+                descripcion: `${accion.charAt(0).toUpperCase() + accion.slice(1)} ${modulo}`
+            });
+        });
+    });
+    return permisos;
+};
