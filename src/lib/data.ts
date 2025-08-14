@@ -15,6 +15,7 @@ import type {
   Modelo,
   SolicitudInterna,
   Purchase,
+  Bitacora,
 } from "./types";
 
 const now = new Date();
@@ -37,8 +38,8 @@ export const usuarios: Usuario[] = [
     id: 1, 
     username: 'admin',
     email: 'admin@example.com', 
-    nombre: 'Admin',
-    apellido_p: 'Principal',
+    nombre: 'Admin Principal',
+    apellido_p: 'System',
     password_hash: 'hashed_password', // En un caso real, esto estaría hasheado
     activo: true,
     created_at: now.toISOString(),
@@ -49,8 +50,8 @@ export const usuarios: Usuario[] = [
     id: 2, 
     username: 'jperez',
     email: 'juan.perez@example.com', 
-    nombre: 'Juan',
-    apellido_p: 'Pérez',
+    nombre: 'Juan Pérez',
+    apellido_p: 'Técnico',
     password_hash: 'hashed_password',
     activo: true,
     created_at: now.toISOString(),
@@ -61,8 +62,8 @@ export const usuarios: Usuario[] = [
     id: 3, 
     username: 'mrodriguez',
     email: 'maria.rodriguez@example.com', 
-    nombre: 'Maria',
-    apellido_p: 'Rodriguez',
+    nombre: 'Maria Rodriguez',
+    apellido_p: 'Ventas',
     password_hash: 'hashed_password',
     activo: true,
     created_at: now.toISOString(),
@@ -243,6 +244,20 @@ export const solicitudesInternas: SolicitudInterna[] = [
   },
 ];
 
+// --------------------
+// BITÁCORA
+// --------------------
+export const bitacora: Bitacora[] = [
+  { id: 1, fecha: new Date(now.getTime() - 2 * 60 * 60 * 1000).toISOString(), usuario_id: 1, accion: 'LOGIN', descripcion: 'Inicio de sesión exitoso.' },
+  { id: 2, fecha: new Date(now.getTime() - 90 * 60 * 1000).toISOString(), usuario_id: 3, accion: 'CREACIÓN DE VENTA', descripcion: 'Se creó la venta con folio VTA-2024-088 para el cliente "Cliente Final".' },
+  { id: 3, fecha: new Date(now.getTime() - 85 * 60 * 1000).toISOString(), usuario_id: 2, accion: 'MOVIMIENTO DE INVENTARIO', descripcion: 'Traslado de 2 unidades de "Pantalla iPhone 15" del Almacén Principal al mostrador.' },
+  { id: 4, fecha: new Date(now.getTime() - 70 * 60 * 1000).toISOString(), usuario_id: 1, accion: 'APROBACIÓN DE COMPRA', descripcion: 'Se aprobó la orden de compra OC-2024-001 al proveedor "Partes Express".' },
+  { id: 5, fecha: new Date(now.getTime() - 60 * 60 * 1000).toISOString(), usuario_id: 3, accion: 'CREACIÓN DE CLIENTE', descripcion: 'Se dio de alta al nuevo cliente "Innovatech Solutions".' },
+  { id: 6, fecha: new Date(now.getTime() - 45 * 60 * 1000).toISOString(), usuario_id: 1, accion: 'AJUSTE DE INVENTARIO', descripcion: 'Ajuste positivo de +1 unidad para el SKU "ACC-CAB-USBC" por conteo físico.' },
+  { id: 7, fecha: new Date(now.getTime() - 30 * 60 * 1000).toISOString(), usuario_id: 2, accion: 'ACTUALIZACIÓN DE ESTADO', descripcion: 'La orden de servicio OS-2024-001 cambió a estado "LISTO PARA ENTREGA".' },
+  { id: 8, fecha: new Date(now.getTime() - 15 * 60 * 1000).toISOString(), usuario_id: 1, accion: 'ACTUALIZACIÓN DE ROL', descripcion: 'Se modificaron los permisos para el rol "Vendedor".' },
+];
+
 
 // Funciones "simuladas" para obtener datos
 export const getUsuarios = (): Usuario[] => usuarios;
@@ -258,6 +273,8 @@ export const getPurchases = (): Purchase[] => purchases;
 export const getOrdenesCompra = (): OrdenCompra[] => ordenesCompra;
 export const getOrdenesServicio = (): OrdenServicio[] => ordenesServicio;
 export const getSolicitudesInternas = (): SolicitudInterna[] => solicitudesInternas;
+export const getBitacora = (): Bitacora[] => bitacora;
+
 
 // Helper para obtener todos los permisos (simulado)
 export const getAllPermissions = (): Permiso[] => {

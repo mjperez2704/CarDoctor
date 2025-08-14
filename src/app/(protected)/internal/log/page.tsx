@@ -1,17 +1,11 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { LogManager } from "@/components/log-manager";
+import { getBitacora, getUsuarios } from "@/lib/data";
 
 export default function LogPage() {
+  const logEntries = getBitacora();
+  const users = getUsuarios();
+  
   return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Bitácora Interna</CardTitle>
-          <CardDescription>
-            Consulta la bitácora de eventos importantes del sistema.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Próximamente: Módulo de bitácora interna.</p>
-        </CardContent>
-      </Card>
+    <LogManager initialLogs={logEntries} users={users} />
   );
 }

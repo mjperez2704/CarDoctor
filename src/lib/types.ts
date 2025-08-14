@@ -361,3 +361,16 @@ export type SolicitudInterna = {
   monto?: number;
   comentarios?: string;
 };
+
+// --------------------
+// 10) BITÁCORA
+// --------------------
+export type Bitacora = {
+  id: number;
+  fecha: string; // ISO 8601 date string
+  usuario_id: number;
+  accion: string; // e.g., 'CREACIÓN DE VENTA', 'LOGIN', 'AJUSTE DE INVENTARIO'
+  descripcion: string;
+  referencia_id?: number; // e.g., ID de la venta, del producto, etc.
+  modulo?: string; // e.g., 'Ventas', 'Inventario'
+};
