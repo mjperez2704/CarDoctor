@@ -1,17 +1,15 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dashboard } from "@/components/dashboard";
+import { getProductos } from "@/lib/data";
 
-export default function ProductsCatalogPage() {
+export default async function ProductsCatalogPage() {
+  const inventoryData = getProductos();
+  // TODO: Cargar registros de auditoría cuando estén disponibles
+  const auditLogsData: any[] = []; 
+
   return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Catálogo de Productos</CardTitle>
-          <CardDescription>
-            Administra los productos, refacciones y servicios que ofreces.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Próximamente: Módulo de catálogo de productos.</p>
-        </CardContent>
-      </Card>
+    <Dashboard
+      initialInventory={inventoryData}
+      initialAuditLogs={auditLogsData}
+    />
   );
 }
