@@ -10,7 +10,9 @@ import type {
   Producto,
   Almacen,
   Seccion,
-  Lote
+  Lote,
+  Marca,
+  Modelo,
 } from "./types";
 
 const now = new Date();
@@ -91,12 +93,29 @@ export const clientes: Cliente[] = [
 ];
 
 // --------------------
+// CATÁLOGOS
+// --------------------
+export const marcas: Marca[] = [
+  { id: 1, nombre: 'Apple', pais_origen: 'USA' },
+  { id: 2, nombre: 'Samsung', pais_origen: 'Corea del Sur' },
+  { id: 3, nombre: 'Xiaomi', pais_origen: 'China' },
+];
+
+export const modelos: Modelo[] = [
+  { id: 1, marca_id: 1, nombre: 'iPhone 15', anio: 2023 },
+  { id: 2, marca_id: 1, nombre: 'iPhone 15 Pro', anio: 2023 },
+  { id: 3, marca_id: 2, nombre: 'Galaxy S24', anio: 2024 },
+  { id: 4, marca_id: 2, nombre: 'Galaxy Z Fold 5', anio: 2023 },
+  { id: 5, marca_id: 3, nombre: 'Redmi Note 12', anio: 2023 },
+];
+
+// --------------------
 // PRODUCTOS
 // --------------------
 export const productos: Producto[] = [
   { id: 1, sku: 'PAR-IP15-PAN', nombre: 'Pantalla iPhone 15', categoria_id: 2, marca_id: 1, modelo_id: 1, activo: true, es_serie: false, precio_lista: 150.00, costo_promedio: 100.00, unidad: 'PZA' },
   { id: 2, sku: 'ACC-CAB-USBC', nombre: 'Cable USB-C 1m', categoria_id: 3, activo: true, es_serie: false, precio_lista: 25.00, costo_promedio: 10.00, unidad: 'PZA' },
-  { id: 3, sku: 'EQU-SAM-S24', nombre: 'Samsung Galaxy S24', categoria_id: 1, marca_id: 2, modelo_id: 2, activo: true, es_serie: true, precio_lista: 1200.00, costo_promedio: 950.00, unidad: 'PZA' },
+  { id: 3, sku: 'EQU-SAM-S24', nombre: 'Samsung Galaxy S24', categoria_id: 1, marca_id: 2, modelo_id: 3, activo: true, es_serie: true, precio_lista: 1200.00, costo_promedio: 950.00, unidad: 'PZA' },
   { id: 4, sku: 'HER-DES-01', nombre: 'Kit Desarmadores Precisión', categoria_id: 4, activo: true, es_serie: false, precio_lista: 40.00, costo_promedio: 25.00, unidad: 'KIT' },
   { id: 5, sku: 'SRV-DIAG-01', nombre: 'Servicio de Diagnóstico', categoria_id: 5, activo: true, es_serie: false, precio_lista: 20.00, costo_promedio: 0.00, unidad: 'SRV' },
 ];
@@ -150,6 +169,8 @@ export const getRoles = (): Rol[] => roles;
 export const getEmpleados = (): Empleado[] => empleados;
 export const getProveedores = (): Proveedor[] => proveedores;
 export const getClientes = (): Cliente[] => clientes;
+export const getMarcas = (): Marca[] => marcas;
+export const getModelos = (): Modelo[] => modelos;
 export const getProductos = (): Producto[] => productos;
 export const getAlmacenes = (): Almacen[] => almacenes;
 export const getOrdenesCompra = (): OrdenCompra[] => ordenesCompra;

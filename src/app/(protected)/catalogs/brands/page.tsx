@@ -1,17 +1,11 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { BrandsManager } from "@/components/brands-manager";
+import { getMarcas, getModelos } from "@/lib/data";
 
 export default function BrandsCatalogPage() {
+  const brands = getMarcas();
+  const models = getModelos();
+
   return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Catálogo de Marcas y Modelos</CardTitle>
-          <CardDescription>
-            Administra las marcas y modelos de los dispositivos.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Próximamente: Módulo de catálogo de marcas y modelos.</p>
-        </CardContent>
-      </Card>
+    <BrandsManager initialBrands={brands} initialModels={models} />
   );
 }
