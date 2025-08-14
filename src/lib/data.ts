@@ -13,6 +13,7 @@ import type {
   Lote,
   Marca,
   Modelo,
+  SolicitudInterna,
 } from "./types";
 
 const now = new Date();
@@ -162,6 +163,46 @@ export const ordenesServicio: OrdenServicio[] = [
     { id: 2, folio: 'OS-2024-002', fecha: '2024-07-31T10:00:00Z', cliente_id: 2, equipo_id: 2, estado: 'DIAGNOSTICO', tecnico_id: 2 },
 ];
 
+// --------------------
+// SOLICITUDES INTERNAS
+// --------------------
+export const solicitudesInternas: SolicitudInterna[] = [
+  {
+    id: 1,
+    folio: "SOL-2024-001",
+    solicitante_id: 3,
+    fecha_solicitud: "2024-07-25T09:00:00Z",
+    tipo: "COMPRA",
+    descripcion: "Solicitud de compra de 50 protectores de pantalla para iPhone 15.",
+    estado: "APROBADA",
+    aprobador_id: 1,
+    fecha_respuesta: "2024-07-25T11:00:00Z",
+    monto: 250.00,
+    comentarios: "Aprobado. Proceder con la compra al proveedor habitual."
+  },
+  {
+    id: 2,
+    folio: "SOL-2024-002",
+    solicitante_id: 2,
+    fecha_solicitud: "2024-07-28T14:30:00Z",
+    tipo: "PERMISO",
+    descripcion: "Solicitud de permiso por asunto personal para el día 2024-08-05.",
+    estado: "PENDIENTE",
+  },
+  {
+    id: 3,
+    folio: "SOL-2024-003",
+    solicitante_id: 2,
+    fecha_solicitud: "2024-07-29T10:00:00Z",
+    tipo: "GASTO",
+    descripcion: "Reembolso por compra de herramienta menor (pinzas antiestáticas).",
+    estado: "RECHAZADA",
+    aprobador_id: 1,
+    fecha_respuesta: "2024-07-29T12:00:00Z",
+    monto: 15.00,
+    comentarios: "Rechazado. La compra de herramientas debe seguir el proceso de solicitud de compra, no de reembolso."
+  },
+];
 
 // Funciones "simuladas" para obtener datos
 export const getUsuarios = (): Usuario[] => usuarios;
@@ -175,3 +216,4 @@ export const getProductos = (): Producto[] => productos;
 export const getAlmacenes = (): Almacen[] => almacenes;
 export const getOrdenesCompra = (): OrdenCompra[] => ordenesCompra;
 export const getOrdenesServicio = (): OrdenServicio[] => ordenesServicio;
+export const getSolicitudesInternas = (): SolicitudInterna[] => solicitudesInternas;

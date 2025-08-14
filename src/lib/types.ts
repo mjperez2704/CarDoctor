@@ -322,3 +322,20 @@ export type Gasto = {
     descripcion?: string;
     monto: number;
 };
+
+// --------------------
+// 9) COMUNICACIÓN INTERNA
+// --------------------
+export type SolicitudInterna = {
+  id: number;
+  folio: string;
+  solicitante_id: number;
+  aprobador_id?: number;
+  fecha_solicitud: string;
+  fecha_respuesta?: string;
+  tipo: "COMPRA" | "GASTO" | "VACACIONES" | "PERMISO" | "OTRO";
+  descripcion: string;
+  estado: "PENDIENTE" | "APROBADA" | "RECHAZADA" | "CANCELADA";
+  monto?: number;
+  comentarios?: string;
+};

@@ -1,17 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { RequestsManager } from "@/components/requests-manager";
+import { getSolicitudesInternas, getEmpleados } from "@/lib/data";
 
 export default function RequestsPage() {
+  const requests = getSolicitudesInternas();
+  const employees = getEmpleados();
   return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Solicitudes Internas</CardTitle>
-          <CardDescription>
-            Gestiona las solicitudes entre el personal.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Próximamente: Módulo de solicitudes internas.</p>
-        </CardContent>
-      </Card>
+    <RequestsManager initialRequests={requests} employees={employees} />
   );
 }
