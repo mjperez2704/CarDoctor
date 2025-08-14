@@ -17,10 +17,10 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import type { Warehouse, Section, Lot } from "@/lib/types";
+import type { Almacen, Seccion, Lote } from "@/lib/types";
 
 type WarehouseManagerProps = {
-  initialData: Warehouse[];
+  initialData: Almacen[];
 };
 
 const RuleBadge = ({
@@ -55,7 +55,7 @@ export function WarehouseManager({ initialData }: WarehouseManagerProps) {
           <CardHeader>
             <div className="flex justify-between items-start">
                 <div>
-                    <CardTitle>{warehouse.name}</CardTitle>
+                    <CardTitle>{warehouse.nombre}</CardTitle>
                     <CardDescription>
                         Administra las secciones y lotes de este almacén.
                     </CardDescription>
@@ -67,16 +67,16 @@ export function WarehouseManager({ initialData }: WarehouseManagerProps) {
           </CardHeader>
           <CardContent>
             <Accordion type="single" collapsible className="w-full">
-              {warehouse.sections.map((section) => (
-                <AccordionItem value={section.id} key={section.id}>
+              {warehouse.secciones && warehouse.secciones.map((section) => (
+                <AccordionItem value={String(section.id)} key={section.id}>
                   <AccordionTrigger>
                     <div className="flex items-center gap-4">
-                        <span className="font-medium text-lg">{section.name}</span>
+                        <span className="font-medium text-lg">{section.nombre}</span>
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="pl-6">
                     <div className="space-y-4">
-                        <div>
+                        {/* <div>
                             <h4 className="font-semibold mb-2">Reglas de la Sección</h4>
                              <div className="flex flex-wrap">
                                 <RuleBadge label="Tipo" values={section.rules.type} />
@@ -85,14 +85,14 @@ export function WarehouseManager({ initialData }: WarehouseManagerProps) {
                                 <RuleBadge label="Stock" values={section.rules.stockType} />
                                 <RuleBadge label="Marca" values={section.rules.brand} />
                             </div>
-                        </div>
+                        </div> */}
                         <div className="flex justify-between items-center">
                             <h4 className="font-semibold">Lotes</h4>
                             <Button variant="outline" size="sm">
                                 <PlusCircle className="mr-2 h-4 w-4" /> Agregar Lote
                             </Button>
                         </div>
-                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                       {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                          {section.lots.map((lot) => (
                             <Card key={lot.id}>
                                 <CardHeader>
@@ -104,7 +104,7 @@ export function WarehouseManager({ initialData }: WarehouseManagerProps) {
                                 </CardContent>
                             </Card>
                          ))}
-                       </div>
+                       </div> */}
                     </div>
                   </AccordionContent>
                 </AccordionItem>
