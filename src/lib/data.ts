@@ -16,6 +16,7 @@ import type {
   SolicitudInterna,
   Purchase,
   Bitacora,
+  Gasto,
 } from "./types";
 
 const now = new Date();
@@ -258,6 +259,32 @@ export const bitacora: Bitacora[] = [
   { id: 8, fecha: new Date(now.getTime() - 15 * 60 * 1000).toISOString(), usuario_id: 1, accion: 'ACTUALIZACIÓN DE ROL', descripcion: 'Se modificaron los permisos para el rol "Vendedor".' },
 ];
 
+// --------------------
+// GASTOS
+// --------------------
+export const gastos: Gasto[] = Array.from({ length: 30 }, (_, i) => {
+    const randomDaysAgo = Math.floor(Math.random() * 30);
+    const fecha = new Date();
+    fecha.setDate(fecha.getDate() - randomDaysAgo);
+
+    const categorias = ['VIATICOS', 'PAPELERIA', 'SERVICIOS', 'TRANSPORTE', 'COMIDA', 'VARIOS'];
+    const estados: Gasto['estado'][] = ['APROBADO', 'PENDIENTE', 'RECHAZADO'];
+
+    const solicitanteId = empleados[Math.floor(Math.random() * empleados.length)].id;
+    const estado = estados[Math.floor(Math.random() * estados.length)];
+
+    return {
+        id: i + 1,
+        fecha: fecha.toISOString(),
+        categoria: categorias[Math.floor(Math.random() * categorias.length)],
+        descripcion: `Descripción de ejemplo para el gasto #${i + 1}`,
+        monto: parseFloat((Math.random() * 1000 + 50).toFixed(2)),
+        empleado_id: solicitanteId,
+        autorizador_id: estado !== 'PENDIENTE' ? 1 : undefined,
+        estado: estado,
+    };
+});
+
 
 // Funciones "simuladas" para obtener datos
 export const getUsuarios = (): Usuario[] => usuarios;
@@ -274,6 +301,7 @@ export const getOrdenesCompra = (): OrdenCompra[] => ordenesCompra;
 export const getOrdenesServicio = (): OrdenServicio[] => ordenesServicio;
 export const getSolicitudesInternas = (): SolicitudInterna[] => solicitudesInternas;
 export const getBitacora = (): Bitacora[] => bitacora;
+export const getGastos = (): Gasto[] => gastos;
 
 
 // Helper para obtener todos los permisos (simulado)

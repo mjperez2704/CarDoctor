@@ -343,6 +343,9 @@ export type Gasto = {
     categoria: string;
     descripcion?: string;
     monto: number;
+    empleado_id: number;
+    autorizador_id?: number;
+    estado: "PENDIENTE" | "APROBADO" | "RECHAZADO";
 };
 
 // --------------------
