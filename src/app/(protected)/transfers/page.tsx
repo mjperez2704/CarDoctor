@@ -1,17 +1,9 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { TransferForm } from "@/components/transfer-form";
+import { getAlmacenes, getProductos } from "@/lib/data";
 
 export default function TransfersPage() {
-  return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Traslados de Inventario</CardTitle>
-          <CardDescription>
-            Gestiona los traslados de inventario entre almacenes.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Próximamente: Módulo de traslados de inventario.</p>
-        </CardContent>
-      </Card>
-  );
+  const almacenes = getAlmacenes();
+  const productos = getProductos();
+
+  return <TransferForm almacenes={almacenes} productos={productos} />;
 }
