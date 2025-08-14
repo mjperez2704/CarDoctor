@@ -46,7 +46,7 @@ import {
 import { NavLink } from "@/components/nav-link";
 
 const NavMenu = () => (
-  <Accordion type="multiple" className="w-full">
+  <Accordion type="multiple" className="w-full" defaultValue={["seguridad", "catalogos", "contactos", "operaciones", "inventario", "administracion", "crm", "reportes", "comunicacion"]}>
     {/* Seguridad */}
     <AccordionItem value="seguridad">
       <AccordionTrigger>
