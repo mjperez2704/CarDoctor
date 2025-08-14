@@ -1,17 +1,14 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Roles } from "@/components/roles";
+import { getRoles } from "@/lib/data";
+import { getAllPermissions } from "@/lib/permissions";
 
 export default function RolesPage() {
+  const roles = getRoles();
+  const permissions = getAllPermissions();
+
   return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Roles y Permisos</CardTitle>
-          <CardDescription>
-            Gestiona los roles y permisos de los usuarios.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Próximamente: Módulo de gestión de roles y permisos.</p>
-        </CardContent>
-      </Card>
+    <Roles initialRoles={roles} allPermissions={permissions} />
   );
 }
+
+    

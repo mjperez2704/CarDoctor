@@ -31,6 +31,7 @@ import {
   BadgePercent,
   MessageSquare,
   ClipboardList,
+  Fingerprint,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -61,7 +62,7 @@ const NavMenu = () => (
             <User className="h-4 w-4" /> Usuarios
           </NavLink>
           <NavLink href="/roles">
-            <UsersRound className="h-4 w-4" /> Roles y Permisos
+            <Fingerprint className="h-4 w-4" /> Roles y Permisos
           </NavLink>
         </nav>
       </AccordionContent>
@@ -315,3 +316,5 @@ export default function ProtectedLayout({
     </div>
   );
 }
+
+    

@@ -1,17 +1,13 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Users } from "@/components/users";
+import { getUsuarios, getRoles } from "@/lib/data";
 
 export default function UsersPage() {
+  const users = getUsuarios();
+  const roles = getRoles();
+  
   return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Usuarios</CardTitle>
-          <CardDescription>
-            Gestiona los usuarios del sistema.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Próximamente: Módulo de gestión de usuarios.</p>
-        </CardContent>
-      </Card>
+    <Users initialUsers={users} availableRoles={roles} />
   );
 }
+
+    
