@@ -1,9 +1,7 @@
-import { AppLayout } from "@/components/layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function ReportsPage() {
   return (
-    <AppLayout title="Reportes Personalizados">
       <Card>
         <CardHeader>
           <CardTitle>Reportes</CardTitle>
@@ -15,6 +13,5 @@ export default function ReportsPage() {
           <p>Próximamente: Módulo de reportes personalizados.</p>
         </CardContent>
       </Card>
-    </AppLayout>
   );
 }

@@ -1,9 +1,7 @@
-import { AppLayout } from "@/components/layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function MarketingPage() {
   return (
-    <AppLayout title="Marketing y Redes Sociales">
       <Card>
         <CardHeader>
           <CardTitle>Marketing</CardTitle>
@@ -15,6 +13,5 @@ export default function MarketingPage() {
           <p>Próximamente: Módulo de gestión de marketing.</p>
         </CardContent>
       </Card>
-    </AppLayout>
   );
 }
