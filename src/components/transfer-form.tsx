@@ -16,6 +16,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -30,6 +31,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import type { Almacen, Producto, Lote } from "@/lib/types";
 
@@ -56,14 +58,23 @@ const formSchema = z.object({
   destinationLot: z.string().min(1, "El lote de destino es requerido."),
   product: z.string().min(1, "El producto es requerido."),
   quantity: z.coerce.number().int().positive("La cantidad debe ser un número positivo."),
+  transferAll: z.boolean().optional(),
 }).refine(data => {
     if (data.transferType === 'inter-warehouse') {
-        return data.originWarehouse !== data.destinationWarehouse;
+        return !!data.originWarehouse && !!data.destinationWarehouse && data.originWarehouse !== data.destinationWarehouse;
     }
     return true;
 }, {
-    message: "El almacén de origen y destino no pueden ser el mismo.",
+    message: "El almacén de origen y destino deben ser seleccionados y no pueden ser el mismo.",
     path: ["destinationWarehouse"],
+}).refine(data => {
+    if (data.transferType === 'intra-warehouse') {
+        return data.originLot !== data.destinationLot;
+    }
+    return true;
+}, {
+    message: "El lote de origen y destino no pueden ser el mismo.",
+    path: ["destinationLot"],
 });
 
 type TransferFormProps = {
@@ -73,11 +84,22 @@ type TransferFormProps = {
 
 export function TransferForm({ almacenes, productos }: TransferFormProps) {
   const { toast } = useToast();
+  const [availableQuantity, setAvailableQuantity] = React.useState<number | null>(null);
+
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema.refine(data => {
+        if(availableQuantity !== null) {
+            return data.quantity <= availableQuantity;
+        }
+        return true;
+    }, {
+        message: "La cantidad a trasladar no puede ser mayor que la disponible.",
+        path: ["quantity"]
+    })),
     defaultValues: {
       transferType: "inter-warehouse",
-      quantity: 1
+      quantity: 1,
+      transferAll: false,
     },
   });
 
@@ -85,6 +107,25 @@ export function TransferForm({ almacenes, productos }: TransferFormProps) {
   const originWarehouseId = form.watch("originWarehouse");
   const destinationWarehouseId = form.watch("destinationWarehouse");
   const intraWarehouseId = form.watch("warehouse");
+  const originLotId = form.watch("originLot");
+  const productId = form.watch("product");
+  const transferAll = form.watch("transferAll");
+
+  React.useEffect(() => {
+    if(originLotId && productId) {
+        const lot = mockLotes.find(l => String(l.id) === originLotId && String(l.producto_id) === productId);
+        if(lot) {
+            setAvailableQuantity(lot.cantidad);
+            if(transferAll) {
+                form.setValue('quantity', lot.cantidad);
+            }
+        } else {
+            setAvailableQuantity(null);
+        }
+    } else {
+        setAvailableQuantity(null);
+    }
+  }, [originLotId, productId, transferAll, form]);
 
 
   const getLotsForWarehouse = (warehouseId: string | undefined) => {
@@ -102,6 +143,7 @@ export function TransferForm({ almacenes, productos }: TransferFormProps) {
       description: `Se registró el traslado de ${values.quantity} unidades.`,
     });
     form.reset();
+    setAvailableQuantity(null);
   }
 
   return (
@@ -123,7 +165,19 @@ export function TransferForm({ almacenes, productos }: TransferFormProps) {
                   <FormLabel>Tipo de Traslado</FormLabel>
                   <FormControl>
                     <RadioGroup
-                      onValueChange={field.onChange}
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        form.reset({
+                            ...form.getValues(),
+                            transferType: value as any,
+                            originWarehouse: undefined,
+                            destinationWarehouse: undefined,
+                            warehouse: undefined,
+                            originLot: undefined,
+                            destinationLot: undefined,
+                        });
+                        setAvailableQuantity(null);
+                      }}
                       defaultValue={field.value}
                       className="flex space-x-4"
                     >
@@ -211,17 +265,18 @@ export function TransferForm({ almacenes, productos }: TransferFormProps) {
                 )}/>
             </div>
 
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField control={form.control} name="product" render={({field}) => (
-                    <FormItem>
-                        <FormLabel>Producto (SKU)</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl><SelectTrigger><SelectValue placeholder="Seleccione un producto"/></SelectTrigger></FormControl>
-                            <SelectContent>{productos.map(p => <SelectItem key={p.id} value={String(p.id)}>{p.nombre} ({p.sku})</SelectItem>)}</SelectContent>
-                        </Select>
-                        <FormMessage />
-                    </FormItem>
-                )}/>
+            <FormField control={form.control} name="product" render={({field}) => (
+                <FormItem>
+                    <FormLabel>Producto (SKU)</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!originLotId}>
+                        <FormControl><SelectTrigger><SelectValue placeholder="Seleccione un producto"/></SelectTrigger></FormControl>
+                        <SelectContent>{productos.map(p => <SelectItem key={p.id} value={String(p.id)}>{p.nombre} ({p.sku})</SelectItem>)}</SelectContent>
+                    </Select>
+                    <FormMessage />
+                </FormItem>
+            )}/>
+
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
                  <FormField
                     control={form.control}
                     name="quantity"
@@ -229,10 +284,33 @@ export function TransferForm({ almacenes, productos }: TransferFormProps) {
                     <FormItem>
                         <FormLabel>Cantidad a Trasladar</FormLabel>
                         <FormControl>
-                        <Input type="number" {...field} />
+                          <Input type="number" {...field} disabled={transferAll}/>
                         </FormControl>
+                         {availableQuantity !== null && (
+                            <FormDescription>
+                                Disponible: {availableQuantity} unidades
+                            </FormDescription>
+                        )}
                         <FormMessage />
                     </FormItem>
+                    )}
+                />
+                 <FormField
+                    control={form.control}
+                    name="transferAll"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-row items-center space-x-2 pb-2">
+                             <FormControl>
+                                <Checkbox
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                    disabled={availableQuantity === null}
+                                />
+                            </FormControl>
+                            <FormLabel className="font-normal mt-0!">
+                                Trasladar todo el stock
+                            </FormLabel>
+                        </FormItem>
                     )}
                 />
             </div>
