@@ -79,7 +79,7 @@ export const usuarios: Usuario[] = [
 export const empleados: Empleado[] = [
     { id: 1, nombre: 'Admin User', apellido_p: 'System', email: 'admin@example.com', puesto: 'Administrador', usuario_id: 1 },
     { id: 2, nombre: 'Juan', apellido_p: 'Pérez', email: 'juan.perez@example.com', puesto: 'Técnico Líder', usuario_id: 2 },
-    { id: 3, nombre: 'Maria', apellido_p: 'Rodriguez', email: 'maria.rodriguez@example.com', puesto: 'Ejecutiva de Ventas', usuario_id: 3 },
+    { id: 3, nombre: 'Maria', apellido_p: 'Rodriguez', email: 'maria.rodriguez@example.com', puesto: 'Ejecutiva de Ventas', usuario_id: 3, slug_vendedor: 'MARIA', meta_venta_mensual: 15000 },
 ];
 
 // --------------------

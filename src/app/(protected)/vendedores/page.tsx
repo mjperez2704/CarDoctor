@@ -1,9 +1,10 @@
 import { Vendedores } from "@/components/vendedores";
-import { getEmpleados } from "@/lib/data";
+import { getEmpleados, getUsuarios } from "@/lib/data";
 
 export default function VendedoresPage() {
   const employees = getEmpleados();
+  const users = getUsuarios();
   return (
-    <Vendedores initialVendedores={employees} />
+    <Vendedores initialVendedores={employees} systemUsers={users} />
   );
 }

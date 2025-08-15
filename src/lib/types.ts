@@ -110,6 +110,8 @@ export type Empleado = {
   fecha_baja?: string; // ISO 8601 date string
   salario_diario?: number;
   usuario_id?: number;
+  slug_vendedor?: string;
+  meta_venta_mensual?: number;
 };
 
 // --------------------
