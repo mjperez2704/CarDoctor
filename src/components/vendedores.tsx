@@ -24,7 +24,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, PlusCircle } from "lucide-react";
 import type { Empleado } from "@/lib/types";
 import { Input } from "./ui/input";
 
@@ -43,6 +43,10 @@ export function Vendedores({ initialVendedores }: { initialVendedores: Empleado[
               Administra las cuotas y el desempeño de tu equipo de ventas.
             </CardDescription>
           </div>
+          <Button>
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Agregar Vendedor
+          </Button>
         </div>
       </CardHeader>
       <CardContent>
