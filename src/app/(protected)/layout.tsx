@@ -32,6 +32,12 @@ import {
   MessageSquare,
   ClipboardList,
   Fingerprint,
+  Palette,
+  Building2,
+  BookLock,
+  BookText,
+  Gavel,
+  Clipboard,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -47,7 +53,7 @@ import {
 import { NavLink } from "@/components/nav-link";
 
 const NavMenu = () => (
-  <Accordion type="multiple" className="w-full" defaultValue={["seguridad", "catalogos", "contactos", "operaciones", "inventario", "administracion", "crm", "reportes", "comunicacion"]}>
+  <Accordion type="multiple" className="w-full" defaultValue={["seguridad", "catalogos", "contactos", "operaciones", "inventario", "administracion", "crm", "reportes", "comunicacion", "configuraciones"]}>
     {/* Seguridad */}
     <AccordionItem value="seguridad">
       <AccordionTrigger>
@@ -115,7 +121,7 @@ const NavMenu = () => (
     <AccordionItem value="operaciones">
       <AccordionTrigger>
         <div className="flex items-center gap-3">
-          <Settings className="h-5 w-5" />
+          <Wrench className="h-5 w-5" />
           <span>Operaciones</span>
         </div>
       </AccordionTrigger>
@@ -251,6 +257,38 @@ const NavMenu = () => (
         </nav>
       </AccordionContent>
     </AccordionItem>
+    
+    {/* Configuraciones */}
+    <AccordionItem value="configuraciones">
+      <AccordionTrigger>
+        <div className="flex items-center gap-3">
+            <Settings className="h-5 w-5" />
+            <span>Configuraciones</span>
+        </div>
+      </AccordionTrigger>
+      <AccordionContent className="pl-4">
+        <nav className="grid items-start gap-1">
+            <NavLink href="/settings/appearance">
+                <Palette className="h-4 w-4" /> Apariencia
+            </NavLink>
+            <NavLink href="/settings/company">
+                <Building2 className="h-4 w-4" /> Datos Empresa
+            </NavLink>
+            <NavLink href="/settings/privacy">
+                <BookLock className="h-4 w-4" /> Aviso de Privacidad
+            </NavLink>
+            <NavLink href="/settings/policies">
+                <BookText className="h-4 w-4" /> Políticas y Reglamentos
+            </NavLink>
+            <NavLink href="/settings/rules">
+                <Gavel className="h-4 w-4" /> Reglas de Negocio
+            </NavLink>
+             <NavLink href="/settings/formats">
+                <Clipboard className="h-4 w-4" /> Formatos
+            </NavLink>
+        </nav>
+      </AccordionContent>
+    </AccordionItem>
   </Accordion>
 );
 
@@ -316,5 +354,3 @@ export default function ProtectedLayout({
     </div>
   );
 }
-
-    
