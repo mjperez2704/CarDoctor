@@ -180,6 +180,9 @@ const NavMenu = () => (
           <NavLink href="/employees">
             <BookUser className="h-4 w-4" /> Empleados
           </NavLink>
+          <NavLink href="/vendedores">
+            <UsersRound className="h-4 w-4" /> Vendedores
+          </NavLink>
           <NavLink href="/billing">
             <FileText className="h-4 w-4" /> Facturación
           </NavLink>
