@@ -34,23 +34,35 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Producto } from "@/lib/types";
+import type { Producto, Proveedor, Marca } from "@/lib/types";
 import { AiSuggestionDialog } from "./ai-suggestion-dialog";
+import { ProductFormModal } from "./product-form-modal";
 
 export function ProductCatalog({
   initialProducts,
+  providers,
+  brands
 }: {
   initialProducts: Producto[];
+  providers: Proveedor[];
+  brands: Marca[];
 }) {
   const [products, setProducts] =
     React.useState<Producto[]>(initialProducts);
 
   const [selectedItemForAI, setSelectedItemForAI] = React.useState<Producto | null>(null);
   const [isAIDialogOpen, setAIDialogOpen] = React.useState(false);
+  const [isProductModalOpen, setProductModalOpen] = React.useState(false);
 
   const handleOpenAISuggestion = (item: Producto) => {
     setSelectedItemForAI(item);
     setAIDialogOpen(true);
+  }
+  
+  const handleSaveProduct = (values: any) => {
+    // TODO: Implement actual save logic
+    console.log("Saving product:", values);
+    setProductModalOpen(false);
   }
 
   return (
@@ -77,7 +89,7 @@ export function ProductCatalog({
                         Exportar
                     </span>
                 </Button>
-                <Button size="sm" className="h-7 gap-1">
+                <Button size="sm" className="h-7 gap-1" onClick={() => setProductModalOpen(true)}>
                     <PlusCircle className="h-3.5 w-3.5" />
                     <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                         Agregar Producto
@@ -145,6 +157,15 @@ export function ProductCatalog({
           </div>
         </CardFooter>
       </Card>
+
+      <ProductFormModal
+        isOpen={isProductModalOpen}
+        onClose={() => setProductModalOpen(false)}
+        onSave={handleSaveProduct}
+        providers={providers}
+        brands={brands}
+      />
+
        {selectedItemForAI && (
         <AiSuggestionDialog
           item={selectedItemForAI}
