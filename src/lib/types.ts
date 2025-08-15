@@ -393,3 +393,5 @@ export type Bitacora = {
   referencia_id?: number; // e.g., ID de la venta, del producto, etc.
   modulo?: string; // e.g., 'Ventas', 'Inventario'
 };
+
+    

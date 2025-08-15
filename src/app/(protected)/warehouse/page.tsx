@@ -7,3 +7,5 @@ export default function WarehousePage() {
     <WarehouseManager initialData={warehouseData} />
   );
 }
+
+    

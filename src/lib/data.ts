@@ -334,3 +334,5 @@ export const getAllPermissions = (): Permiso[] => {
     });
     return permisos;
 };
+
+    

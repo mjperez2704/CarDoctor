@@ -116,3 +116,5 @@ export function WarehouseManager({ initialData }: WarehouseManagerProps) {
     </div>
   );
 }
+
+    
