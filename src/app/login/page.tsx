@@ -50,8 +50,8 @@ export default function LoginPage() {
         <form onSubmit={handleLogin}>
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
-                <Image src="/logo.png" alt="Logo" width={300} height={200} />
-                <Image src="" alt="Logo" width={64} height={64} />
+                {/*<Image src="/logo.png" alt="Logo" width={300} height={200} />*/}
+                <Image src="https://hospitaldelmovil.mega-shop-test.shop/logo.png" alt="Logo" width={64} height={64} />
             </div>
             <CardTitle className="text-2xl">Hospital del Móvil</CardTitle>
             <CardDescription>
