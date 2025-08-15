@@ -38,6 +38,7 @@ import {
   BookText,
   Gavel,
   Clipboard,
+  BookHeadphones,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -285,6 +286,9 @@ const NavMenu = () => (
             </NavLink>
              <NavLink href="/settings/formats">
                 <Clipboard className="h-4 w-4" /> Formatos
+            </NavLink>
+             <NavLink href="/settings/manuals">
+                <BookHeadphones className="h-4 w-4" /> Manuales
             </NavLink>
         </nav>
       </AccordionContent>

@@ -1,17 +1,33 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function PoliciesPage() {
   return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold">Políticas y Reglamentos</h1>
+        <p className="text-muted-foreground">
+          Define las políticas y reglamentos internos de la empresa.
+        </p>
+      </div>
       <Card>
         <CardHeader>
-          <CardTitle>Políticas y Reglamentos</CardTitle>
+          <CardTitle>Editor de Políticas</CardTitle>
           <CardDescription>
-            Define las políticas y reglamentos internos de la empresa.
+            Utiliza el siguiente editor para redactar y dar formato a las políticas de la empresa. El contenido se guardará y será visible para los empleados correspondientes.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p>Próximamente: Módulo para gestionar políticas y reglamentos.</p>
+            <Textarea 
+                placeholder="Escribe aquí las políticas y reglamentos..."
+                className="min-h-[400px]"
+            />
         </CardContent>
+        <CardFooter>
+            <Button>Guardar Cambios</Button>
+        </CardFooter>
       </Card>
+    </div>
   );
 }

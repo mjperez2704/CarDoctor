@@ -1,17 +1,33 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function PrivacyPage() {
   return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold">Aviso de Privacidad</h1>
+        <p className="text-muted-foreground">
+          Gestiona el contenido del aviso de privacidad de la empresa.
+        </p>
+      </div>
       <Card>
         <CardHeader>
-          <CardTitle>Aviso de Privacidad</CardTitle>
+          <CardTitle>Editor del Aviso de Privacidad</CardTitle>
           <CardDescription>
-            Edita el aviso de privacidad de la empresa.
+            Utiliza el siguiente editor para redactar y dar formato al aviso de privacidad.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p>Próximamente: Módulo para gestionar el aviso de privacidad.</p>
+          <Textarea 
+            placeholder="Escribe aquí el aviso de privacidad..."
+            className="min-h-[400px]"
+          />
         </CardContent>
+        <CardFooter>
+            <Button>Guardar Cambios</Button>
+        </CardFooter>
       </Card>
+    </div>
   );
 }
