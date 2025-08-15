@@ -34,9 +34,10 @@ import {
 } from "@/components/ui/select";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { Checkbox } from "./ui/checkbox";
 import { Switch } from "./ui/switch";
 import { Separator } from "./ui/separator";
+import { ScrollArea } from "./ui/scroll-area";
+import { Checkbox } from "./ui/checkbox";
 
 const formSchema = z.object({
   nombre: z.string().min(1, "El nombre es requerido."),
@@ -161,41 +162,44 @@ export function UserFormModal({
                 render={() => (
                     <FormItem>
                         <FormLabel>Roles</FormLabel>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 rounded-lg border p-4">
-                        {roles.map((rol) => (
-                            <FormField
-                            key={rol.id}
-                            control={form.control}
-                            name="roles"
-                            render={({ field }) => {
-                                return (
-                                <FormItem
-                                    key={rol.id}
-                                    className="flex flex-row items-start space-x-3 space-y-0"
-                                >
-                                    <FormControl>
-                                    <Checkbox
-                                        checked={field.value?.includes(String(rol.id))}
-                                        onCheckedChange={(checked) => {
-                                        return checked
-                                            ? field.onChange([...field.value, String(rol.id)])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                (value) => value !== String(rol.id)
-                                                )
-                                            );
-                                        }}
-                                    />
-                                    </FormControl>
-                                    <FormLabel className="font-normal">
-                                        {rol.nombre}
-                                    </FormLabel>
-                                </FormItem>
-                                );
-                            }}
-                            />
-                        ))}
-                        </div>
+                         <FormDescription>
+                            Seleccione uno o más roles para el usuario.
+                        </FormDescription>
+                        <ScrollArea className="h-32 w-full rounded-md border p-4">
+                            {roles.map((rol) => (
+                                <FormField
+                                key={rol.id}
+                                control={form.control}
+                                name="roles"
+                                render={({ field }) => {
+                                    return (
+                                    <FormItem
+                                        key={rol.id}
+                                        className="flex flex-row items-start space-x-3 space-y-0 mb-3"
+                                    >
+                                        <FormControl>
+                                        <Checkbox
+                                            checked={field.value?.includes(String(rol.id))}
+                                            onCheckedChange={(checked) => {
+                                            return checked
+                                                ? field.onChange([...(field.value || []), String(rol.id)])
+                                                : field.onChange(
+                                                    (field.value || []).filter(
+                                                    (value) => value !== String(rol.id)
+                                                    )
+                                                );
+                                            }}
+                                        />
+                                        </FormControl>
+                                        <FormLabel className="font-normal">
+                                            {rol.nombre}
+                                        </FormLabel>
+                                    </FormItem>
+                                    );
+                                }}
+                                />
+                            ))}
+                        </ScrollArea>
                         <FormMessage />
                     </FormItem>
                 )}
@@ -262,6 +266,7 @@ export function UserFormModal({
                     name="expiryUnit"
                     render={({ field }) => (
                          <FormItem>
+                            <FormLabel>&nbsp;</FormLabel>
                             <Select onValueChange={field.onChange} defaultValue={field.value} disabled={passwordNeverExpires}>
                                 <FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl>
                                 <SelectContent>
