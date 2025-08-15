@@ -17,6 +17,7 @@ import type {
   Purchase,
   Bitacora,
   Gasto,
+  Herramienta,
 } from "./types";
 
 const now = new Date();
@@ -115,6 +116,14 @@ export const modelos: Modelo[] = [
   { id: 3, marca_id: 2, nombre: 'Galaxy S24', anio: 2024 },
   { id: 4, marca_id: 2, nombre: 'Galaxy Z Fold 5', anio: 2023 },
   { id: 5, marca_id: 3, nombre: 'Redmi Note 12', anio: 2023 },
+];
+
+export const herramientas: Herramienta[] = [
+  { id: 1, sku: 'HER-MUL-01', nombre: 'Multímetro Digital', marca: 'Fluke', modelo: '115', estado: 'DISPONIBLE', fecha_compra: '2023-01-15', costo: 180.00 },
+  { id: 2, sku: 'HER-CAU-02', nombre: 'Estación de Soldadura', marca: 'Weller', modelo: 'WES51', estado: 'ASIGNADA', asignada_a_empleado_id: 2, fecha_compra: '2023-02-20', costo: 120.00 },
+  { id: 3, sku: 'HER-KIT-03', nombre: 'Kit de Desarmadores iFixit', marca: 'iFixit', modelo: 'Pro Tech Toolkit', estado: 'EN_MANTENIMIENTO', fecha_compra: '2022-11-10', costo: 75.00 },
+  { id: 4, sku: 'HER-FUE-04', nombre: 'Fuente de Poder Regulable', marca: 'KORAD', modelo: 'KD3005D', estado: 'DISPONIBLE', fecha_compra: '2023-05-30', costo: 95.00 },
+  { id: 5, sku: 'HER-MIC-05', nombre: 'Microscopio Digital', marca: 'Andonstar', modelo: 'AD407', estado: 'DE_BAJA', fecha_compra: '2022-09-01', costo: 250.00 },
 ];
 
 // --------------------
@@ -294,6 +303,7 @@ export const getProveedores = (): Proveedor[] => proveedores;
 export const getClientes = (): Cliente[] => clientes;
 export const getMarcas = (): Marca[] => marcas;
 export const getModelos = (): Modelo[] => modelos;
+export const getHerramientas = (): Herramienta[] => herramientas;
 export const getProductos = (): Producto[] => productos;
 export const getAlmacenes = (): Almacen[] => almacenes;
 export const getPurchases = (): Purchase[] => purchases;

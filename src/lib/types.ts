@@ -84,6 +84,20 @@ export type Producto = {
   costo_promedio: number;
 };
 
+export type Herramienta = {
+  id: number;
+  sku: string;
+  nombre: string;
+  descripcion?: string;
+  marca?: string;
+  modelo?: string;
+  numero_serie?: string;
+  estado: "DISPONIBLE" | "ASIGNADA" | "EN_MANTENIMIENTO" | "DE_BAJA";
+  asignada_a_empleado_id?: number;
+  fecha_compra?: string;
+  costo?: number;
+};
+
 export type ProductoSerie = {
   id: number;
   producto_id: number;

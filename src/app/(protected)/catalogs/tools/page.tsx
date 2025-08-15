@@ -1,17 +1,11 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ToolsManager } from "@/components/tools-manager";
+import { getHerramientas, getEmpleados } from "@/lib/data";
 
 export default function ToolsCatalogPage() {
+  const tools = getHerramientas();
+  const employees = getEmpleados();
+
   return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Catálogo de Herramientas</CardTitle>
-          <CardDescription>
-            Administra las herramientas del taller.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Próximamente: Módulo de catálogo de herramientas.</p>
-        </CardContent>
-      </Card>
+    <ToolsManager initialTools={tools} employees={employees} />
   );
 }
