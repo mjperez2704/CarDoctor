@@ -7,8 +7,8 @@ import { SessionProvider } from "@/components/session-provider";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "TrackFlow",
-  description: "Gestión Inteligente de Inventario",
+  title: "HOSPITAL DEL MÓVIL",
+  description: "SISTEMA DE ADMINISTRACION INTELIGENTE",
 };
 
 export default function RootLayout({
