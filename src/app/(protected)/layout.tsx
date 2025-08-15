@@ -155,7 +155,7 @@ const NavMenu = () => (
             <Package className="h-4 w-4" /> Inventario General
           </NavLink>
           <NavLink href="/warehouse">
-            <Home className="h-4 w-4" /> Almacenes y Lotes
+            <Home className="h-4 w-4" /> Gestión de Almacén
           </NavLink>
           <NavLink href="/transfers">
             <ArrowRightLeft className="h-4 w-4" /> Traslados
