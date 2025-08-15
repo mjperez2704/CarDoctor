@@ -29,90 +29,105 @@ import {
 import { MoreHorizontal, PlusCircle, UserX, UserCheck } from "lucide-react";
 import type { Usuario, Rol } from "@/lib/types";
 import { Badge } from "./ui/badge";
+import { UserFormModal } from "./user-form-modal";
 
 export function Users({ initialUsers, availableRoles }: { initialUsers: Usuario[], availableRoles: Rol[] }) {
   const [users, setUsers] = React.useState(initialUsers);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   const toggleUserStatus = (userId: number) => {
     setUsers(users.map(user => 
         user.id === userId ? { ...user, activo: !user.activo } : user
     ));
   }
+  
+  const handleSaveUser = (values: any) => {
+    console.log("New user to be added:", values);
+    // Here you would typically call an API to create the user
+    // and then refresh the user list.
+  }
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex justify-between items-center">
-          <div>
-            <CardTitle>Usuarios</CardTitle>
-            <CardDescription>
-              Administra los usuarios del sistema y sus roles.
-            </CardDescription>
+    <>
+      <Card>
+        <CardHeader>
+          <div className="flex justify-between items-center">
+            <div>
+              <CardTitle>Usuarios</CardTitle>
+              <CardDescription>
+                Administra los usuarios del sistema y sus roles.
+              </CardDescription>
+            </div>
+            <Button onClick={() => setIsModalOpen(true)}>
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Agregar Usuario
+            </Button>
           </div>
-          <Button>
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Agregar Usuario
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Nombre</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Roles</TableHead>
-              <TableHead>Estado</TableHead>
-              <TableHead>
-                <span className="sr-only">Acciones</span>
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {users.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell className="font-medium">{user.nombre} {user.apellido_p}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>
-                  {user.roles?.map(role => (
-                    <Badge key={role.id} variant="secondary" className="mr-1">{role.nombre}</Badge>
-                  ))}
-                </TableCell>
-                <TableCell>
-                    <Badge variant={user.activo ? "default" : "destructive"}>
-                        {user.activo ? "Activo" : "Inactivo"}
-                    </Badge>
-                </TableCell>
-                <TableCell>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button aria-haspopup="true" size="icon" variant="ghost">
-                        <MoreHorizontal className="h-4 w-4" />
-                        <span className="sr-only">Abrir menú</span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                      <DropdownMenuItem>Editar</DropdownMenuItem>
-                      <DropdownMenuItem>Reestablecer Contraseña</DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => toggleUserStatus(user.id)}>
-                        {user.activo ? (
-                            <><UserX className="mr-2 h-4 w-4" /> Desactivar</>
-                        ) : (
-                            <><UserCheck className="mr-2 h-4 w-4" /> Activar</>
-                        )}
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Nombre</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Roles</TableHead>
+                <TableHead>Estado</TableHead>
+                <TableHead>
+                  <span className="sr-only">Acciones</span>
+                </TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
+            </TableHeader>
+            <TableBody>
+              {users.map((user) => (
+                <TableRow key={user.id}>
+                  <TableCell className="font-medium">{user.nombre} {user.apellido_p}</TableCell>
+                  <TableCell>{user.email}</TableCell>
+                  <TableCell>
+                    {user.roles?.map(role => (
+                      <Badge key={role.id} variant="secondary" className="mr-1">{role.nombre}</Badge>
+                    ))}
+                  </TableCell>
+                  <TableCell>
+                      <Badge variant={user.activo ? "default" : "destructive"}>
+                          {user.activo ? "Activo" : "Inactivo"}
+                      </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button aria-haspopup="true" size="icon" variant="ghost">
+                          <MoreHorizontal className="h-4 w-4" />
+                          <span className="sr-only">Abrir menú</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                        <DropdownMenuItem>Editar</DropdownMenuItem>
+                        <DropdownMenuItem>Reestablecer Contraseña</DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={() => toggleUserStatus(user.id)}>
+                          {user.activo ? (
+                              <><UserX className="mr-2 h-4 w-4" /> Desactivar</>
+                          ) : (
+                              <><UserCheck className="mr-2 h-4 w-4" /> Activar</>
+                          )}
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+      
+      <UserFormModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleSaveUser}
+        roles={availableRoles}
+      />
+    </>
   );
 }
-
-    
