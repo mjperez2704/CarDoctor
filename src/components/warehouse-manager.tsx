@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -7,6 +8,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Trash2, Edit, ChevronDown, ChevronRight } from "lucide-react";
@@ -21,22 +23,6 @@ import type { Almacen, Seccion, Lote } from "@/lib/types";
 
 type WarehouseManagerProps = {
   initialData: Almacen[];
-};
-
-const RuleBadge = ({
-  label,
-  values,
-}: {
-  label: string;
-  values?: string[];
-}) => {
-  if (!values || values.length === 0) return null;
-  return (
-    <Badge variant="secondary" className="mr-2 mb-2">
-      <span className="font-semibold">{label}:</span>&nbsp;
-      {values.join(", ")}
-    </Badge>
-  );
 };
 
 export function WarehouseManager({ initialData }: WarehouseManagerProps) {
@@ -55,12 +41,12 @@ export function WarehouseManager({ initialData }: WarehouseManagerProps) {
           <CardHeader>
             <div className="flex justify-between items-start">
                 <div>
-                    <CardTitle>{warehouse.nombre}</CardTitle>
+                    <CardTitle className="flex items-center gap-4">{warehouse.nombre} <Badge variant="outline">{warehouse.secciones?.length || 0} secciones</Badge></CardTitle>
                     <CardDescription>
                         Administra las secciones y lotes de este almacén.
                     </CardDescription>
                 </div>
-                 <Button size="sm">
+                 <Button size="sm" variant="outline">
                     <PlusCircle className="mr-2 h-4 w-4" /> Agregar Sección
                 </Button>
             </div>
@@ -68,53 +54,49 @@ export function WarehouseManager({ initialData }: WarehouseManagerProps) {
           <CardContent>
             <Accordion type="single" collapsible className="w-full">
               {warehouse.secciones && warehouse.secciones.map((section) => (
-                <AccordionItem value={String(section.id)} key={section.id}>
-                  <AccordionTrigger>
-                    <div className="flex items-center gap-4">
-                        <span className="font-medium text-lg">{section.nombre}</span>
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent className="pl-6">
-                    <div className="space-y-4">
-                        {/* <div>
-                            <h4 className="font-semibold mb-2">Reglas de la Sección</h4>
-                             <div className="flex flex-wrap">
-                                <RuleBadge label="Tipo" values={section.rules.type} />
-                                <RuleBadge label="Uso" values={section.rules.usage} />
-                                <RuleBadge label="Estado" values={section.rules.status} />
-                                <RuleBadge label="Stock" values={section.rules.stockType} />
-                                <RuleBadge label="Marca" values={section.rules.brand} />
-                            </div>
-                        </div> */}
-                        <div className="flex justify-between items-center">
-                            <h4 className="font-semibold">Lotes</h4>
-                            <Button variant="outline" size="sm">
-                                <PlusCircle className="mr-2 h-4 w-4" /> Agregar Lote
-                            </Button>
+                <AccordionItem value={String(section.id)} key={section.id} className="border-b-0">
+                   <Card className="mb-2">
+                    <CardHeader className="p-4">
+                      <AccordionTrigger className="p-0">
+                        <div className="flex justify-between items-center w-full">
+                            <span className="font-semibold text-md">{section.nombre}</span>
                         </div>
-                       {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                         {section.lots.map((lot) => (
-                            <Card key={lot.id}>
-                                <CardHeader>
-                                    <CardTitle className="text-base">{lot.name}</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <p className="text-sm text-muted-foreground">{lot.items.length} tipo(s) de artículos.</p>
-                                    <Button variant="link" size="sm" className="p-0 h-auto mt-2">Ver artículos</Button>
-                                </CardContent>
-                            </Card>
-                         ))}
-                       </div> */}
-                    </div>
-                  </AccordionContent>
+                      </AccordionTrigger>
+                    </CardHeader>
+                    <AccordionContent>
+                      <CardContent className="pl-8 pr-4 pb-4">
+                        <div className="space-y-4">
+                            <div className="flex justify-between items-center">
+                                <h4 className="font-semibold text-muted-foreground">Lotes en esta sección</h4>
+                                <Button variant="outline" size="sm">
+                                    <PlusCircle className="mr-2 h-4 w-4" /> Agregar Lote
+                                </Button>
+                            </div>
+                           <p className="text-sm text-muted-foreground">La funcionalidad para visualizar y gestionar lotes estará disponible aquí.</p>
+                        </div>
+                      </CardContent>
+                    </AccordionContent>
+                   </Card>
                 </AccordionItem>
               ))}
+               {(!warehouse.secciones || warehouse.secciones.length === 0) && (
+                <div className="text-center py-8 text-muted-foreground">
+                    <p>Este almacén no tiene secciones.</p>
+                    <Button variant="link" className="mt-2">Agregar la primera sección</Button>
+                </div>
+              )}
             </Accordion>
           </CardContent>
+           <CardFooter className="flex justify-end gap-2">
+                <Button variant="ghost">
+                  <Edit className="mr-2 h-4 w-4" /> Editar Almacén
+                </Button>
+                <Button variant="ghost" className="text-destructive hover:text-destructive">
+                    <Trash2 className="mr-2 h-4 w-4" /> Eliminar Almacén
+                </Button>
+           </CardFooter>
         </Card>
       ))}
     </div>
   );
 }
-
-    

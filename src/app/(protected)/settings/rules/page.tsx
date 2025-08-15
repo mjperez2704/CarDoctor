@@ -1,17 +1,16 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+import { BusinessRulesEngine } from "@/components/business-rules-engine";
 
 export default function RulesPage() {
   return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Reglas de Negocio</CardTitle>
-          <CardDescription>
-            Establece y personaliza las reglas de funcionamiento del sistema.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Próximamente: Módulo para configurar reglas de negocio.</p>
-        </CardContent>
-      </Card>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold">Reglas de Negocio</h1>
+        <p className="text-muted-foreground">
+          Establece y personaliza las reglas de funcionamiento y las restricciones del sistema.
+        </p>
+      </div>
+      <BusinessRulesEngine />
+    </div>
   );
 }
