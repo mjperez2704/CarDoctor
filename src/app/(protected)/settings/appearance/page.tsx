@@ -1,17 +1,15 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { AppearanceForm } from "@/components/appearance-form";
 
 export default function AppearancePage() {
   return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Apariencia</CardTitle>
-          <CardDescription>
-            Personaliza la apariencia del sistema, como los colores y el tema.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Próximamente: Módulo de configuración de apariencia.</p>
-        </CardContent>
-      </Card>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold">Apariencia</h1>
+        <p className="text-muted-foreground">
+          Personaliza la apariencia del sistema. Los cambios se reflejarán en tiempo real.
+        </p>
+      </div>
+      <AppearanceForm />
+    </div>
   );
 }
