@@ -69,8 +69,8 @@ const NavMenu = () => (
       </AccordionTrigger>
       <AccordionContent className="pl-4">
         <nav className="grid items-start gap-1">
-          <NavLink href="/catalogs/parts">
-            <Package className="h-4 w-4" /> Refacciones y Servicios
+          <NavLink href="/catalogs/products">
+            <Package className="h-4 w-4" /> Refacciones
           </NavLink>
           <NavLink href="/catalogs/vehicles">
             <Car className="h-4 w-4" /> Vehículos

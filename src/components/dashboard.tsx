@@ -39,13 +39,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Producto, MovimientoInventario } from "@/lib/types";
 import { AiSuggestionDialog } from "./ai-suggestion-dialog";
 
+type DashboardProps = {
+  initialInventory: Producto[];
+  initialAuditLogs: MovimientoInventario[];
+  defaultTab?: "services" | "inventory";
+};
+
 export function Dashboard({
   initialInventory,
   initialAuditLogs,
-}: {
-  initialInventory: Producto[];
-  initialAuditLogs: MovimientoInventario[];
-}) {
+  defaultTab = "services",
+}: DashboardProps) {
   const [inventory, setInventory] =
     React.useState<Producto[]>(initialInventory);
   const [auditLogs, setAuditLogs] =
@@ -61,7 +65,7 @@ export function Dashboard({
 
   return (
     <>
-      <Tabs defaultValue="services">
+      <Tabs defaultValue={defaultTab}>
         <div className="flex items-center">
           <TabsList>
             <TabsTrigger value="services">Órdenes de Servicio</TabsTrigger>

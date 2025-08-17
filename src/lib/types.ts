@@ -179,13 +179,14 @@ export type Seccion = {
   almacen_id: number;
   clave: string;
   nombre: string;
+  lotes?: Lote[];
 };
 
 export type Lote = {
   id: number;
   producto_id: number;
   almacen_id: number;
-  seccion_id?: number;
+  seccion_id: number;
   codigo_lote: string;
   fecha_caducidad?: string;
   cantidad: number;

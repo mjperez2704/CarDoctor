@@ -10,6 +10,7 @@ export default async function InventoryPage() {
     <Dashboard
       initialInventory={inventoryData}
       initialAuditLogs={auditLogsData}
+      defaultTab="inventory"
     />
   );
 }
