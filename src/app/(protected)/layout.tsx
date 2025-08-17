@@ -73,7 +73,7 @@ const NavMenu = () => (
             <Package className="h-4 w-4" /> Refacciones y Servicios
           </NavLink>
           <NavLink href="/catalogs/vehicles">
-            <Car className="h-4 w-4" /> Marcas y Modelos
+            <Car className="h-4 w-4" /> Vehículos
           </NavLink>
         </nav>
       </AccordionContent>
@@ -89,8 +89,8 @@ const NavMenu = () => (
       </AccordionTrigger>
       <AccordionContent className="pl-4">
         <nav className="grid items-start gap-1">
-          <NavLink href="/customers">
-            <Users className="h-4 w-4" /> Clientes
+          <NavLink href="/drivers">
+            <Users className="h-4 w-4" /> Choferes
           </NavLink>
           <NavLink href="/providers">
             <Truck className="h-4 w-4" /> Proveedores
@@ -132,6 +132,9 @@ const NavMenu = () => (
            <NavLink href="/finances/expenses">
             <FileText className="h-4 w-4" /> Gastos
           </NavLink>
+          <NavLink href="/users">
+            <User className="h-4 w-4" /> Usuarios
+          </NavLink>
         </nav>
       </AccordionContent>
     </AccordionItem>
@@ -166,9 +169,6 @@ const NavMenu = () => (
       </AccordionTrigger>
       <AccordionContent className="pl-4">
         <nav className="grid items-start gap-1">
-          <NavLink href="/users">
-            <User className="h-4 w-4" /> Usuarios
-          </NavLink>
           <NavLink href="/roles">
             <Fingerprint className="h-4 w-4" /> Roles y Permisos
           </NavLink>
