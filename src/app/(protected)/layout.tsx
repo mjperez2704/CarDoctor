@@ -12,6 +12,7 @@ import {
   Package,
   PanelLeft,
   Settings,
+  ShoppingCart,
   Truck,
   User,
   Users,
@@ -55,6 +56,9 @@ const NavMenu = () => (
           <NavLink href="/quotes">
             <Briefcase className="h-4 w-4" /> Cotizaciones
           </NavLink>
+          <NavLink href="/purchases">
+            <ShoppingCart className="h-4 w-4" /> Compras
+          </NavLink>
         </nav>
       </AccordionContent>
     </AccordionItem>
@@ -74,6 +78,9 @@ const NavMenu = () => (
           </NavLink>
           <NavLink href="/catalogs/vehicles">
             <Car className="h-4 w-4" /> Vehículos
+          </NavLink>
+          <NavLink href="/catalogs/tools">
+            <Wrench className="h-4 w-4" /> Herramientas
           </NavLink>
         </nav>
       </AccordionContent>
@@ -112,6 +119,12 @@ const NavMenu = () => (
            <NavLink href="/inventory">
             <Package className="h-4 w-4" /> Inventario General
           </NavLink>
+          <NavLink href="/warehouse">
+            <Warehouse className="h-4 w-4" /> Gestión de Almacén
+          </NavLink>
+          <NavLink href="/transfers">
+            <Truck className="h-4 w-4" /> Traslados
+          </NavLink>
         </nav>
       </AccordionContent>
     </AccordionItem>
@@ -135,6 +148,9 @@ const NavMenu = () => (
           <NavLink href="/users">
             <User className="h-4 w-4" /> Usuarios
           </NavLink>
+          <NavLink href="/vendedores">
+            <Users className="h-4 w-4" /> Vendedores
+          </NavLink>
         </nav>
       </AccordionContent>
     </AccordionItem>
@@ -149,18 +165,15 @@ const NavMenu = () => (
       </AccordionTrigger>
       <AccordionContent className="pl-4">
          <nav className="grid items-start gap-1">
-          <NavLink href="/reports/services">
-            <FileText className="h-4 w-4" /> Reporte de Servicios
-          </NavLink>
-          <NavLink href="/reports/inventory">
-            <Package className="h-4 w-4" /> Reporte de Inventario
+          <NavLink href="/reports/predetermined">
+            <FileText className="h-4 w-4" /> Reportes Predeterminados
           </NavLink>
         </nav>
       </AccordionContent>
     </AccordionItem>
 
-    {/* Seguridad */}
-    <AccordionItem value="seguridad">
+    {/* Configuración */}
+    <AccordionItem value="configuracion">
       <AccordionTrigger>
         <div className="flex items-center gap-3">
           <Settings className="h-5 w-5" />
@@ -171,6 +184,9 @@ const NavMenu = () => (
         <nav className="grid items-start gap-1">
           <NavLink href="/roles">
             <Fingerprint className="h-4 w-4" /> Roles y Permisos
+          </NavLink>
+           <NavLink href="/settings/rules">
+            <Wrench className="h-4 w-4" /> Reglas de Negocio
           </NavLink>
         </nav>
       </AccordionContent>

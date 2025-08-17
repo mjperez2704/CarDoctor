@@ -81,6 +81,7 @@ export const empleados: Empleado[] = [
     { id: 1, nombre: 'Admin User', apellido_p: 'System', email: 'admin@example.com', puesto: 'Administrador', usuario_id: 1 },
     { id: 2, nombre: 'Juan', apellido_p: 'Pérez', email: 'juan.perez@example.com', puesto: 'Mecánico A', usuario_id: 2 },
     { id: 3, nombre: 'Maria', apellido_p: 'Rodriguez', email: 'maria.rodriguez@example.com', puesto: 'Asesora de Servicio', usuario_id: 3, slug_vendedor: 'MARIA', meta_venta_mensual: 25000 },
+    { id: 4, nombre: 'Luisa', apellido_p: 'Martinez', email: 'luisa.martinez@example.com', puesto: 'Ejecutiva de Ventas', usuario_id: 4, slug_vendedor: 'LUISA', meta_venta_mensual: 30000 },
 ];
 
 // --------------------
@@ -130,6 +131,34 @@ export const productos: Producto[] = [
   { id: 4, sku: 'ACE-MOT-5W30', nombre: 'Aceite Sintético 5W30', categoria_id: 2, activo: true, es_serie: false, precio_lista: 12.00, costo_promedio: 7.50, unidad: 'LT' },
 ];
 
+// --------------------
+// COMPRAS
+// --------------------
+export const purchases: Purchase[] = [
+  { 
+    id: "OC-2024-001",
+    providerId: "1",
+    date: new Date(now.setDate(now.getDate() - 5)).toISOString(),
+    total: 950.00,
+    status: "Pendiente",
+    items: [
+      { sku: 'FIL-ACE-01', name: 'Filtro de Aceite Motor 1.6L', quantity: 50, price: 8.00 },
+      { sku: 'BAL-DEL-05', name: 'Balatas Delanteras Cerámicas', quantity: 10, price: 45.00 },
+      { sku: 'ACE-MOT-5W30', name: 'Aceite Sintético 5W30', quantity: 10, price: 10.00 },
+    ]
+  },
+  { 
+    id: "OC-2024-002",
+    providerId: "2",
+    date: new Date(now.setDate(now.getDate() - 10)).toISOString(),
+    total: 225.00,
+    status: "Recibida Completa",
+    items: [
+       { sku: 'ACE-MOT-5W30', name: 'Aceite Sintético 5W30', quantity: 30, price: 7.50 },
+    ]
+  },
+];
+
 
 // Funciones "simuladas" para obtener datos
 export const getUsuarios = (): Usuario[] => usuarios;
@@ -141,10 +170,10 @@ export const getMarcas = (): Marca[] => marcas;
 export const getModelos = (): Modelo[] => modelos;
 export const getProductos = (): Producto[] => productos;
 export const getOrdenesServicio = (): OrdenServicio[] => ordenesServicio;
+export const getPurchases = (): Purchase[] => purchases;
 // --- Dejando estas funciones con datos vacíos por ahora ---
 export const getHerramientas = (): Herramienta[] => [];
 export const getAlmacenes = (): Almacen[] => [];
-export const getPurchases = (): Purchase[] => [];
 export const getOrdenesCompra = (): OrdenCompra[] => [];
 export const getSolicitudesInternas = (): SolicitudInterna[] => [];
 export const getBitacora = (): Bitacora[] => [];

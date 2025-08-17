@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from "react";
@@ -29,6 +28,7 @@ export function ReceptionModal({ isOpen, onClose, purchase }: ReceptionModalProp
     if (purchase) {
       setReceptionItems(
         purchase.items.map((item) => ({
+          sku: item.sku,
           name: item.name,
           orderedQuantity: item.quantity,
           unitCost: item.price,
@@ -90,7 +90,7 @@ export function ReceptionModal({ isOpen, onClose, purchase }: ReceptionModalProp
             </TableHeader>
             <TableBody>
                 {receptionItems.map(item => (
-                    <TableRow key={item.name}>
+                    <TableRow key={item.sku}>
                         <TableCell className="font-medium">{item.name}</TableCell>
                         <TableCell className="text-center">{item.orderedQuantity}</TableCell>
                         <TableCell className="text-center">${item.unitCost.toFixed(2)}</TableCell>

@@ -223,6 +223,7 @@ export type Purchase = {
   total: number;
   status: "Pendiente" | "Recibida Parcial" | "Recibida Completa";
   items: {
+    sku: string;
     name: string;
     quantity: number;
     price: number;
@@ -230,6 +231,7 @@ export type Purchase = {
 };
 
 export type ReceptionItem = {
+  sku: string;
   name: string;
   orderedQuantity: number;
   unitCost: number;
@@ -394,5 +396,3 @@ export type Bitacora = {
   referencia_id?: number; // e.g., ID de la venta, del producto, etc.
   modulo?: string; // e.g., 'Ventas', 'Inventario'
 };
-
-    

@@ -25,7 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, PlusCircle, File, ListFilter, Truck } from "lucide-react";
-import type { Purchase, Provider } from "@/lib/types";
+import type { Purchase, Proveedor } from "@/lib/types";
 import { Badge } from "./ui/badge";
 import { ReceptionModal } from "./reception-modal";
 
@@ -34,7 +34,7 @@ export function Purchases({
   initialProviders,
 }: {
   initialPurchases: Purchase[];
-  initialProviders: Provider[];
+  initialProviders: Proveedor[];
 }) {
   const [purchases, setPurchases] = React.useState(initialPurchases);
   const [providers, setProviders] = React.useState(initialProviders);
@@ -42,7 +42,7 @@ export function Purchases({
   const [isReceptionModalOpen, setReceptionModalOpen] = React.useState(false);
 
   const getProviderName = (providerId: string) => {
-    return providers.find((p) => p.id === providerId)?.name || "N/A";
+    return providers.find((p) => String(p.id) === providerId)?.razon_social || "N/A";
   };
   
   const handleOpenReception = (purchase: Purchase) => {
@@ -108,7 +108,7 @@ export function Purchases({
               <TableRow key={purchase.id}>
                 <TableCell className="font-medium">{purchase.id}</TableCell>
                 <TableCell>{getProviderName(purchase.providerId)}</TableCell>
-                <TableCell>{purchase.date}</TableCell>
+                <TableCell>{new Date(purchase.date).toLocaleDateString()}</TableCell>
                 <TableCell>
                   <Badge variant={statusVariant[purchase.status]}>{purchase.status}</Badge>
                 </TableCell>
