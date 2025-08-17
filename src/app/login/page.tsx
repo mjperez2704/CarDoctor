@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { Button } from "@/components/ui/button";
@@ -17,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2 } from "lucide-react";
+import { Loader2, Wrench } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -50,10 +49,9 @@ export default function LoginPage() {
         <form onSubmit={handleLogin}>
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
-                {/*<Image src="/logo.png" alt="Logo" width={300} height={200} />*/}
-                <Image src="https://hospitaldelmovil.mega-shop-test.shop/logo.png" alt="Logo" width={64} height={64} />
+                <Wrench className="h-16 w-16 text-primary" />
             </div>
-            <CardTitle className="text-2xl">Hospital del Móvil</CardTitle>
+            <CardTitle className="text-2xl">Mi Taller Mecánico</CardTitle>
             <CardDescription>
               Ingresa tus credenciales para acceder al sistema.
             </CardDescription>

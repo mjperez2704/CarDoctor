@@ -7,6 +7,8 @@ import {
   MoreHorizontal,
   PlusCircle,
   Bot,
+  Wrench,
+  Car,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -34,8 +36,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { MovementForm } from "./movement-form";
 import type { Producto, MovimientoInventario } from "@/lib/types";
 import { AiSuggestionDialog } from "./ai-suggestion-dialog";
 
@@ -50,16 +50,10 @@ export function Dashboard({
     React.useState<Producto[]>(initialInventory);
   const [auditLogs, setAuditLogs] =
     React.useState<MovimientoInventario[]>(initialAuditLogs);
-  const [isSheetOpen, setSheetOpen] = React.useState(false);
-
+  
   const [selectedItemForAI, setSelectedItemForAI] = React.useState<Producto | null>(null);
   const [isAIDialogOpen, setAIDialogOpen] = React.useState(false);
 
-  const handleMovementSave = () => {
-    // TODO: Refresh data
-    setSheetOpen(false);
-  };
-  
   const handleOpenAISuggestion = (item: Producto) => {
     setSelectedItemForAI(item);
     setAIDialogOpen(true);
@@ -67,11 +61,11 @@ export function Dashboard({
 
   return (
     <>
-      <Tabs defaultValue="inventory">
+      <Tabs defaultValue="services">
         <div className="flex items-center">
           <TabsList>
-            <TabsTrigger value="inventory">Inventario</TabsTrigger>
-            <TabsTrigger value="audit">Auditoría</TabsTrigger>
+            <TabsTrigger value="services">Órdenes de Servicio</TabsTrigger>
+            <TabsTrigger value="inventory">Inventario de Refacciones</TabsTrigger>
           </TabsList>
           <div className="ml-auto flex items-center gap-2">
             <DropdownMenu>
@@ -85,8 +79,8 @@ export function Dashboard({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Filtrar por</DropdownMenuLabel>
-                <DropdownMenuItem>Categoría</DropdownMenuItem>
-                <DropdownMenuItem>Marca</DropdownMenuItem>
+                <DropdownMenuItem>Mecánico</DropdownMenuItem>
+                <DropdownMenuItem>Estado</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <Button size="sm" variant="outline" className="h-7 gap-1">
@@ -95,30 +89,37 @@ export function Dashboard({
                 Exportar
               </span>
             </Button>
-            <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
-              <SheetTrigger asChild>
-                <Button size="sm" className="h-7 gap-1">
-                  <PlusCircle className="h-3.5 w-3.5" />
-                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                    Agregar Movimiento
-                  </span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent>
-                <MovementForm
-                  inventory={inventory}
-                  onSave={handleMovementSave}
-                />
-              </SheetContent>
-            </Sheet>
+            <Button size="sm" className="h-7 gap-1">
+              <PlusCircle className="h-3.5 w-3.5" />
+              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                Nueva Orden
+              </span>
+            </Button>
           </div>
         </div>
+        <TabsContent value="services">
+           <Card>
+            <CardHeader>
+              <CardTitle>Órdenes de Servicio Activas</CardTitle>
+              <CardDescription>
+                Vehículos actualmente en el taller.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col items-center justify-center h-64 border-2 border-dashed rounded-lg">
+                <Car className="w-16 h-16 text-muted-foreground" />
+                <p className="mt-4 text-muted-foreground">Aún no hay órdenes de servicio.</p>
+                <Button className="mt-2">Crear Primera Orden</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
         <TabsContent value="inventory">
           <Card>
             <CardHeader>
-              <CardTitle>Inventario</CardTitle>
+              <CardTitle>Inventario de Refacciones</CardTitle>
               <CardDescription>
-                Gestiona tus productos, refacciones, accesorios y equipos.
+                Gestiona las refacciones y consumibles del taller.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -160,7 +161,7 @@ export function Dashboard({
                             <DropdownMenuItem>Editar</DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleOpenAISuggestion(item)}>
                               <Bot className="mr-2 h-4 w-4" />
-                              Obtener Sugerencia IA
+                              Sugerencia de Stock (IA)
                             </DropdownMenuItem>
                             <DropdownMenuItem className="text-destructive">
                               Eliminar
@@ -176,22 +177,9 @@ export function Dashboard({
             <CardFooter>
               <div className="text-xs text-muted-foreground">
                 Mostrando <strong>1-{inventory.length}</strong> de{" "}
-                <strong>{inventory.length}</strong> productos
+                <strong>{inventory.length}</strong> refacciones
               </div>
             </CardFooter>
-          </Card>
-        </TabsContent>
-        <TabsContent value="audit">
-          <Card>
-            <CardHeader>
-              <CardTitle>Registro de Auditoría</CardTitle>
-              <CardDescription>
-                Un registro completo de todos los movimientos de inventario.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>El registro de auditoría se implementará en un paso posterior.</p>
-            </CardContent>
           </Card>
         </TabsContent>
       </Tabs>

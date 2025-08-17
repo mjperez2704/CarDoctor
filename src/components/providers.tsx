@@ -35,7 +35,7 @@ export function Providers({ initialProviders }: { initialProviders: Proveedor[] 
       <CardHeader>
         <div className="flex justify-between items-center">
           <div>
-            <CardTitle>Proveedores</CardTitle>
+            <CardTitle>Proveedores de Refacciones</CardTitle>
             <CardDescription>
               Administra tu lista de proveedores.
             </CardDescription>

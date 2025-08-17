@@ -37,7 +37,7 @@ export function Customers({ initialCustomers }: { initialCustomers: Cliente[] })
           <div>
             <CardTitle>Clientes</CardTitle>
             <CardDescription>
-              Administra tu lista de clientes.
+              Administra la información de los clientes de tu taller.
             </CardDescription>
           </div>
           <Button>
@@ -50,10 +50,9 @@ export function Customers({ initialCustomers }: { initialCustomers: Cliente[] })
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Razón Social</TableHead>
+              <TableHead>Nombre</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Teléfono</TableHead>
-              <TableHead>RFC</TableHead>
               <TableHead>Fecha de Registro</TableHead>
               <TableHead>
                 <span className="sr-only">Acciones</span>
@@ -66,7 +65,6 @@ export function Customers({ initialCustomers }: { initialCustomers: Cliente[] })
                 <TableCell className="font-medium">{customer.razon_social}</TableCell>
                 <TableCell>{customer.email}</TableCell>
                 <TableCell>{customer.telefono}</TableCell>
-                <TableCell>{customer.rfc}</TableCell>
                 <TableCell>{new Date(customer.fecha_registro).toLocaleDateString()}</TableCell>
                 <TableCell>
                   <DropdownMenu>
@@ -79,6 +77,7 @@ export function Customers({ initialCustomers }: { initialCustomers: Cliente[] })
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                       <DropdownMenuItem>Editar</DropdownMenuItem>
+                       <DropdownMenuItem>Ver Vehículos</DropdownMenuItem>
                       <DropdownMenuItem className="text-destructive">
                         Eliminar
                       </DropdownMenuItem>
