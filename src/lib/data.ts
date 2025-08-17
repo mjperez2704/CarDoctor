@@ -114,6 +114,12 @@ export const modelos: Modelo[] = [
   { id: 4, marca_id: 4, nombre: 'Aveo', anio: 2021 },
 ];
 
+export const ordenesServicio: OrdenServicio[] = [
+    { id: 1, folio: 'OS-2024-001', fecha: '2024-07-28T10:00:00Z', cliente_id: 1, equipo_id: 1, diagnostico_ini: 'Ruido en el motor al acelerar.', estado: 'DIAGNOSTICO', tecnico_id: 2 },
+    { id: 2, folio: 'OS-2024-002', fecha: '2024-07-29T12:30:00Z', cliente_id: 2, equipo_id: 2, diagnostico_ini: 'Falla en frenos, rechinan mucho.', estado: 'EN_REPARACION', tecnico_id: 2 },
+    { id: 3, folio: 'OS-2024-003', fecha: '2024-07-30T09:00:00Z', cliente_id: 1, equipo_id: 3, diagnostico_ini: 'Servicio de mantenimiento general (10,000km).', estado: 'RECEPCION' },
+];
+
 // --------------------
 // PRODUCTOS (REFACCIONES Y SERVICIOS)
 // --------------------
@@ -134,12 +140,12 @@ export const getClientes = (): Cliente[] => clientes;
 export const getMarcas = (): Marca[] => marcas;
 export const getModelos = (): Modelo[] => modelos;
 export const getProductos = (): Producto[] => productos;
+export const getOrdenesServicio = (): OrdenServicio[] => ordenesServicio;
 // --- Dejando estas funciones con datos vacíos por ahora ---
 export const getHerramientas = (): Herramienta[] => [];
 export const getAlmacenes = (): Almacen[] => [];
 export const getPurchases = (): Purchase[] => [];
 export const getOrdenesCompra = (): OrdenCompra[] => [];
-export const getOrdenesServicio = (): OrdenServicio[] => [];
 export const getSolicitudesInternas = (): SolicitudInterna[] => [];
 export const getBitacora = (): Bitacora[] => [];
 export const getGastos = (): Gasto[] => [];
