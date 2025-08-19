@@ -35,7 +35,7 @@ const NavMenu = () => (
   <Accordion
     type="multiple"
     className="w-full"
-    defaultValue={['operaciones', 'catalogos', 'contactos', 'administracion']}
+    defaultValue={['operaciones', 'catalogos', 'contactos', 'administracion', 'inventario']}
   >
     {/* Operaciones */}
     <AccordionItem value="operaciones">
