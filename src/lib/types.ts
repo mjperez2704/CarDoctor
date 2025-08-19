@@ -1,3 +1,4 @@
+
 // ============================================================
 //  Sistema: Administración de Taller de Smartphones (ATS)
 //  Versión de Tipos: 1.0 (Basado en esquema MySQL)
@@ -82,6 +83,8 @@ export type Producto = {
   es_serie: boolean;
   precio_lista: number;
   costo_promedio: number;
+  stock_minimo?: number;
+  stock_maximo?: number;
 };
 
 export type Herramienta = {

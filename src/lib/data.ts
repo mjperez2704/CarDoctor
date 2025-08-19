@@ -1,3 +1,4 @@
+
 import type {
   Usuario,
   Rol,
@@ -125,10 +126,10 @@ export const ordenesServicio: OrdenServicio[] = [
 // PRODUCTOS (REFACCIONES Y SERVICIOS)
 // --------------------
 export const productos: Producto[] = [
-  { id: 1, sku: 'FIL-ACE-01', nombre: 'Filtro de Aceite Motor 1.6L', categoria_id: 2, activo: true, es_serie: false, precio_lista: 15.00, costo_promedio: 8.00, unidad: 'PZA' },
-  { id: 2, sku: 'BAL-DEL-05', nombre: 'Balatas Delanteras Cerámicas', categoria_id: 2, activo: true, es_serie: false, precio_lista: 80.00, costo_promedio: 45.00, unidad: 'JGO' },
-  { id: 3, sku: 'SRV-AFIN-01', nombre: 'Servicio de Afinación Menor', categoria_id: 5, activo: true, es_serie: false, precio_lista: 150.00, costo_promedio: 0.00, unidad: 'SRV' },
-  { id: 4, sku: 'ACE-MOT-5W30', nombre: 'Aceite Sintético 5W30', categoria_id: 2, activo: true, es_serie: false, precio_lista: 12.00, costo_promedio: 7.50, unidad: 'LT' },
+  { id: 1, sku: 'FIL-ACE-01', nombre: 'Filtro de Aceite Motor 1.6L', categoria_id: 2, activo: true, es_serie: false, precio_lista: 15.00, costo_promedio: 8.00, unidad: 'PZA', stock_minimo: 10, stock_maximo: 50 },
+  { id: 2, sku: 'BAL-DEL-05', nombre: 'Balatas Delanteras Cerámicas', categoria_id: 2, activo: true, es_serie: false, precio_lista: 80.00, costo_promedio: 45.00, unidad: 'JGO', stock_minimo: 5, stock_maximo: 20 },
+  { id: 3, sku: 'SRV-AFIN-01', nombre: 'Servicio de Afinación Menor', categoria_id: 5, activo: true, es_serie: false, precio_lista: 150.00, costo_promedio: 0.00, unidad: 'SRV', stock_minimo: 0, stock_maximo: 0 },
+  { id: 4, sku: 'ACE-MOT-5W30', nombre: 'Aceite Sintético 5W30', categoria_id: 2, activo: true, es_serie: false, precio_lista: 12.00, costo_promedio: 7.50, unidad: 'LT', stock_minimo: 24, stock_maximo: 100 },
 ];
 
 // --------------------
@@ -159,6 +160,23 @@ export const purchases: Purchase[] = [
   },
 ];
 
+export const almacenes: Almacen[] = [
+    { id: 1, clave: 'A-GRAL', nombre: 'Almacén General', tipo: 'PRINCIPAL', secciones: [
+        { id: 1, almacen_id: 1, clave: 'REF-GEN', nombre: 'Refacciones Generales' },
+        { id: 2, almacen_id: 1, clave: 'REF-MOT', nombre: 'Refacciones de Motor' },
+    ]},
+    { id: 2, clave: 'A-TALL', nombre: 'Almacén Taller', tipo: 'SUCURSAL', secciones: [
+         { id: 3, almacen_id: 2, clave: 'HER-MEC', nombre: 'Herramienta Mecánica' },
+    ]},
+];
+
+export const mockLotes: Lote[] = [
+  { id: 1, almacen_id: 1, seccion_id: 1, producto_id: 1, codigo_lote: "LOTE-A1-001", cantidad: 8 },
+  { id: 2, almacen_id: 1, seccion_id: 1, producto_id: 1, codigo_lote: "LOTE-A1-002", cantidad: 5 },
+  { id: 3, almacen_id: 1, seccion_id: 2, producto_id: 2, codigo_lote: "LOTE-B1-001", cantidad: 4 },
+  { id: 4, almacen_id: 2, seccion_id: 3, producto_id: 4, codigo_lote: "LOTE-C1-001", cantidad: 20 },
+];
+
 
 // Funciones "simuladas" para obtener datos
 export const getUsuarios = (): Usuario[] => usuarios;
@@ -171,9 +189,9 @@ export const getModelos = (): Modelo[] => modelos;
 export const getProductos = (): Producto[] => productos;
 export const getOrdenesServicio = (): OrdenServicio[] => ordenesServicio;
 export const getPurchases = (): Purchase[] => purchases;
+export const getAlmacenes = (): Almacen[] => almacenes;
 // --- Dejando estas funciones con datos vacíos por ahora ---
 export const getHerramientas = (): Herramienta[] => [];
-export const getAlmacenes = (): Almacen[] => [];
 export const getOrdenesCompra = (): OrdenCompra[] => [];
 export const getSolicitudesInternas = (): SolicitudInterna[] => [];
 export const getBitacora = (): Bitacora[] => [];
