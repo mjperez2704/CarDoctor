@@ -30,11 +30,13 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { NavLink } from '@/components/nav-link';
+import { cn } from '@/lib/utils';
 
-const NavMenu = () => (
+
+const NavMenu = ({className} : {className?: string}) => (
   <Accordion
     type="multiple"
-    className="w-full"
+    className={cn("w-full", className)}
     defaultValue={['operaciones', 'catalogos', 'contactos', 'administracion', 'inventario']}
   >
     {/* Operaciones */}
@@ -201,19 +203,19 @@ export default function ProtectedLayout({
 }) {
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <aside className="fixed inset-y-0 left-0 z-10 hidden w-64 flex-col border-r bg-background sm:flex">
-        <div className="flex h-16 items-center gap-2 border-b px-4 lg:px-6">
+      <aside className="fixed inset-y-0 left-0 z-10 hidden w-64 flex-col border-r sm:flex bg-[#1E1E2D] text-white">
+        <div className="flex h-16 items-center gap-2 border-b border-gray-700 px-4 lg:px-6">
           <Link href="/" className="flex items-center gap-2 font-semibold">
-            <Wrench className="h-6 w-6" />
+            <Wrench className="h-6 w-6 text-blue-400" />
             <span className="text-lg">Mi Taller Mecánico</span>
           </Link>
         </div>
         <div className="flex-1 overflow-auto py-2">
           <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-            <NavLink href="/dashboard">
+            <NavLink href="/dashboard" className="text-gray-300 hover:text-white [&.active]:bg-blue-800/20 [&.active]:text-white">
               <LayoutDashboard className="h-5 w-5" /> Dashboard
             </NavLink>
-            <NavMenu />
+            <NavMenu className="text-gray-300 [&_span]:hover:text-white [&_svg]:hover:text-white [&_a.active]:bg-blue-800/20 [&_a.active]:text-white [&_a]:hover:text-white"/>
           </nav>
         </div>
       </aside>
@@ -226,22 +228,22 @@ export default function ProtectedLayout({
                 <span className="sr-only">Abrir menú</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="sm:max-w-xs">
-              <div className="flex h-16 items-center gap-2 border-b px-4">
+            <SheetContent side="left" className="sm:max-w-xs bg-[#1E1E2D] text-white border-r-0">
+              <div className="flex h-16 items-center gap-2 border-b border-gray-700 px-4">
                 <Link
                   href="/"
                   className="flex items-center gap-2 font-semibold"
                 >
-                  <Wrench className="h-6 w-6" />
+                  <Wrench className="h-6 w-6 text-blue-400" />
                   <span className="">Mi Taller Mecánico</span>
                 </Link>
               </div>
               <div className="flex-1 overflow-auto py-2">
-                <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-                  <NavLink href="/dashboard">
+                 <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+                  <NavLink href="/dashboard" className="text-gray-300 hover:text-white [&.active]:bg-blue-800/20 [&.active]:text-white">
                     <LayoutDashboard className="h-5 w-5" /> Dashboard
                   </NavLink>
-                  <NavMenu />
+                  <NavMenu className="text-gray-300 [&_span]:hover:text-white [&_svg]:hover:text-white [&_a.active]:bg-blue-800/20 [&_a.active]:text-white [&_a]:hover:text-white"/>
                 </nav>
               </div>
             </SheetContent>
