@@ -40,8 +40,8 @@ const NavMenu = ({className} : {className?: string}) => (
     defaultValue={['operaciones', 'catalogos', 'contactos', 'administracion', 'inventario']}
   >
     {/* Operaciones */}
-    <AccordionItem value="operaciones">
-      <AccordionTrigger>
+    <AccordionItem value="operaciones" className="border-b-blue-500">
+      <AccordionTrigger className="hover:no-underline">
         <div className="flex items-center gap-3">
           <Wrench className="h-5 w-5" />
           <span>Operaciones</span>
@@ -49,16 +49,16 @@ const NavMenu = ({className} : {className?: string}) => (
       </AccordionTrigger>
       <AccordionContent className="pl-4">
         <nav className="grid items-start gap-1">
-          <NavLink href="/reception">
+          <NavLink href="/reception" variant="dark">
             <Car className="h-4 w-4" /> Recepción de Vehículos
           </NavLink>
-          <NavLink href="/work-orders">
+          <NavLink href="/work-orders" variant="dark">
             <FileText className="h-4 w-4" /> Órdenes de Servicio
           </NavLink>
-          <NavLink href="/quotes">
+          <NavLink href="/quotes" variant="dark">
             <Briefcase className="h-4 w-4" /> Cotizaciones
           </NavLink>
-          <NavLink href="/purchases">
+          <NavLink href="/purchases" variant="dark">
             <ShoppingCart className="h-4 w-4" /> Compras
           </NavLink>
         </nav>
@@ -66,8 +66,8 @@ const NavMenu = ({className} : {className?: string}) => (
     </AccordionItem>
 
     {/* Catálogos */}
-    <AccordionItem value="catalogos">
-      <AccordionTrigger>
+    <AccordionItem value="catalogos" className="border-b-blue-500">
+      <AccordionTrigger className="hover:no-underline">
         <div className="flex items-center gap-3">
           <ClipboardList className="h-5 w-5" />
           <span>Catálogos</span>
@@ -75,13 +75,13 @@ const NavMenu = ({className} : {className?: string}) => (
       </AccordionTrigger>
       <AccordionContent className="pl-4">
         <nav className="grid items-start gap-1">
-          <NavLink href="/catalogs/products">
+          <NavLink href="/catalogs/products" variant="dark">
             <Package className="h-4 w-4" /> Refacciones
           </NavLink>
-          <NavLink href="/catalogs/vehicles">
+          <NavLink href="/catalogs/vehicles" variant="dark">
             <Car className="h-4 w-4" /> Vehículos
           </NavLink>
-          <NavLink href="/catalogs/tools">
+          <NavLink href="/catalogs/tools" variant="dark">
             <Wrench className="h-4 w-4" /> Herramientas
           </NavLink>
         </nav>
@@ -89,8 +89,8 @@ const NavMenu = ({className} : {className?: string}) => (
     </AccordionItem>
 
     {/* Contactos */}
-    <AccordionItem value="contactos">
-      <AccordionTrigger>
+    <AccordionItem value="contactos" className="border-b-blue-500">
+      <AccordionTrigger className="hover:no-underline">
         <div className="flex items-center gap-3">
           <Contact className="h-5 w-5" />
           <span>Contactos</span>
@@ -98,10 +98,10 @@ const NavMenu = ({className} : {className?: string}) => (
       </AccordionTrigger>
       <AccordionContent className="pl-4">
         <nav className="grid items-start gap-1">
-          <NavLink href="/drivers">
+          <NavLink href="/drivers" variant="dark">
             <Users className="h-4 w-4" /> Choferes
           </NavLink>
-          <NavLink href="/providers">
+          <NavLink href="/providers" variant="dark">
             <Truck className="h-4 w-4" /> Proveedores
           </NavLink>
         </nav>
@@ -109,8 +109,8 @@ const NavMenu = ({className} : {className?: string}) => (
     </AccordionItem>
     
     {/* Inventario */}
-    <AccordionItem value="inventario">
-      <AccordionTrigger>
+    <AccordionItem value="inventario" className="border-b-blue-500">
+      <AccordionTrigger className="hover:no-underline">
         <div className="flex items-center gap-3">
           <Warehouse className="h-5 w-5" />
           <span>Inventario</span>
@@ -118,13 +118,13 @@ const NavMenu = ({className} : {className?: string}) => (
       </AccordionTrigger>
       <AccordionContent className="pl-4">
         <nav className="grid items-start gap-1">
-           <NavLink href="/inventory">
+           <NavLink href="/inventory" variant="dark">
             <Package className="h-4 w-4" /> Inventario General
           </NavLink>
-          <NavLink href="/warehouse">
+          <NavLink href="/warehouse" variant="dark">
             <Warehouse className="h-4 w-4" /> Gestión de Almacén
           </NavLink>
-          <NavLink href="/transfers">
+          <NavLink href="/transfers" variant="dark">
             <Truck className="h-4 w-4" /> Traslados
           </NavLink>
         </nav>
@@ -132,8 +132,8 @@ const NavMenu = ({className} : {className?: string}) => (
     </AccordionItem>
 
     {/* Administración */}
-    <AccordionItem value="administracion">
-      <AccordionTrigger>
+    <AccordionItem value="administracion" className="border-b-blue-500">
+      <AccordionTrigger className="hover:no-underline">
         <div className="flex items-center gap-3">
           <Landmark className="h-5 w-5" />
           <span>Administración</span>
@@ -141,16 +141,16 @@ const NavMenu = ({className} : {className?: string}) => (
       </AccordionTrigger>
       <AccordionContent className="pl-4">
         <nav className="grid items-start gap-1">
-          <NavLink href="/employees">
+          <NavLink href="/employees" variant="dark">
             <CircleUserRound className="h-4 w-4" /> Empleados
           </NavLink>
-           <NavLink href="/finances/expenses">
+           <NavLink href="/finances/expenses" variant="dark">
             <FileText className="h-4 w-4" /> Gastos
           </NavLink>
-          <NavLink href="/users">
+          <NavLink href="/users" variant="dark">
             <User className="h-4 w-4" /> Usuarios
           </NavLink>
-          <NavLink href="/vendedores">
+          <NavLink href="/vendedores" variant="dark">
             <Users className="h-4 w-4" /> Vendedores
           </NavLink>
         </nav>
@@ -158,8 +158,8 @@ const NavMenu = ({className} : {className?: string}) => (
     </AccordionItem>
     
      {/* Reportes */}
-    <AccordionItem value="reportes">
-      <AccordionTrigger>
+    <AccordionItem value="reportes" className="border-b-blue-500">
+      <AccordionTrigger className="hover:no-underline">
         <div className="flex items-center gap-3">
           <LineChart className="h-5 w-5" />
           <span>Reportes</span>
@@ -167,7 +167,7 @@ const NavMenu = ({className} : {className?: string}) => (
       </AccordionTrigger>
       <AccordionContent className="pl-4">
          <nav className="grid items-start gap-1">
-          <NavLink href="/reports/predetermined">
+          <NavLink href="/reports/predetermined" variant="dark">
             <FileText className="h-4 w-4" /> Reportes Predeterminados
           </NavLink>
         </nav>
@@ -175,8 +175,8 @@ const NavMenu = ({className} : {className?: string}) => (
     </AccordionItem>
 
     {/* Configuración */}
-    <AccordionItem value="configuracion">
-      <AccordionTrigger>
+    <AccordionItem value="configuracion" className="border-b-0">
+      <AccordionTrigger className="hover:no-underline">
         <div className="flex items-center gap-3">
           <Settings className="h-5 w-5" />
           <span>Configuración</span>
@@ -184,10 +184,10 @@ const NavMenu = ({className} : {className?: string}) => (
       </AccordionTrigger>
       <AccordionContent className="pl-4">
         <nav className="grid items-start gap-1">
-          <NavLink href="/roles">
+          <NavLink href="/roles" variant="dark">
             <Fingerprint className="h-4 w-4" /> Roles y Permisos
           </NavLink>
-           <NavLink href="/settings/rules">
+           <NavLink href="/settings/rules" variant="dark">
             <Wrench className="h-4 w-4" /> Reglas de Negocio
           </NavLink>
         </nav>
@@ -203,16 +203,16 @@ export default function ProtectedLayout({
 }) {
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <aside className="fixed inset-y-0 left-0 z-10 hidden w-64 flex-col border-r bg-background sm:flex">
-        <div className="flex h-16 items-center gap-2 border-b px-4 lg:px-6">
+      <aside className="fixed inset-y-0 left-0 z-10 hidden w-64 flex-col border-r sm:flex bg-blue-600 text-white">
+        <div className="flex h-16 items-center gap-2 border-b border-blue-500 px-4 lg:px-6">
           <Link href="/" className="flex items-center gap-2 font-semibold">
-            <Wrench className="h-6 w-6 text-primary" />
+            <Wrench className="h-6 w-6" />
             <span className="text-lg">Mi Taller Mecánico</span>
           </Link>
         </div>
         <div className="flex-1 overflow-auto py-2">
           <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-            <NavLink href="/dashboard">
+            <NavLink href="/dashboard" variant="dark">
               <LayoutDashboard className="h-5 w-5" /> Dashboard
             </NavLink>
             <NavMenu />

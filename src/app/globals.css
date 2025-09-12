@@ -4,11 +4,11 @@
 
 @layer base {
   :root {
-    --background: 210 100% 98%; /* Azul claro (AliceBlue) */
+    --background: 240 5% 96%; /* Gris claro */
     --foreground: 240 10% 3.9%;
-    --card: 210 100% 98%; /* Mismo que el fondo para integrar las tarjetas */
+    --card: 240 5% 100%; /* Blanco para las tarjetas */
     --card-foreground: 240 10% 3.9%;
-    --popover: 210 100% 98%; /* Mismo que el fondo */
+    --popover: 240 5% 100%;
     --popover-foreground: 240 10% 3.9%;
     --primary: 0 72% 56%; /* #df3d3d */
     --primary-foreground: 0 0% 98%;
@@ -16,18 +16,18 @@
     --secondary-foreground: 240 5% 10%;
     --muted: 240 5% 96%;
     --muted-foreground: 240 4% 46%;
-    --accent: 240 5% 96%; /* Gris muy claro para acentos sutiles */
+    --accent: 240 5% 96%;
     --accent-foreground: 240 5% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 240 6% 90%;
     --input: 240 6% 90%;
     --ring: 0 72% 56%;
-    --chart-1: 0 60% 35%; /* Dark Red */
-    --chart-2: 0 80% 65%;  /* Lighter Red */
-    --chart-3: 0 70% 50%;
-    --chart-4: 0 85% 70%;
-    --chart-5: 0 90% 75%;
+    --chart-1: 217 89% 61%; /* Azul brillante para gráficos */
+    --chart-2: 217 85% 75%;
+    --chart-3: 217 80% 85%;
+    --chart-4: 217 75% 90%;
+    --chart-5: 217 70% 95%;
     --radius: 0.5rem;
   }
 
