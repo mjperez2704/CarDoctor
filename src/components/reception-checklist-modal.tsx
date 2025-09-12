@@ -56,7 +56,18 @@ const formSchema = z.object({
   carMats: z.boolean().default(false),
   
   // Daños y observaciones
-  damages: z.string().optional(),
+  damageFrontBumper: z.string().optional(),
+  damageHood: z.string().optional(),
+  damageRoof: z.string().optional(),
+  damageRearBumper: z.string().optional(),
+  damageTrunk: z.string().optional(),
+  damageHeadlights: z.string().optional(),
+  damageTaillights: z.string().optional(),
+  damageWindshield: z.string().optional(),
+  damageRearWindow: z.string().optional(),
+  damageLeftMirror: z.string().optional(),
+  damageRightMirror: z.string().optional(),
+  damageTires: z.string().optional(),
   notes: z.string().optional(),
 });
 
@@ -208,18 +219,68 @@ export function ReceptionChecklistModal({
                     <Separator />
                     
                     {/* Sección de Observaciones */}
-                    <h3 className="text-lg font-semibold">Observaciones Adicionales</h3>
-                     <FormField control={form.control} name="damages" render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Daños Visibles (Rayones, Golpes)</FormLabel>
-                            <FormControl><Textarea placeholder="Describa cualquier daño visible en la carrocería o interiores." {...field} /></FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}/>
+                    <h3 className="text-lg font-semibold">Registro de Daños Visibles</h3>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                        <FormField control={form.control} name="damageFrontBumper" render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Fascia Delantera</FormLabel>
+                                <FormControl><Input placeholder="Rayones leves, raspadura en esquina..." {...field} /></FormControl>
+                            </FormItem>
+                        )}/>
+                         <FormField control={form.control} name="damageRearBumper" render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Fascia Trasera</FormLabel>
+                                <FormControl><Input placeholder="Golpe ligero, pintura saltada..." {...field} /></FormControl>
+                            </FormItem>
+                        )}/>
+                         <FormField control={form.control} name="damageHood" render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Cofre</FormLabel>
+                                <FormControl><Input placeholder="Pequeña abolladura, rayón..." {...field} /></FormControl>
+                            </FormItem>
+                        )}/>
+                         <FormField control={form.control} name="damageTrunk" render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Cajuela</FormLabel>
+                                <FormControl><Input placeholder="Daños, rayones..." {...field} /></FormControl>
+                            </FormItem>
+                        )}/>
+                        <FormField control={form.control} name="damageRoof" render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Toldo</FormLabel>
+                                <FormControl><Input placeholder="Daños, rayones..." {...field} /></FormControl>
+                            </FormItem>
+                        )}/>
+                        <FormField control={form.control} name="damageWindshield" render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Parabrisas</FormLabel>
+                                <FormControl><Input placeholder="Estrellado, rayado por plumas..." {...field} /></FormControl>
+                            </FormItem>
+                        )}/>
+                         <FormField control={form.control} name="damageLeftMirror" render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Espejo Izquierdo</FormLabel>
+                                <FormControl><Input placeholder="Carcasa rota, luna estrellada..." {...field} /></FormControl>
+                            </FormItem>
+                        )}/>
+                         <FormField control={form.control} name="damageRightMirror" render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Espejo Derecho</FormLabel>
+                                <FormControl><Input placeholder="Rayado, flojo..." {...field} /></FormControl>
+                            </FormItem>
+                        )}/>
+                        <FormField control={form.control} name="damageTires" render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Llantas y Rines</FormLabel>
+                                <FormControl><Input placeholder="Rines raspados, llantas bajas..." {...field} /></FormControl>
+                            </FormItem>
+                        )}/>
+                     </div>
+                     
                      <FormField control={form.control} name="notes" render={({ field }) => (
                         <FormItem>
                             <FormLabel>Notas Adicionales</FormLabel>
-                            <FormControl><Textarea placeholder="Cualquier otra observación relevante." {...field} /></FormControl>
+                            <FormControl><Textarea placeholder="Cualquier otra observación relevante. Ej. Puerta delantera derecha no cierra bien." {...field} /></FormControl>
                             <FormMessage />
                         </FormItem>
                     )}/>
@@ -236,3 +297,5 @@ export function ReceptionChecklistModal({
     </Dialog>
   );
 }
+
+    
