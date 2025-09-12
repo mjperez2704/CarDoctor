@@ -28,7 +28,7 @@ import {
 import { File, ListFilter, MoreHorizontal, PlusCircle } from "lucide-react";
 import type { OrdenServicio, Cliente, Empleado } from "@/lib/types";
 import { Badge } from "./ui/badge";
-import { WorkOrderFormModal } from "./work-order-form-modal";
+import { ReceptionChecklistModal } from "./reception-checklist-modal";
 
 type ReceptionManagerProps = {
   initialReceptions: OrdenServicio[];
@@ -62,9 +62,9 @@ export function ReceptionManager({
     CANCELADO: "destructive",
   };
   
-  const handleSaveOrder = (values: any) => {
-    console.log("Creating new work order from reception:", values);
-    // Lógica para guardar la nueva orden/recepción
+  const handleSaveReception = (values: any) => {
+    console.log("Saving new reception checklist:", values);
+    // Lógica para guardar la nueva recepción y la OS asociada
     setIsModalOpen(false);
   };
 
@@ -76,7 +76,7 @@ export function ReceptionManager({
             <div>
               <CardTitle>Recepción de Vehículos</CardTitle>
               <CardDescription>
-                Registra la entrada de nuevos vehículos al taller.
+                Listado de vehículos actualmente en el taller y su estado.
               </CardDescription>
             </div>
             <div className="flex justify-end gap-2 mb-4">
@@ -153,10 +153,10 @@ export function ReceptionManager({
         </CardContent>
       </Card>
 
-       <WorkOrderFormModal
+       <ReceptionChecklistModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSave={handleSaveOrder}
+        onSave={handleSaveReception}
         clients={clients}
         employees={employees}
       />
