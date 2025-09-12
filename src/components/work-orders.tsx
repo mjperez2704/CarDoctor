@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -27,6 +28,7 @@ import {
 import { File, ListFilter, MoreHorizontal, PlusCircle } from "lucide-react";
 import type { OrdenServicio, Cliente, Empleado } from "@/lib/types";
 import { Badge } from "./ui/badge";
+import { WorkOrderFormModal } from "./work-order-form-modal";
 
 type WorkOrdersProps = {
   initialWorkOrders: OrdenServicio[];
@@ -40,6 +42,7 @@ export function WorkOrders({
   employees,
 }: WorkOrdersProps) {
   const [workOrders, setWorkOrders] = React.useState(initialWorkOrders);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   const getClientName = (clientId: number) => {
     return clients.find((c) => c.id === clientId)?.razon_social || "N/A";
@@ -64,7 +67,15 @@ export function WorkOrders({
     CANCELADO: "destructive",
   };
 
+  const handleSaveOrder = (values: any) => {
+    console.log("Saving new work order:", values);
+    // Here you would typically call an API to save the new order
+    // and then refresh the work orders list.
+    setIsModalOpen(false);
+  };
+
   return (
+    <>
     <Card>
       <CardHeader>
         <div className="flex justify-between items-center">
@@ -87,7 +98,7 @@ export function WorkOrders({
                 Exportar
               </span>
             </Button>
-            <Button size="sm" className="h-7 gap-1">
+            <Button size="sm" className="h-7 gap-1" onClick={() => setIsModalOpen(true)}>
               <PlusCircle className="h-3.5 w-3.5" />
               <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                 Nueva Orden de Servicio
@@ -151,5 +162,13 @@ export function WorkOrders({
         </Table>
       </CardContent>
     </Card>
+     <WorkOrderFormModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleSaveOrder}
+        clients={clients}
+        employees={employees}
+      />
+    </>
   );
 }
