@@ -203,19 +203,19 @@ export default function ProtectedLayout({
 }) {
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <aside className="fixed inset-y-0 left-0 z-10 hidden w-64 flex-col border-r sm:flex bg-[#2D1E1E] text-white">
-        <div className="flex h-16 items-center gap-2 border-b border-gray-700 px-4 lg:px-6">
+      <aside className="fixed inset-y-0 left-0 z-10 hidden w-64 flex-col border-r bg-background sm:flex">
+        <div className="flex h-16 items-center gap-2 border-b px-4 lg:px-6">
           <Link href="/" className="flex items-center gap-2 font-semibold">
-            <Wrench className="h-6 w-6 text-red-400" />
+            <Wrench className="h-6 w-6 text-primary" />
             <span className="text-lg">Mi Taller Mecánico</span>
           </Link>
         </div>
         <div className="flex-1 overflow-auto py-2">
           <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-            <NavLink href="/dashboard" className="text-gray-300 hover:text-white [&.active]:bg-red-800/30 [&.active]:text-white">
+            <NavLink href="/dashboard">
               <LayoutDashboard className="h-5 w-5" /> Dashboard
             </NavLink>
-            <NavMenu className="text-gray-300 [&_span]:hover:text-white [&_svg]:hover:text-white [&_a.active]:bg-red-800/30 [&_a.active]:text-white [&_a]:hover:text-white"/>
+            <NavMenu />
           </nav>
         </div>
       </aside>
@@ -228,22 +228,22 @@ export default function ProtectedLayout({
                 <span className="sr-only">Abrir menú</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="sm:max-w-xs bg-[#2D1E1E] text-white border-r-0">
-              <div className="flex h-16 items-center gap-2 border-b border-gray-700 px-4">
+            <SheetContent side="left" className="sm:max-w-xs bg-background">
+              <div className="flex h-16 items-center gap-2 border-b px-4">
                 <Link
                   href="/"
                   className="flex items-center gap-2 font-semibold"
                 >
-                  <Wrench className="h-6 w-6 text-red-400" />
+                  <Wrench className="h-6 w-6 text-primary" />
                   <span className="">Mi Taller Mecánico</span>
                 </Link>
               </div>
               <div className="flex-1 overflow-auto py-2">
                  <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-                  <NavLink href="/dashboard" className="text-gray-300 hover:text-white [&.active]:bg-red-800/30 [&.active]:text-white">
+                  <NavLink href="/dashboard">
                     <LayoutDashboard className="h-5 w-5" /> Dashboard
                   </NavLink>
-                  <NavMenu className="text-gray-300 [&_span]:hover:text-white [&_svg]:hover:text-white [&_a.active]:bg-red-800/30 [&_a.active]:text-white [&_a]:hover:text-white"/>
+                  <NavMenu/>
                 </nav>
               </div>
             </SheetContent>
