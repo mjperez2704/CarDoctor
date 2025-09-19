@@ -55,6 +55,9 @@ const NavMenu = ({className} : {className?: string}) => (
           <NavLink href="/work-orders" variant="dark">
             <FileText className="h-4 w-4" /> Órdenes de Servicio
           </NavLink>
+          <NavLink href="/catalogs/vehicles" variant="dark">
+            <Car className="h-4 w-4" /> Vehículos en Taller
+          </NavLink>
           <NavLink href="/quotes" variant="dark">
             <Briefcase className="h-4 w-4" /> Cotizaciones
           </NavLink>
@@ -77,9 +80,6 @@ const NavMenu = ({className} : {className?: string}) => (
         <nav className="grid items-start gap-1">
           <NavLink href="/catalogs/products" variant="dark">
             <Package className="h-4 w-4" /> Refacciones
-          </NavLink>
-          <NavLink href="/catalogs/vehicles" variant="dark">
-            <Car className="h-4 w-4" /> Vehículos
           </NavLink>
           <NavLink href="/catalogs/tools" variant="dark">
             <Wrench className="h-4 w-4" /> Herramientas
