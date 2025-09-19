@@ -241,6 +241,8 @@ export type ReceptionItem = {
   unitCost: number;
   receivedQuantity: number;
   isComplete: boolean;
+  location?: string; // e.g., "Almacén A / Sección 3 / Lote 123"
+  notes?: string;
 };
 
 
