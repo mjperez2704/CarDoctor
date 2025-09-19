@@ -1,4 +1,5 @@
 
+
 // ============================================================
 //  Sistema: Administración de Taller de Smartphones (ATS)
 //  Versión de Tipos: 1.0 (Basado en esquema MySQL)
@@ -285,6 +286,16 @@ export type Presupuesto = {
   total: number;
   estado: "BORRADOR" | "ENVIADO" | "ACEPTADO" | "RECHAZADO" | "VENCIDO";
 };
+
+export type Cotizacion = {
+  id: number;
+  folio: string;
+  fecha: string;
+  cliente_id: number;
+  cliente_nombre: string;
+  total: number;
+  estado: 'GENERADA' | 'ENVIADA' | 'ACEPTADA' | 'RECHAZADA';
+}
 
 export type EquipoTaller = {
   id: number;
