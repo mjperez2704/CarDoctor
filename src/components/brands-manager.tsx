@@ -58,7 +58,7 @@ export function BrandsManager({ initialBrands, initialModels }: BrandsManagerPro
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  <h4 className="font-semibold text-sm mb-2">Modelos:</h4>
+                  <h4 className="font-semibold text-sm mb-2">Model</h4>
                   {brandModels.length > 0 ? (
                     <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
                       {brandModels.map(model => (

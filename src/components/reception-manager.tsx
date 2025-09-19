@@ -2,6 +2,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -105,6 +106,7 @@ export function ReceptionManager({
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead className="hidden sm:table-cell">Imagen</TableHead>
                 <TableHead>Folio OS</TableHead>
                 <TableHead>Cliente</TableHead>
                 <TableHead>Vehículo (ID)</TableHead>
@@ -117,8 +119,17 @@ export function ReceptionManager({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {receptions.map((reception) => (
+              {receptions.map((reception, index) => (
                 <TableRow key={reception.id}>
+                    <TableCell className="hidden sm:table-cell">
+                        <Image
+                            alt={`Vehículo ${reception.equipo_id}`}
+                            className="aspect-square rounded-md object-cover"
+                            height="64"
+                            src={`/vehiculo_${(index % 4) + 1}.jpg`}
+                            width="64"
+                        />
+                    </TableCell>
                   <TableCell className="font-medium">{reception.folio}</TableCell>
                   <TableCell>{getClientName(reception.cliente_id)}</TableCell>
                   <TableCell>ID: {reception.equipo_id}</TableCell>
