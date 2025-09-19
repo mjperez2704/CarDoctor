@@ -27,22 +27,22 @@ import {
 import { MoreHorizontal, PlusCircle } from "lucide-react";
 import type { Cliente } from "@/lib/types";
 
-export function Drivers({ initialDrivers }: { initialDrivers: Cliente[] }) {
-  const [drivers, setDrivers] = React.useState(initialDrivers);
+export function Customers({ initialCustomers }: { initialCustomers: Cliente[] }) {
+  const [customers, setCustomers] = React.useState(initialCustomers);
 
   return (
     <Card>
       <CardHeader>
         <div className="flex justify-between items-center">
           <div>
-            <CardTitle>Choferes</CardTitle>
+            <CardTitle>Clientes</CardTitle>
             <CardDescription>
-              Administra la información de los choferes de la empresa.
+              Administra la información de los clientes de tu taller.
             </CardDescription>
           </div>
           <Button>
             <PlusCircle className="mr-2 h-4 w-4" />
-            Agregar Chofer
+            Agregar Cliente
           </Button>
         </div>
       </CardHeader>
@@ -60,12 +60,12 @@ export function Drivers({ initialDrivers }: { initialDrivers: Cliente[] }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {drivers.map((driver) => (
-              <TableRow key={driver.id}>
-                <TableCell className="font-medium">{driver.razon_social}</TableCell>
-                <TableCell>{driver.email}</TableCell>
-                <TableCell>{driver.telefono}</TableCell>
-                <TableCell>{new Date(driver.fecha_registro).toLocaleDateString()}</TableCell>
+            {customers.map((customer) => (
+              <TableRow key={customer.id}>
+                <TableCell className="font-medium">{customer.razon_social}</TableCell>
+                <TableCell>{customer.email}</TableCell>
+                <TableCell>{customer.telefono}</TableCell>
+                <TableCell>{new Date(customer.fecha_registro).toLocaleDateString()}</TableCell>
                 <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

@@ -98,8 +98,8 @@ const NavMenu = ({className} : {className?: string}) => (
       </AccordionTrigger>
       <AccordionContent className="pl-4">
         <nav className="grid items-start gap-1">
-          <NavLink href="/drivers" variant="dark">
-            <Users className="h-4 w-4" /> Choferes
+          <NavLink href="/customers" variant="dark">
+            <Users className="h-4 w-4" /> Clientes
           </NavLink>
           <NavLink href="/providers" variant="dark">
             <Truck className="h-4 w-4" /> Proveedores

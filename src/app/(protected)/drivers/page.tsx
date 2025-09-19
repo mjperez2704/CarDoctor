@@ -1,9 +1,9 @@
-import { Drivers } from "@/components/drivers";
+import { Customers } from "@/components/customers";
 import { getClientes } from "@/lib/data";
 
-export default function DriversPage() {
-  const drivers = getClientes();
+export default function CustomersPage() {
+  const customers = getClientes();
   return (
-    <Drivers initialDrivers={drivers} />
+    <Customers initialCustomers={customers} />
   );
 }
