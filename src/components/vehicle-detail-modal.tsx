@@ -21,7 +21,8 @@ import {
 } from "@/components/ui/carousel";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import placeholderImageData from '@/lib/placeholder-images.json';
+import placeholderImageData from '@/app/lib/placeholder-images.json';
+import { Card, CardContent } from "./ui/card";
 
 type VehicleInService = OrdenServicio & {
   clientName: string;

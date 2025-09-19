@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import type { OrdenServicio } from "@/lib/types";
 import { VehicleDetailModal } from "./vehicle-detail-modal";
 import { Badge } from "./ui/badge";
-import placeholderImageData from '@/lib/placeholder-images.json';
+import placeholderImageData from '@/app/lib/placeholder-images.json';
 
 type VehicleInService = OrdenServicio & {
   clientName: string;
