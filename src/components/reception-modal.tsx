@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -58,6 +59,17 @@ export function ReceptionModal({ isOpen, onClose, purchase }: ReceptionModalProp
       )
     );
   };
+  
+  const handleCostChange = (itemName: string, value: string) => {
+    const newCost = parseFloat(value) || 0;
+     setReceptionItems((prev) =>
+      prev.map((item) =>
+        item.name === itemName
+          ? { ...item, unitCost: newCost }
+          : item
+      )
+    );
+  }
 
   const handleCompleteToggle = (itemName: string, checked: boolean) => {
      setReceptionItems((prev) =>
@@ -94,7 +106,7 @@ export function ReceptionModal({ isOpen, onClose, purchase }: ReceptionModalProp
                             <TableHead>SKU/Descripción</TableHead>
                             <TableHead className="text-center">Pedida</TableHead>
                             <TableHead className="text-center w-[120px]">Recibida</TableHead>
-                            <TableHead className="text-center">Costo Unit.</TableHead>
+                            <TableHead className="text-center w-[130px]">Costo Unit.</TableHead>
                             <TableHead className="text-center">Ubicación</TableHead>
                         </TableRow>
                         </TableHeader>
@@ -114,7 +126,15 @@ export function ReceptionModal({ isOpen, onClose, purchase }: ReceptionModalProp
                                             className="w-20 mx-auto h-8"
                                         />
                                     </TableCell>
-                                    <TableCell className="text-center">${item.unitCost.toFixed(2)}</TableCell>
+                                    <TableCell className="text-center">
+                                        <Input
+                                            type="number"
+                                            step="0.01"
+                                            value={item.unitCost.toFixed(2)}
+                                            onChange={(e) => handleCostChange(item.name, e.target.value)}
+                                            className="w-24 mx-auto h-8"
+                                        />
+                                    </TableCell>
                                     <TableCell className="text-center">
                                        <Button variant="outline" size="sm" className="h-8 gap-1">
                                             <MapPin className="h-3.5 w-3.5" />
