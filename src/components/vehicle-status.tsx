@@ -1,0 +1,105 @@
+
+"use client";
+
+import * as React from "react";
+import Image from "next/image";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import type { OrdenServicio } from "@/lib/types";
+import { VehicleDetailModal } from "./vehicle-detail-modal";
+import { Badge } from "./ui/badge";
+import placeholderImageData from '@/lib/placeholder-images.json';
+
+type VehicleInService = OrdenServicio & {
+  clientName: string;
+  vehicleIdentifier: string;
+};
+
+type VehicleStatusProps = {
+  initialVehicles: VehicleInService[];
+};
+
+export function VehicleStatus({ initialVehicles }: VehicleStatusProps) {
+  const [vehicles, setVehicles] = React.useState(initialVehicles);
+  const [selectedVehicle, setSelectedVehicle] = React.useState<VehicleInService | null>(null);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const handleOpenModal = (vehicle: VehicleInService) => {
+    setSelectedVehicle(vehicle);
+    setIsModalOpen(true);
+  };
+  
+  const statusVariant: Record<OrdenServicio["estado"], "default" | "secondary" | "destructive" | "outline"> = {
+    RECEPCION: "outline",
+    DIAGNOSTICO: "secondary",
+    AUTORIZACION: "secondary",
+    EN_REPARACION: "default",
+    PRUEBAS: "default",
+    LISTO: "default",
+    ENTREGADO: "default",
+    CANCELADO: "destructive",
+  };
+
+
+  return (
+    <>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold">Vehículos en Taller</h1>
+          <p className="text-muted-foreground">
+            Listado de vehículos actualmente en servicio o reparación.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {vehicles.map((vehicle) => {
+             const vehicleImage = placeholderImageData.vehicles.find(v => String(v.id) === String(vehicle.equipo_id)) || placeholderImageData.vehicles[0];
+            return (
+              <Card key={vehicle.id} className="overflow-hidden">
+                <div className="relative">
+                    <Image
+                        alt={`Imagen de ${vehicle.vehicleIdentifier}`}
+                        className="aspect-video w-full object-cover"
+                        data-ai-hint={vehicleImage.hint}
+                        height={337}
+                        src={vehicleImage.url_600_337}
+                        width={600}
+                    />
+                     <Badge variant={statusVariant[vehicle.estado]} className="absolute top-2 left-2">
+                        {vehicle.estado.replace("_", " ")}
+                    </Badge>
+                </div>
+
+                <CardHeader>
+                  <CardTitle>{vehicle.vehicleIdentifier}</CardTitle>
+                  <CardDescription>{vehicle.clientName}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button
+                    className="w-full"
+                    onClick={() => handleOpenModal(vehicle)}
+                  >
+                    Ver Detalles
+                  </Button>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      </div>
+      {selectedVehicle && (
+        <VehicleDetailModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          vehicle={selectedVehicle}
+        />
+      )}
+    </>
+  );
+}

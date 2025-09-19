@@ -1,0 +1,25 @@
+
+{
+    "vehicles": [
+        {
+            "id": 1,
+            "hint": "white sedan",
+            "url_600_337": "https://picsum.photos/seed/nissan-versa/600/337"
+        },
+        {
+            "id": 2,
+            "hint": "black sedan",
+            "url_600_337": "https://picsum.photos/seed/vw-jetta/600/337"
+        },
+        {
+            "id": 3,
+            "hint": "red sportscar",
+            "url_600_337": "https://picsum.photos/seed/ford-mustang/600/337"
+        },
+        {
+            "id": 4,
+            "hint": "silver compact",
+            "url_600_337": "https://picsum.photos/seed/chevy-aveo/600/337"
+        }
+    ]
+}
