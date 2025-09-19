@@ -15,6 +15,7 @@ import type { OrdenServicio } from "@/lib/types";
 import { VehicleDetailModal } from "./vehicle-detail-modal";
 import { Badge } from "./ui/badge";
 import placeholderImageData from '@/app/lib/placeholder-images.json';
+import { cn } from "@/lib/utils";
 
 type VehicleInService = OrdenServicio & {
   clientName: string;
@@ -24,6 +25,8 @@ type VehicleInService = OrdenServicio & {
 type VehicleStatusProps = {
   initialVehicles: VehicleInService[];
 };
+
+type TimeStatus = "EN TIEMPO" | "ATRASADO" | "URGENTE";
 
 export function VehicleStatus({ initialVehicles }: VehicleStatusProps) {
   const [vehicles, setVehicles] = React.useState(initialVehicles);
@@ -45,6 +48,20 @@ export function VehicleStatus({ initialVehicles }: VehicleStatusProps) {
     ENTREGADO: "default",
     CANCELADO: "destructive",
   };
+  
+  const getTimeStatus = (vehicleId: number): TimeStatus => {
+    // Simulando la lógica para determinar el estado del tiempo
+    const mod = vehicleId % 3;
+    if (mod === 0) return "URGENTE";
+    if (mod === 1) return "EN TIEMPO";
+    return "ATRASADO";
+  }
+
+  const timeStatusColors: Record<TimeStatus, string> = {
+    "EN TIEMPO": "bg-green-600 text-white hover:bg-green-700",
+    "ATRASADO": "bg-slate-500 text-white hover:bg-slate-600",
+    "URGENTE": "bg-red-600 text-white hover:bg-red-700",
+  }
 
 
   return (
@@ -60,6 +77,7 @@ export function VehicleStatus({ initialVehicles }: VehicleStatusProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {vehicles.map((vehicle) => {
              const vehicleImage = placeholderImageData.vehicles.find(v => String(v.id) === String(vehicle.equipo_id)) || placeholderImageData.vehicles[0];
+             const timeStatus = getTimeStatus(vehicle.id);
             return (
               <Card key={vehicle.id} className="overflow-hidden">
                 <div className="relative">
@@ -71,9 +89,14 @@ export function VehicleStatus({ initialVehicles }: VehicleStatusProps) {
                         src={vehicleImage.url_600_337}
                         width={600}
                     />
-                     <Badge variant={statusVariant[vehicle.estado]} className="absolute top-2 left-2">
-                        {vehicle.estado.replace("_", " ")}
-                    </Badge>
+                     <div className="absolute top-2 left-2 flex flex-col gap-2">
+                        <Badge variant={statusVariant[vehicle.estado]}>
+                            {vehicle.estado.replace("_", " ")}
+                        </Badge>
+                         <Badge className={cn("border-none", timeStatusColors[timeStatus])}>
+                           {timeStatus}
+                        </Badge>
+                     </div>
                 </div>
 
                 <CardHeader>
