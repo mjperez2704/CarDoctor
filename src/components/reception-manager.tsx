@@ -126,7 +126,7 @@ export function ReceptionManager({
                             alt={`Vehículo ${reception.equipo_id}`}
                             className="aspect-square rounded-md object-cover"
                             height="64"
-                            src={`/vehiculo_${(index % 4) + 1}.jpg`}
+                            src={`/assets/vehiculo_${(index % 4) + 1}.jpg`}
                             width="64"
                         />
                     </TableCell>

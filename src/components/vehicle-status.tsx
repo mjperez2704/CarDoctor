@@ -14,7 +14,6 @@ import { Button } from "@/components/ui/button";
 import type { OrdenServicio } from "@/lib/types";
 import { VehicleDetailModal } from "./vehicle-detail-modal";
 import { Badge } from "./ui/badge";
-import placeholderImageData from '@/app/lib/placeholder-images.json';
 import { cn } from "@/lib/utils";
 
 type VehicleInService = OrdenServicio & {
@@ -75,18 +74,17 @@ export function VehicleStatus({ initialVehicles }: VehicleStatusProps) {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {vehicles.map((vehicle) => {
-             const vehicleImage = placeholderImageData.vehicles.find(v => String(v.id) === String(vehicle.equipo_id)) || placeholderImageData.vehicles[0];
+          {vehicles.map((vehicle, index) => {
              const timeStatus = getTimeStatus(vehicle.id);
+             const imageIndex = (index % 4) + 1;
             return (
               <Card key={vehicle.id} className="overflow-hidden">
                 <div className="relative">
                     <Image
                         alt={`Imagen de ${vehicle.vehicleIdentifier}`}
                         className="aspect-video w-full object-cover"
-                        data-ai-hint={vehicleImage.hint}
                         height={337}
-                        src={vehicleImage.url_600_337}
+                        src={`/assets/vehiculo_${imageIndex}.jpg`}
                         width={600}
                     />
                      <div className="absolute top-2 left-2 flex flex-col gap-2">
