@@ -198,7 +198,7 @@ export const getBitacora = (): Bitacora[] => [];
 export const getGastos = (): Gasto[] => [];
 
 
-// Helper para obtener todos los permisos (simulado)
+// Helper para obtener todos los permisos (Demo)
 export const getAllPermissions = (): Permiso[] => {
     const modulos = ['Usuarios', 'Roles', 'Clientes', 'Inventario', 'Ordenes de Servicio', 'Compras', 'Reportes'];
     const acciones = ['ver', 'crear', 'editar', 'eliminar'];

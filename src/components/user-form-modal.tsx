@@ -86,7 +86,7 @@ export function UserFormModal({
     form.reset();
     toast({
       title: "Usuario Guardado",
-      description: "El nuevo usuario ha sido guardado exitosamente (simulado).",
+      description: "El nuevo usuario ha sido guardado exitosamente (Demo).",
     });
     onClose();
   };

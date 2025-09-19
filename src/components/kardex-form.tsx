@@ -69,7 +69,7 @@ export function KardexForm({ products }: KardexFormProps) {
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("Generando reporte de Kardex con:", values);
     toast({
-        title: "Reporte Generado (Simulado)",
+        title: "Reporte Generado (Demo)",
         description: `Se generó el Kardex para ${values.productIds.length} producto(s) desde ${format(values.dateRange.from, "PPP", { locale: es })} hasta ${format(values.dateRange.to, "PPP", { locale: es })}.`
     })
   }

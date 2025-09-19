@@ -70,7 +70,7 @@ export function WorkOrderFormModal({
     form.reset();
     toast({
       title: "Orden de Servicio Creada",
-      description: "La nueva orden ha sido guardada exitosamente (simulado).",
+      description: "La nueva orden ha sido guardada exitosamente (Demo).",
     });
     onClose();
   };

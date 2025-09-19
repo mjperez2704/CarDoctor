@@ -71,7 +71,7 @@ export function MovementForm({ inventory, onSave }: MovementFormProps) {
     console.log("Valores del formulario de movimiento:", values);
     
     toast({
-      title: "Movimiento Guardado (Simulado)",
+      title: "Movimiento Guardado (Demo)",
       description: `Se registró el movimiento de ${values.quantity} x ${selectedItem.nombre}.`,
     });
 

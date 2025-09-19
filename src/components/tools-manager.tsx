@@ -64,7 +64,7 @@ export function ToolsManager({ initialTools, employees }: ToolsManagerProps) {
         <CardHeader>
           <div className="flex justify-between items-center">
             <div>
-              <CardTitle>Catálogo de Herramientas</CardTitle>
+              <CardTitle>Listado de Herramientas</CardTitle>
               <CardDescription>
                 Administra el inventario de herramientas internas del taller.
               </CardDescription>

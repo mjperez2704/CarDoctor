@@ -113,7 +113,7 @@ export function ProductFormModal({
     form.reset();
      toast({
       title: "Producto Guardado",
-      description: "El nuevo producto ha sido guardado exitosamente (simulado).",
+      description: "El nuevo producto ha sido guardado exitosamente (Demo).",
     });
   };
 

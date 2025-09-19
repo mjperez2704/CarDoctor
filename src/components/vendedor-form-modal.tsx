@@ -80,7 +80,7 @@ export function VendedorFormModal({
     form.reset();
     toast({
       title: "Vendedor Guardado",
-      description: "La configuración del vendedor ha sido guardada (simulado).",
+      description: "La configuración del vendedor ha sido guardada (Demo).",
     });
     onClose();
   };

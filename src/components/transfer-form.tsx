@@ -139,7 +139,7 @@ export function TransferForm({ almacenes, productos }: TransferFormProps) {
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("Valores del formulario de traslado:", values);
     toast({
-      title: "Traslado Guardado (Simulado)",
+      title: "Traslado Guardado (Demo)",
       description: `Se registró el traslado de ${values.quantity} unidades.`,
     });
     form.reset();

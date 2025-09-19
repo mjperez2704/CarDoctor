@@ -90,7 +90,7 @@ export function AppearanceForm() {
         console.log("Guardando configuración de apariencia:", values);
         toast({
             title: "Apariencia Guardada",
-            description: "Los nuevos ajustes de apariencia han sido guardados (simulado).",
+            description: "Los nuevos ajustes de apariencia han sido guardados (Demo).",
         });
     }
 

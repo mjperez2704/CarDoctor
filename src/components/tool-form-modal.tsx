@@ -69,7 +69,7 @@ export function ToolFormModal({
     form.reset();
     toast({
       title: "Herramienta Guardada",
-      description: "La nueva herramienta ha sido registrada (simulado).",
+      description: "La nueva herramienta ha sido registrada (Demo).",
     });
     onClose();
   };
@@ -93,7 +93,7 @@ export function ToolFormModal({
                         <FormItem>
                         <FormLabel>SKU / Código</FormLabel>
                         <FormControl>
-                            <Input placeholder="Ej. HER-MUL-01" {...field} />
+                            <Input placeholder="Ej. GATHID20TRU" {...field} />
                         </FormControl>
                         <FormMessage />
                         </FormItem>
@@ -106,7 +106,7 @@ export function ToolFormModal({
                         <FormItem>
                         <FormLabel>Nombre</FormLabel>
                         <FormControl>
-                            <Input placeholder="Ej. Multímetro Digital" {...field} />
+                            <Input placeholder="Ej. GATO HIDRAULICO DE PATIN" {...field} />
                         </FormControl>
                         <FormMessage />
                         </FormItem>
@@ -120,7 +120,7 @@ export function ToolFormModal({
                     <FormItem>
                     <FormLabel>Descripción</FormLabel>
                     <FormControl>
-                        <Textarea placeholder="Detalles de la herramienta..." {...field} />
+                        <Textarea placeholder="Detalles: GATO HIDRAULICO DE PATÍN DE HASTA 21 TONELADAS COLOR NARANJA" {...field} />
                     </FormControl>
                     <FormMessage />
                     </FormItem>
@@ -134,7 +134,7 @@ export function ToolFormModal({
                         <FormItem>
                         <FormLabel>Marca</FormLabel>
                         <FormControl>
-                            <Input placeholder="Ej. Fluke" {...field} />
+                            <Input placeholder="Ej. TRUPPER" {...field} />
                         </FormControl>
                         <FormMessage />
                         </FormItem>
@@ -147,7 +147,7 @@ export function ToolFormModal({
                         <FormItem>
                         <FormLabel>Modelo</FormLabel>
                         <FormControl>
-                            <Input placeholder="Ej. 115" {...field} />
+                            <Input placeholder="Ej. GAT-20" {...field} />
                         </FormControl>
                         <FormMessage />
                         </FormItem>
