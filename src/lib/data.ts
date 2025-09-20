@@ -4,7 +4,7 @@ import pool from './db';
 import { unstable_noStore as noStore } from 'next/cache';
 import type {
     Producto, Marca, Proveedor, OrdenServicio, Bitacora, Usuario, Gasto, Empleado, Cliente,
-    Modelo, Vehiculo, Herramienta, Almacen, Seccion, Lote, SolicitudInterna, Purchase
+    Modelo, Vehiculo, Herramienta, Almacen, Seccion, Lote, SolicitudInterna, Purchase, Rol
 } from './types';
 import { RowDataPacket } from 'mysql2';
 
@@ -46,6 +46,23 @@ export async function getProductos(): Promise<Producto[]> {
         throw new Error('No se pudieron obtener los productos.');
     }
 }
+
+/**
+ * Obtiene los productos (refacciones) del sistema.
+ */
+export async function getProducts(): Promise<Producto[]> {
+    noStore();
+    try {
+        const [rows] = await pool.query<RowDataPacket[]>(
+            'SELECT * FROM productos WHERE es_servicio = false LIMIT 100'
+        );
+        return rows as Producto[];
+    } catch (error) {
+        console.error('Error de base de datos al obtener productos:', error);
+        throw new Error('No se pudieron obtener los productos.');
+    }
+}
+
 
 /**
  * Obtiene los servicios del sistema.
@@ -142,12 +159,12 @@ export async function getOrdenesServicio(): Promise<OrdenServicioCompleta[]> {
     try {
         const query = `
             SELECT
-                os.id, os.folio, os.cliente_id, os.vehiculo_id, os.fecha, os.estado, os.diagnostico_ini,
+                os.id, os.folio, os.cliente_id, os.equipo_id, os.fecha, os.estado, os.diagnostico_ini,
                 c.razon_social as clientName,
                 CONCAT(m.nombre, ' ', mo.nombre, ' / Placas: ', v.placas) as vehicleIdentifier
             FROM ordenes_servicio os
                      JOIN clientes c ON os.cliente_id = c.id
-                     JOIN vehiculos v ON os.vehiculo_id = v.id
+                     JOIN vehiculos v ON os.equipo_id = v.id
                      LEFT JOIN marcas m ON v.marca_id = m.id
                      LEFT JOIN modelos mo ON v.modelo_id = mo.id
             WHERE os.estado NOT IN ('ENTREGADO', 'CANCELADO')
@@ -182,8 +199,35 @@ export async function getBitacora(): Promise<Bitacora[]> {
 export async function getUsuarios(): Promise<Usuario[]> {
     noStore();
     try {
-        const [rows] = await pool.query<RowDataPacket[]>('SELECT id, nombre, apellido_p, email, activo FROM usuarios');
-        return rows as Usuario[];
+        const [rows] = await pool.query<RowDataPacket[]>("SELECT u.id, u.nombre, u.apellido_p, u.email, u.activo, r.id as rol_id, r.nombre as rol_nombre FROM usuarios u LEFT JOIN usuarios_roles ur ON u.id = ur.usuario_id LEFT JOIN roles r ON ur.rol_id = r.id");
+
+        const userMap = new Map<number, Usuario>();
+
+        for (const row of rows as (RowDataPacket & {rol_id: number, rol_nombre: string})[]) {
+            if (!userMap.has(row.id)) {
+                userMap.set(row.id, {
+                    id: row.id,
+                    nombre: row.nombre,
+                    apellido_p: row.apellido_p,
+                    email: row.email,
+                    activo: row.activo,
+                    roles: [],
+                    username: '', // Default values for properties not in the query
+                    password_hash: '',
+                    created_at: '',
+                    updated_at: ''
+                });
+            }
+
+            if (row.rol_id && row.rol_nombre) {
+                userMap.get(row.id)!.roles!.push({
+                    id: row.rol_id,
+                    nombre: row.rol_nombre,
+                });
+            }
+        }
+
+        return Array.from(userMap.values());
     } catch (error) {
         console.error("Error de base de datos al obtener usuarios:", error);
         throw new Error('No se pudieron obtener los usuarios.');
@@ -291,8 +335,45 @@ export async function getLotesPorProducto(productoId: number): Promise<LoteConDe
     }
 }
 
-// ... (Puedes agregar más funciones según necesites, como getRoles, getSolicitudesInternas, etc.)
-// Estas son funciones placeholder que puedes implementar
-export function getRoles(): any[] { return []; }
-export function getSolicitudesInternas(): any[] { return []; }
-export function getPurchases(): any[] { return []; }
+/**
+ * Obtiene los roles del sistema.
+ */
+export async function getRoles(): Promise<Rol[]> {
+    noStore();
+    try {
+        const [rows] = await pool.query<RowDataPacket[]>('SELECT * FROM roles ORDER BY nombre');
+        return rows as Rol[];
+    } catch (error) {
+        console.error("Error de base de datos al obtener roles:", error);
+        throw new Error('No se pudieron obtener los roles.');
+    }
+}
+
+/**
+ * Obtiene las solicitudes internas.
+ */
+export async function getSolicitudesInternas(): Promise<SolicitudInterna[]> {
+    noStore();
+    try {
+        const [rows] = await pool.query<RowDataPacket[]>('SELECT * FROM solicitudes_internas ORDER BY fecha_solicitud DESC LIMIT 100');
+        return rows as SolicitudInterna[];
+    } catch (error) {
+        console.error("Error de base de datos al obtener solicitudes internas:", error);
+        throw new Error('No se pudieron obtener las solicitudes internas.');
+    }
+}
+
+/**
+ * Obtiene las compras.
+ */
+export async function getPurchases(): Promise<Purchase[]> {
+    noStore();
+    // Esta función simula la obtención de datos de compras.
+    // Deberías reemplazarla con una consulta real a tu base de datos.
+    const mockPurchases: Purchase[] = [
+        { id: "OC-2024-001", providerId: "1", date: "2024-07-28", total: 1850.00, status: "Recibida Parcial", items: [{ sku: 'SKU001', name: 'Filtro de Aceite', quantity: 10, price: 150 }, { sku: 'SKU002', name: 'Bujía', quantity: 20, price: 17.50 }] },
+        { id: "OC-2024-002", providerId: "2", date: "2024-07-25", total: 550.00, status: "Pendiente", items: [{ sku: 'SKU003', name: 'Balatas Delanteras', quantity: 2, price: 275 }] },
+        { id: "OC-2024-003", providerId: "1", date: "2024-07-22", total: 320.00, status: "Recibida Completa", items: [{ sku: 'SKU004', name: 'Aceite Sintético 5L', quantity: 2, price: 160 }] }
+    ];
+    return mockPurchases;
+}
