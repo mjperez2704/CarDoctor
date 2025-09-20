@@ -1,7 +1,8 @@
+
 'use server';
 
 import mysql from 'mysql2/promise';
-import datosNull[]  from './datanull.json';
+import datosNull from './datanull.json';
 import { FieldPacket, RowDataPacket } from 'mysql2'
 
 
@@ -17,7 +18,7 @@ const dbConfig = {
     queueLimit: 0,
 };
 
-function getTableNameFromQuery(query: string): keyof typeof any | null {
+function getTableNameFromQuery(query: string): keyof typeof datosNull | null {
     const match = query.match(/(?:FROM|INTO|UPDATE|DELETE\s+FROM)\s+`?(\w+)`?/i);
     if (match && match[1]) {
         return match[1] as keyof typeof datosNull;
@@ -25,12 +26,16 @@ function getTableNameFromQuery(query: string): keyof typeof any | null {
     return null;
 }
 
+const pool = mysql.createPool(dbConfig);
+
+export default pool;
+
 export async function executeQuery<T>(query: string, values: any[] = []): Promise<T> {
     if (!dbConfig.host || !dbConfig.user || !dbConfig.database) {
         console.warn("Las variables de entorno de la base de datos no están totalmente configuradas.");
         const tableName = getTableNameFromQuery(query);
-        if (tableName && tableName in dataNull) {
-            return dataNull[tableName] as T;
+        if (tableName && tableName in datosNull) {
+            return datosNull[tableName] as T;
         }
         return [] as T;
     }
@@ -43,9 +48,9 @@ export async function executeQuery<T>(query: string, values: any[] = []): Promis
     } catch (error) {
         console.error("Error de consulta de base de datos:", error);
         const tableName = getTableNameFromQuery(query);
-        if (tableName && tableName in dataNull) {
+        if (tableName && tableName in datosNull) {
             console.log(`Error en la consulta de la tabla "${tableName}". Devuelve datos alternativos vacíos.`);
-            return dataNull[tableName] as T;
+            return datosNull[tableName] as T;
         }
         return [] as T;
     } finally {
@@ -59,7 +64,7 @@ export async function executeQuery<T>(query: string, values: any[] = []): Promis
  * Ejecuta una consulta y devuelve tanto las filas de resultados como la información de los campos (columnas).
  * Esta versión es más robusta y maneja diferentes tipos de resultados de consulta.
  */
-export async function executeQueryWithFields(query: string, values: any[] = []): Promise<[RowDataPacket[], FieldPacket[]]> {
+export async function executeQueryWithFields(query: string, values: any[] = []): Promise<[RowDataPacket[], FieldPacket[ {
     if (!dbConfig.host || !dbConfig.user || !dbConfig.database) {
         console.warn("Las variables de entorno de la base de datos no están configuradas.");
         return [[], []];
@@ -87,3 +92,4 @@ export async function executeQueryWithFields(query: string, values: any[] = []):
         }
     }
 }
+]]>
