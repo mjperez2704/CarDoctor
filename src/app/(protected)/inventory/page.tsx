@@ -1,8 +1,8 @@
 import { Dashboard } from "@/components/dashboard";
-import { getProductos } from "@/lib/data";
+import { getProducts } from "@/lib/data";
 
 export default async function InventoryPage() {
-  const inventoryData = getProductos();
+  const inventoryData = await getProducts();
   // TODO: Cargar registros de auditoría cuando estén disponibles
   const auditLogsData: any[] = []; 
 

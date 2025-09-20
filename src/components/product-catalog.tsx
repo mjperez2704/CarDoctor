@@ -2,13 +2,9 @@
 "use client";
 
 import * as React from "react";
-import {
-  File,
-  ListFilter,
-  MoreHorizontal,
-  PlusCircle,
-  Bot,
-} from "lucide-react";
+import { z } from "zod";
+import { File, ListFilter, MoreHorizontal, PlusCircle, Bot } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -34,12 +30,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Producto, Proveedor, Marca, Lote } from "@/lib/types";
+import { cn } from "@/lib/utils";
+
+import type { Producto, Proveedor, Marca } from "@/lib/types";
+import { saveProductAction, productFormSchema } from "@/app/actions";
+
 import { AiSuggestionDialog } from "./ai-suggestion-dialog";
 import { ProductFormModal } from "./product-form-modal";
 import { StockDetailModal } from "./stock-detail-modal";
-import { mockLotes } from "@/lib/data";
-import { cn } from "@/lib/utils";
+
 
 export function ProductCatalog({
   initialProducts,
@@ -50,22 +49,21 @@ export function ProductCatalog({
   providers: Proveedor[];
   brands: Marca[];
 }) {
+  const { toast } = useToast();
   const [products, setProducts] = React.useState<Producto[]>(initialProducts);
-  const [lotes, setLotes] = React.useState<Lote[]>(mockLotes);
-
+  
+  // State for modals
+  const [isProductModalOpen, setProductModalOpen] = React.useState(false);
+  const [isDetailModalOpen, setDetailModalOpen] = React.useState(false);
+  const [isAIDialogOpen, setAIDialogOpen] = React.useState(false);
+  
+  // State for selected items
   const [selectedItemForAI, setSelectedItemForAI] = React.useState<Producto | null>(null);
   const [selectedItemForDetail, setSelectedItemForDetail] = React.useState<Producto | null>(null);
 
-  const [isAIDialogOpen, setAIDialogOpen] = React.useState(false);
-  const [isProductModalOpen, setProductModalOpen] = React.useState(false);
-  const [isDetailModalOpen, setDetailModalOpen] = React.useState(false);
+  // Form submission state
+  const [isSaving, setIsSaving] = React.useState(false);
 
-  const getStockForProduct = (productId: number) => {
-    return lotes
-      .filter((lote) => lote.producto_id === productId)
-      .reduce((acc, lote) => acc + lote.cantidad, 0);
-  };
-  
   const handleOpenDetailModal = (item: Producto) => {
     setSelectedItemForDetail(item);
     setDetailModalOpen(true);
@@ -76,10 +74,21 @@ export function ProductCatalog({
     setAIDialogOpen(true);
   };
 
-  const handleSaveProduct = (values: any) => {
-    // TODO: Implement actual save logic
-    console.log("Saving product:", values);
-    setProductModalOpen(false);
+  const handleSaveProduct = async (values: z.infer<typeof productFormSchema>) => {
+    setIsSaving(true);
+    try {
+      const result = await saveProductAction(values);
+      if (result.success) {
+        toast({ title: "Éxito", description: result.message });
+        setProductModalOpen(false);
+      } else {
+        toast({ variant: "destructive", title: "Error", description: result.message });
+      }
+    } catch (error) {
+        toast({ variant: "destructive", title: "Error", description: "Ocurrió un error inesperado." });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -135,8 +144,8 @@ export function ProductCatalog({
             </TableHeader>
             <TableBody>
               {products.map((item) => {
-                const stock = getStockForProduct(item.id);
-                const isLowStock = item.stock_minimo ? stock <= item.stock_minimo : false;
+                const stock = item.stock_actual || 0;
+                const isLowStock = item.stock_min ? stock <= item.stock_min : false;
 
                 return (
                   <TableRow
@@ -152,9 +161,9 @@ export function ProductCatalog({
                     <TableCell className={cn("font-semibold", isLowStock && "text-destructive")}>
                         {stock} {item.unidad}
                     </TableCell>
-                    <TableCell>${item.precio_lista.toFixed(2)}</TableCell>
+                    <TableCell>${(item.precio_lista || 0).toFixed(2)}</TableCell>
                     <TableCell className="text-right">
-                      ${item.costo_promedio.toFixed(4)}
+                      ${(item.costo_promedio || 0).toFixed(4)}
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>
@@ -203,6 +212,7 @@ export function ProductCatalog({
         onSave={handleSaveProduct}
         providers={providers}
         brands={brands}
+        isSaving={isSaving} 
       />
       
       {selectedItemForDetail && (

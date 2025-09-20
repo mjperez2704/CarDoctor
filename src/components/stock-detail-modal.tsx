@@ -20,58 +20,53 @@ import {
   TableRow,
 } from "./ui/table";
 import { Badge } from "./ui/badge";
-import type { Producto, Lote, Almacen, Seccion } from "@/lib/types";
-import { getAlmacenes, getProductos, mockLotes } from "@/lib/data"; // Using mock data functions for now
+import { Skeleton } from "./ui/skeleton";
+import type { Producto } from "@/lib/types";
+import { getLotesPorProducto, type LoteConDetalles } from "@/lib/data";
 
 type StockDetailModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  item: Producto;
+  product: Producto | null;
 };
 
-type StockLocation = {
-  warehouseName: string;
-  sectionName: string;
-  lotCode: string;
-  quantity: number;
-};
-
-export function StockDetailModal({ isOpen, onClose, item }: StockDetailModalProps) {
-  const [stockLocations, setStockLocations] = React.useState<StockLocation[]>([]);
-  const [totalStock, setTotalStock] = React.useState(0);
-  const [almacenes, setAlmacenes] = React.useState<Almacen[]>([]);
+export function StockDetailModal({ isOpen, onClose, product }: StockDetailModalProps) {
+  const [lotes, setLotes] = React.useState<LoteConDetalles[]>([]);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   React.useEffect(() => {
-    if (isOpen && item) {
-      const allAlmacenes = getAlmacenes();
-      setAlmacenes(allAlmacenes);
-      
-      const itemLotes = mockLotes.filter(lote => lote.producto_id === item.id);
-      
-      const locations: StockLocation[] = itemLotes.map(lote => {
-        const warehouse = allAlmacenes.find(a => a.id === lote.almacen_id);
-        const section = warehouse?.secciones?.find(s => s.id === lote.seccion_id);
-        
-        return {
-          warehouseName: warehouse?.nombre || 'N/A',
-          sectionName: section?.nombre || 'N/A',
-          lotCode: lote.codigo_lote,
-          quantity: lote.cantidad
+    if (isOpen && product) {
+      const fetchLotes = async () => {
+        setIsLoading(true);
+        try {
+          const fetchedLotes = await getLotesPorProducto(product.id);
+          setLotes(fetchedLotes);
+        } catch (error) {
+          console.error("Error al obtener los lotes del producto:", error);
+          setLotes([]); // Limpiar en caso de error
+        } finally {
+          setIsLoading(false);
         }
-      });
-      
-      setStockLocations(locations);
-      setTotalStock(locations.reduce((acc, loc) => acc + loc.quantity, 0));
+      };
+
+      fetchLotes();
+    } else {
+      // Resetear estado cuando el modal se cierra
+      setLotes([]);
     }
-  }, [isOpen, item]);
+  }, [isOpen, product]);
+
+  const totalStock = lotes.reduce((acc, lote) => acc + lote.cantidad, 0);
+
+  if (!product) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>Detalle de Stock: {item.nombre}</DialogTitle>
+          <DialogTitle>Detalle de Stock: {product.nombre}</DialogTitle>
           <DialogDescription>
-            SKU: {item.sku} | Existencia Total: <Badge>{totalStock} {item.unidad}</Badge>
+            SKU: {product.sku} | Existencia Total: <Badge>{totalStock} {product.unidad}</Badge>
           </DialogDescription>
         </DialogHeader>
         <div className="py-4">
@@ -83,22 +78,34 @@ export function StockDetailModal({ isOpen, onClose, item }: StockDetailModalProp
                   <TableHead>Almacén</TableHead>
                   <TableHead>Sección</TableHead>
                   <TableHead>Lote</TableHead>
+                  <TableHead>Fecha de Caducidad</TableHead>
                   <TableHead className="text-right">Cantidad</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {stockLocations.length > 0 ? (
-                  stockLocations.map((loc, index) => (
+                {isLoading ? (
+                  Array.from({ length: 3 }).map((_, index) => (
                     <TableRow key={index}>
-                      <TableCell>{loc.warehouseName}</TableCell>
-                      <TableCell>{loc.sectionName}</TableCell>
-                      <TableCell>{loc.lotCode}</TableCell>
-                      <TableCell className="text-right font-medium">{loc.quantity}</TableCell>
+                      <TableCell><Skeleton className="h-4 w-28" /></TableCell>
+                      <TableCell><Skeleton className="h-4 w-24" /></TableCell>
+                      <TableCell><Skeleton className="h-4 w-32" /></TableCell>
+                      <TableCell><Skeleton className="h-4 w-20" /></TableCell>
+                      <TableCell className="text-right"><Skeleton className="h-4 w-12 ml-auto" /></TableCell>
+                    </TableRow>
+                  ))
+                ) : lotes.length > 0 ? (
+                  lotes.map((lote) => (
+                    <TableRow key={lote.id}>
+                      <TableCell>{lote.almacen_nombre || 'N/A'}</TableCell>
+                      <TableCell>{lote.seccion_nombre || 'N/A'}</TableCell>
+                      <TableCell>{lote.codigo_lote}</TableCell>
+                      <TableCell>{lote.fecha_caducidad ? new Date(lote.fecha_caducidad).toLocaleDateString() : 'N/A'}</TableCell>
+                      <TableCell className="text-right font-medium">{lote.cantidad}</TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center h-24">
+                    <TableCell colSpan={5} className="text-center h-24">
                       No hay existencias registradas para este producto.
                     </TableCell>
                   </TableRow>

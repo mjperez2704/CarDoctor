@@ -1,8 +1,8 @@
-
+// src/lib/types.ts
 
 // ============================================================
-//  Sistema: Administración de Taller de Smartphones (ATS)
-//  Versión de Tipos: 1.0 (Basado en esquema MySQL)
+//  Sistema: Administración de Taller Automotriz (ATA)
+//  Versión de Tipos: 1.1 (Adaptado a Taller Automotriz)
 // ============================================================
 
 // --------------------
@@ -45,7 +45,7 @@ export type Permiso = {
 // --------------------
 export type Marca = {
   id: number;
-  nombre: string;
+  nombre: string; // e.g., 'Nissan', 'Ford', 'Chevrolet'
   pais_origen?: string;
   sitio_web?: string;
 };
@@ -53,21 +53,23 @@ export type Marca = {
 export type Modelo = {
   id: number;
   marca_id: number;
-  nombre: string;
+  nombre: string; // e.g., 'Versa', 'Mustang', 'Aveo'
   anio?: number;
 };
 
 export type Version = {
   id: number;
   modelo_id: number;
-  nombre: string;
+  nombre: string; // e.g., 'Sense', 'GT', 'LS'
+  motor?: string; // e.g., '1.6L', '5.0L V8'
+  transmision?: 'AUTOMATICA' | 'MANUAL';
   notas?: string;
 };
 
 export type CategoriaProducto = {
   id: number;
   nombre: string;
-  tipo: "EQUIPO" | "REFACCION" | "ACCESORIO" | "HERRAMIENTA" | "SERVICIO";
+  tipo: "REFACCION" | "SERVICIO" | "LLANTA" | "ACEITE" | "HERRAMIENTA" | "ACCESORIO";
 };
 
 export type Producto = {
@@ -79,14 +81,14 @@ export type Producto = {
   marca_id?: number;
   modelo_id?: number;
   version_id?: number;
-  unidad: string; // e.g., 'PZA'
+  unidad: string; // e.g., 'PZA', 'LT', 'KIT'
   activo: boolean;
-  es_serie: boolean;
-  tipo: string;
+  es_servicio: boolean; // True si es un servicio como "Afinación"
   precio_lista: number;
   costo_promedio: number;
-  stock_minimo?: number;
-  stock_maximo?: number;
+  stock_min?: number;
+  stock_max?: number;
+  stock_actual?: number;
 };
 
 export type Herramienta = {
@@ -101,13 +103,6 @@ export type Herramienta = {
   asignada_a_empleado_id?: number;
   fecha_compra?: string;
   costo?: number;
-};
-
-export type ProductoSerie = {
-  id: number;
-  producto_id: number;
-  numero_serie: string;
-  estado: "DISPONIBLE" | "VENDIDO" | "ASIGNADO" | "EN_SERVICIO" | "BAJA";
 };
 
 // --------------------
@@ -279,8 +274,45 @@ export type RecepcionCompra = {
 };
 
 // --------------------
-// 7) VENTAS / SERVICIOS
+// 7) OPERACIONES (TALLER)
 // --------------------
+export type Vehiculo = {
+  id: number;
+  cliente_id: number;
+  marca_id?: number;
+  modelo_id?: number;
+  version_id?: number;
+  placas?: string;
+  vin?: string; // Vehicle Identification Number
+  motor?: string;
+  color?: string;
+  accesorios?: string; // Descripción de accesorios o detalles
+  condicion_ingreso?: string; // Descripción de daños a la recepción
+};
+
+export type OrdenServicio = {
+  id: number;
+  folio: string;
+  fecha: string;
+  cliente_id: number;
+  vehiculo_id: number;
+  diagnostico_ini?: string;
+  estado:
+    | "RECEPCION"
+    | "DIAGNOSTICO"
+    | "AUTORIZACION"
+    | "EN_REPARACION"
+    | "PRUEBAS"
+    | "LISTO"
+    | "ENTREGADO"
+    | "CANCELADO";
+  tecnico_id?: number;
+  kilometraje?: number;
+};
+
+
+// ... (El resto de los tipos como Venta, Finanzas, etc., pueden permanecer igual por ahora)
+
 export type Presupuesto = {
   id: number;
   folio: string;
@@ -299,37 +331,6 @@ export type Cotizacion = {
   total: number;
   estado: 'GENERADA' | 'ENVIADA' | 'ACEPTADA' | 'RECHAZADA';
 }
-
-export type EquipoTaller = {
-  id: number;
-  cliente_id: number;
-  marca_id?: number;
-  modelo_id?: number;
-  imei?: string;
-  numero_serie?: string;
-  color?: string;
-  accesorios?: string;
-  condicion?: string;
-};
-
-export type OrdenServicio = {
-  id: number;
-  folio: string;
-  fecha: string;
-  cliente_id: number;
-  equipo_id: number;
-  diagnostico_ini?: string;
-  estado:
-    | "RECEPCION"
-    | "DIAGNOSTICO"
-    | "AUTORIZACION"
-    | "EN_REPARACION"
-    | "PRUEBAS"
-    | "LISTO"
-    | "ENTREGADO"
-    | "CANCELADO";
-  tecnico_id?: number;
-};
 
 export type Venta = {
   id: number;
