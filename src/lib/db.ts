@@ -1,6 +1,4 @@
 
-'use server';
-
 import mysql from 'mysql2/promise';
 import datosNull from './datanull.json';
 import { FieldPacket, RowDataPacket } from 'mysql2'
