@@ -1,7 +1,9 @@
 'use server';
 
-import mysql, { FieldPacket, RowDataPacket } from 'mysql2/promise';
-import dataNull from "./datanull.json";
+import mysql from 'mysql2/promise';
+import datosNull[]  from './datanull.json';
+import { FieldPacket, RowDataPacket } from 'mysql2'
+
 
 // Configuración de la base de datos
 const dbConfig = {
@@ -15,10 +17,10 @@ const dbConfig = {
     queueLimit: 0,
 };
 
-function getTableNameFromQuery(query: string): keyof typeof dataNull | null {
+function getTableNameFromQuery(query: string): keyof typeof any | null {
     const match = query.match(/(?:FROM|INTO|UPDATE|DELETE\s+FROM)\s+`?(\w+)`?/i);
     if (match && match[1]) {
-        return match[1] as keyof typeof dataNull;
+        return match[1] as keyof typeof datosNull;
     }
     return null;
 }

@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  webpack: (config, { isServer }) => {
+  webpack: (config: { resolve: { fallback: any; }; }, { isServer }: any) => {
     if (!isServer) {
       // Excluir módulos del servidor del paquete del cliente
       config.resolve.fallback = {
