@@ -10,7 +10,7 @@ export default function VehiclesPage() {
   const vehiclesInService = workOrders.map(order => ({
     ...order,
     clientName: clients.find(c => c.id === order.cliente_id)?.razon_social || 'N/A',
-    vehicleIdentifier: `Vehículo de order.equipo_id}` // Simulación de identificador
+    vehicleIdentifier: `Vehículo #${order.equipo_id}` // Usando el ID del equipo como identificador
   }));
 
   return (

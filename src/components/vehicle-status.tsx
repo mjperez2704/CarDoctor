@@ -87,14 +87,6 @@ export function VehicleStatus({ initialVehicles }: VehicleStatusProps) {
                         src={`/assets/vehiculo_${imageIndex}.jpg`}
                         width={600}
                     />
-                     <div className="absolute top-2 left-2 flex flex-col gap-2">
-                        <Badge variant={statusVariant[vehicle.estado]}>
-                            {vehicle.estado.replace("_", " ")}
-                        </Badge>
-                         <Badge className={cn("border-none", timeStatusColors[timeStatus])}>
-                           {timeStatus}
-                        </Badge>
-                     </div>
                 </div>
 
                 <CardHeader>
