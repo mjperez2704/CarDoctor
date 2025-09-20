@@ -82,6 +82,7 @@ export type Producto = {
   unidad: string; // e.g., 'PZA'
   activo: boolean;
   es_serie: boolean;
+  tipo: string;
   precio_lista: number;
   costo_promedio: number;
   stock_minimo?: number;

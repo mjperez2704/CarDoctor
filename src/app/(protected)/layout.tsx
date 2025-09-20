@@ -1,3 +1,4 @@
+
 import {
   Briefcase,
   Car,
@@ -80,6 +81,9 @@ const NavMenu = ({className} : {className?: string}) => (
         <nav className="grid items-start gap-1">
           <NavLink href="/catalogs/products" variant="dark">
             <Package className="h-4 w-4" /> Refacciones
+          </NavLink>
+          <NavLink href="/catalogs/services" variant="dark">
+            <Briefcase className="h-4 w-4" /> Servicios
           </NavLink>
           <NavLink href="/catalogs/tools" variant="dark">
             <Wrench className="h-4 w-4" /> Herramientas

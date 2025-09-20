@@ -78,14 +78,15 @@ export function VehicleStatus({ initialVehicles }: VehicleStatusProps) {
              const timeStatus = getTimeStatus(vehicle.id);
              const imageIndex = (index % 4) + 1;
             return (
-              <Card key={vehicle.id} className="overflow-hidden">
-                <div className="relative">
+              <Card key={vehicle.id} className="overflow-hidden flex flex-col">
+                <div>
                     <Image
                         alt={`Imagen de ${vehicle.vehicleIdentifier}`}
                         className="aspect-video w-full object-cover"
                         height={337}
-                        src={`/assets/vehiculo_${imageIndex}.jpg`}
+                        src={`/vehiculo_${imageIndex}.jpg`}
                         width={600}
+                        priority={index < 4}
                     />
                 </div>
 
@@ -93,7 +94,15 @@ export function VehicleStatus({ initialVehicles }: VehicleStatusProps) {
                   <CardTitle>{vehicle.vehicleIdentifier}</CardTitle>
                   <CardDescription>{vehicle.clientName}</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="flex-grow flex flex-col justify-between">
+                   <div className="flex flex-wrap gap-1 mb-4">
+                       <Badge variant={statusVariant[vehicle.estado]} className="text-xs font-medium">
+                           {vehicle.estado.replace("_", " ")}
+                       </Badge>
+                        <Badge className={cn("border-none text-xs font-medium", timeStatusColors[timeStatus])}>
+                          {timeStatus}
+                       </Badge>
+                    </div>
                   <Button
                     className="w-full"
                     onClick={() => handleOpenModal(vehicle)}
