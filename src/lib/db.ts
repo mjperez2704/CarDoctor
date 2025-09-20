@@ -64,10 +64,10 @@ export async function executeQuery<T>(query: string, values: any[] = []): Promis
  * Ejecuta una consulta y devuelve tanto las filas de resultados como la información de los campos (columnas).
  * Esta versión es más robusta y maneja diferentes tipos de resultados de consulta.
  */
-export async function executeQueryWithFields(query: string, values: any[] = []): Promise<[RowDataPacket[], FieldPacket[ {
+export async function executeWithQuery<T>(query: string, values: any[] = []): Promise<T> {
     if (!dbConfig.host || !dbConfig.user || !dbConfig.database) {
         console.warn("Las variables de entorno de la base de datos no están configuradas.");
-        return [[], []];
+        return [[], []] as any;
     }
 
     let connection;
@@ -77,19 +77,18 @@ export async function executeQueryWithFields(query: string, values: any[] = []):
 
         // Verificamos si los resultados son un array (como en un SELECT)
         if (Array.isArray(results)) {
-            return [results as RowDataPacket[], fields as FieldPacket[]];
+            return [results as RowDataPacket[], fields as FieldPacket[]] as any;
         }
 
         // Si no es un array (es un OkPacket de un INSERT, etc.), devolvemos un array vacío para las filas.
-        return [[], fields as FieldPacket[]];
+        return [[], fields as FieldPacket[]] as any;
 
     } catch (error) {
         console.error("Error de consulta de base de datos:", error);
-        return [[], []];
+        return [[], []] as any;
     } finally {
         if (connection) {
             await connection.end();
         }
     }
 }
-]]>
