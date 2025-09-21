@@ -1,0 +1,25 @@
+
+{
+    "vehicles": [
+        {
+            "id": 1,
+            "hint": "white sedan",
+            "url_600_337": "/assets/vehiculo_1.jpg"
+        },
+        {
+            "id": 2,
+            "hint": "black sedan",
+            "url_600_337": "/assets/vehiculo_2.jpg"
+        },
+        {
+            "id": 3,
+            "hint": "red sportscar",
+            "url_600_337": "/assets/vehiculo_3.jpg"
+        },
+        {
+            "id": 4,
+            "hint": "silver compact",
+            "url_600_337": "/assets/vehiculo_4.jpg"
+        }
+    ]
+}

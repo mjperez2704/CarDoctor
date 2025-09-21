@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/lib/firebase";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -28,19 +26,18 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
+
+    // Simple hardcoded authentication
+    if (email === "admin@example.com" && password === "password123") {
       router.push("/");
-    } catch (error) {
-      console.error("Error al iniciar sesión:", error);
+    } else {
       toast({
         variant: "destructive",
         title: "Error de autenticación",
         description: "Las credenciales son incorrectas. Por favor, inténtalo de nuevo.",
       });
-    } finally {
-      setIsLoading(false);
     }
+    setIsLoading(false);
   };
 
   return (

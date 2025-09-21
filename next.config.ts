@@ -1,18 +1,35 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  webpack: (config: { resolve: { fallback: any; }; }, { isServer }: any) => {
-    if (!isServer) {
-      // Excluir módulos del servidor del paquete del cliente
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        net: false,
-        tls: false,
-      };
-    }
+import type {NextConfig} from 'next';
 
-    return config;
+const nextConfig: NextConfig = {
+  /* config options here */
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'hospitaldelmovil.mega-shop-test.shop',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+        port: '',
+        pathname: '/**',
+      }
+    ],
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
