@@ -48,26 +48,24 @@ import {
 } from "@/components/ui/chart";
 
 import type { Producto, OrdenServicio } from "@/lib/types";
-import { getOrdenesServicio } from "@/lib/data";
 import Link from "next/link";
 
 type DashboardProps = {
   initialInventory: Producto[];
+  initialWorkOrders: OrdenServicio[];
   // This prop is no longer used but kept for compatibility if needed elsewhere.
   initialAuditLogs: any[];
 };
 
-export function Dashboard({ initialInventory }: DashboardProps) {
+export function Dashboard({ initialInventory, initialWorkOrders }: DashboardProps) {
   const [inventory, setInventory] = React.useState(initialInventory);
-  const workOrders = getOrdenesServicio(); // Using mock data directly for now
+  const [workOrders, setWorkOrders] = React.useState(initialWorkOrders);
 
   const lowStockItems = inventory.filter(
-    (item) => item.stock_minimo && item.stock_minimo > 0 // Placeholder logic for stock
+    (item) => item.stock_minimo && item.stock_actual && item.stock_actual < item.stock_minimo
   ).length;
 
-  const activeWorkOrders = workOrders.filter(
-    (order) => order.estado !== "ENTREGADO" && order.estado !== "CANCELADO"
-  ).length;
+  const activeWorkOrders = workOrders.length;
 
   // Data for charts
   const workOrdersByStatusData = workOrders.reduce((acc, order) => {
@@ -95,6 +93,7 @@ export function Dashboard({ initialInventory }: DashboardProps) {
   const chartConfig = {
     total: {
       label: "Total",
+      color: "hsl(var(--chart-1))",
     },
   };
   const inventoryChartConfig = {

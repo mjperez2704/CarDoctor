@@ -23,7 +23,6 @@ import {
 import Link from 'next/link';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { UserAvatar } from '@/components/user-avatar';
 import {
   Accordion,
   AccordionContent,
@@ -255,7 +254,6 @@ export default function ProtectedLayout({
           <div className="relative ml-auto flex-1 md:grow-0">
             {/* Title can go here if needed */}
           </div>
-          <UserAvatar />
         </header>
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
           {children}
