@@ -5,7 +5,7 @@ import React, { useActionState } from "react";
 import { useFormStatus } from 'react-dom';
 import { useRouter } from "next/navigation";
 import { useEffect } from 'react';
-import NextImage from "next/image"; // Renamed import
+import NextImage from "next/image";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Wrench } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { validateCredentials } from './actions';
 
 function LoginButton() {
@@ -46,17 +46,15 @@ export default function LoginPage() {
         }
     }, [state, toast]);
 
-
     return (
         <div className="flex items-center justify-center min-h-screen bg-muted/40">
             <Card className="w-full max-w-sm">
                 <form action={formAction}>
                     <CardHeader className="text-center">
                         <div className="flex justify-center mb-4">
-                        <NextImage src="/assets/letras_login.png" alt="Car Doctor" width={300} height={160} className="h-12 w-auto"/>
-                            {/*<Wrench className="h-16 w-16 text-primary" />*/}
+                            <NextImage src="/assets/letras_login.png" alt="Car Doctor" width={300} height={160} className="h-12 w-auto"/>
                         </div>
-                        <CardTitle className="text-2xl"></CardTitle>
+                        <CardTitle className="text-2xl" />
                         <CardDescription>
                             Ingresa tus credenciales para acceder al sistema.
                         </CardDescription>

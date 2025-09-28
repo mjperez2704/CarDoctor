@@ -32,6 +32,7 @@ import {
 } from '@/components/ui/accordion';
 import { NavLink } from '@/components/nav-link';
 import { cn } from '@/lib/utils';
+import NextImage from "next/image";
 
 
 const NavMenu = ({className} : {className?: string}) => (
@@ -210,8 +211,10 @@ export default function ProtectedLayout({
             <aside className="fixed inset-y-0 left-0 z-10 hidden w-64 flex-col border-r sm:flex bg-black text-white">
                 <div className="flex h-16 items-center gap-2 border-b border-gray-800 px-4 lg:px-6">
                     <Link href="/" className="flex items-center gap-2 font-semibold">
-                        <Wrench className="h-6 w-6" />
-                        <span className="text-lg">Mi Taller Mecánico</span>
+                        {/*<Wrench className="h-6 w-6" />*/}
+                        <span className="text-lg">
+                            <NextImage src="/assets/nombre_negro.png" alt="Car Doctor" width={300} height={160} className="h-12 w-auto"/>
+                            </span>
                     </Link>
                 </div>
                 <div className="flex-1 overflow-auto py-2">
@@ -240,10 +243,10 @@ export default function ProtectedLayout({
                             <div className="flex h-16 items-center gap-2 border-b px-4">
                                 <Link
                                     href="/"
-                                    className="flex items-center gap-2 font-semibold"
-                                >
-                                    <Wrench className="h-6 w-6 text-primary" />
-                                    <span className="">Mi Taller Mecánico</span>
+                                    className="flex items-center gap-2 font-semibold">
+                                    {/*<Wrench className="h-6 w-6 text-primary" />
+                                    <span className="">Mi Taller Mecánico</span>*/}
+                                    
                                 </Link>
                             </div>
                             <div className="flex-1 overflow-auto py-2">

@@ -6,6 +6,7 @@ import type { RowDataPacket } from 'mysql2';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
+// ... (Interfaces existentes: Version, Model, BrandWithDetails)
 export interface Version extends RowDataPacket {
     id: number;
     nombre: string;
@@ -24,6 +25,7 @@ export interface BrandWithDetails extends RowDataPacket {
     modelos: Model[];
 }
 
+// ... (Función existente: getBrandsWithDetails)
 export async function getBrandsWithDetails(): Promise<BrandWithDetails[]> {
     let db;
     try {
@@ -62,6 +64,104 @@ export async function getBrandsWithDetails(): Promise<BrandWithDetails[]> {
     }
 }
 
+// Esquema para la validación de la Marca
+const brandSchema = z.object({
+    nombre: z.string().min(1, "El nombre es requerido."),
+    pais_origen: z.string().optional(),
+    tipo_marca: z.enum(['AUTOS', 'REFACCIONES', 'AMBOS']),
+});
+
+// Acción para CREAR una nueva Marca
+export async function createBrand(prevState: any, formData: FormData) {
+    const validatedFields = brandSchema.safeParse({
+        nombre: formData.get('nombre'),
+        pais_origen: formData.get('pais_origen'),
+        tipo_marca: formData.get('tipo_marca'),
+    });
+
+    if (!validatedFields.success) {
+        return { success: false, message: "Datos inválidos." };
+    }
+
+    const { nombre, pais_origen, tipo_marca } = validatedFields.data;
+    let db;
+    try {
+        db = await pool.getConnection();
+        await db.query(
+            `INSERT INTO marcas (nombre, pais_origen, tipo_marca) VALUES (?, ?, ?)`,
+            [nombre, pais_origen, tipo_marca]
+        );
+        revalidatePath('/catalogs/brands');
+        return { success: true, message: 'Marca creada exitosamente.' };
+    } catch (error) {
+        console.error('Error creating brand:', error);
+        return { success: false, message: 'Error al guardar la marca.' };
+    } finally {
+        if (db) db.release();
+    }
+}
+
+// Acción para ACTUALIZAR una Marca existente
+export async function updateBrand(prevState: any, formData: FormData) {
+    const id = formData.get('id');
+    if (!id) return { success: false, message: "ID de marca no proporcionado." };
+
+    const validatedFields = brandSchema.safeParse({
+        nombre: formData.get('nombre'),
+        pais_origen: formData.get('pais_origen'),
+        tipo_marca: formData.get('tipo_marca'),
+    });
+
+    if (!validatedFields.success) {
+        return { success: false, message: "Datos inválidos para actualizar." };
+    }
+
+    const { nombre, pais_origen, tipo_marca } = validatedFields.data;
+    let db;
+    try {
+        db = await pool.getConnection();
+        await db.query(
+            `UPDATE marcas SET nombre = ?, pais_origen = ?, tipo_marca = ? WHERE id = ?`,
+            [nombre, pais_origen, tipo_marca, id]
+        );
+        revalidatePath('/catalogs/brands');
+        return { success: true, message: 'Marca actualizada exitosamente.' };
+    } catch (error) {
+        console.error('Error updating brand:', error);
+        return { success: false, message: 'Error al actualizar la marca.' };
+    } finally {
+        if (db) db.release();
+    }
+}
+
+// Acción para ELIMINAR una Marca
+export async function deleteBrand(brandId: number) {
+    let db;
+    try {
+        db = await pool.getConnection();
+        // Opcional: Verificar si la marca tiene modelos asociados antes de eliminar
+        const [models] = await db.query<RowDataPacket[]>("SELECT id FROM modelos WHERE marca_id = ?", [brandId]);
+        if (models.length > 0) {
+            return { success: false, message: "No se puede eliminar la marca porque tiene modelos asociados. Elimine los modelos primero." };
+        }
+
+        await db.query("DELETE FROM marcas WHERE id = ?", [brandId]);
+        revalidatePath('/catalogs/brands');
+        return { success: true, message: "Marca eliminada exitosamente." };
+    } catch (error: any) {
+        console.error('Error deleting brand:', error);
+         // Comprobación específica para errores de clave externa
+        if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+            return { success: false, message: "No se puede eliminar la marca porque está siendo referenciada en otras partes del sistema." };
+        }
+        return { success: false, message: "Error al eliminar la marca." };
+    } finally {
+        if (db) db.release();
+    }
+}
+
+
+// ... (Código existente para Versiones)
 const versionSchema = z.object({
     nombre: z.string().min(1, "El nombre de la versión es requerido."),
     modelo_id: z.coerce.number().min(1, "El ID del modelo es inválido."),

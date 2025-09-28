@@ -39,10 +39,14 @@ import {
 
 import Link from "next/link";
 
-// Tipos para las props que vienen del servidor
+// Tipos actualizados para las props que vienen del servidor
 type CardStats = {
     activeWorkOrders: number;
     lowStockItems: number;
+    monthlyRevenue: number;
+    revenueChange: number;
+    recentActivity: number;
+    activityChange: number;
 };
 
 type ChartData = {
@@ -75,7 +79,6 @@ export function Dashboard({
         items: {
             label: "Refacciones",
         },
-        // Se genera dinámicamente desde los datos
         ...inventoryByCategory.reduce((acc, item) => {
             if(item.name && item.fill) {
                 acc[item.name] = { label: item.name, color: item.fill };
@@ -83,66 +86,67 @@ export function Dashboard({
             return acc;
         }, {} as any)
     };
-
+    
+    // Función para formatear moneda
+    const formatCurrency = (value: number) => {
+        return new Intl.NumberFormat("es-MX", {
+            style: "currency",
+            currency: "MXN",
+        }).format(value);
+    };
 
     return (
         <div className="flex flex-col gap-4">
             <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+                {/* Órdenes Activas */}
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            Órdenes Activas
-                        </CardTitle>
+                        <CardTitle className="text-sm font-medium">Órdenes Activas</CardTitle>
                         <Wrench className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        {/* Dato real de la BD */}
                         <div className="text-2xl font-bold">{cardStats.activeWorkOrders}</div>
                         <p className="text-xs text-muted-foreground">
                             Vehículos actualmente en el taller
                         </p>
                     </CardContent>
                 </Card>
+                {/* Refacciones en Bajo Stock */}
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            Refacciones en Bajo Stock
-                        </CardTitle>
+                        <CardTitle className="text-sm font-medium">Refacciones en Bajo Stock</CardTitle>
                         <Package className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        {/* Dato real de la BD */}
                         <div className="text-2xl font-bold">{cardStats.lowStockItems}</div>
                         <p className="text-xs text-muted-foreground">
                             Artículos que necesitan reabastecimiento
                         </p>
                     </CardContent>
                 </Card>
+                {/* Ingresos del Mes */}
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            Ingresos del Mes (Demo)
-                        </CardTitle>
+                        <CardTitle className="text-sm font-medium">Ingresos del Mes</CardTitle>
                         <DollarSign className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">$45,231.89</div>
+                        <div className="text-2xl font-bold">{formatCurrency(cardStats.monthlyRevenue)}</div>
                         <p className="text-xs text-muted-foreground">
-                            +20.1% desde el mes pasado
+                            {cardStats.revenueChange >= 0 ? '+' : ''}{cardStats.revenueChange.toFixed(1)}% desde el mes pasado
                         </p>
                     </CardContent>
                 </Card>
+                {/* Actividad Reciente */}
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            Actividad Reciente (Demo)
-                        </CardTitle>
+                        <CardTitle className="text-sm font-medium">Actividad Reciente</CardTitle>
                         <Activity className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">+573</div>
+                        <div className="text-2xl font-bold">+{cardStats.recentActivity}</div>
                         <p className="text-xs text-muted-foreground">
-                            +201 desde la última semana
+                           {cardStats.activityChange >= 0 ? '+' : ''}{cardStats.activityChange} desde la última semana
                         </p>
                     </CardContent>
                 </Card>
@@ -165,7 +169,6 @@ export function Dashboard({
                     </CardHeader>
                     <CardContent>
                         <ChartContainer config={chartConfig} className="min-h-[300px]">
-                            {/* Gráfica con datos reales */}
                             <BarChart accessibilityLayer data={workOrdersByStatus}>
                                 <CartesianGrid vertical={false} />
                                 <XAxis
@@ -196,7 +199,6 @@ export function Dashboard({
                             config={inventoryChartConfig}
                             className="mx-auto aspect-square max-h-[300px]"
                         >
-                            {/* Gráfica con datos reales */}
                             <PieChart>
                                 <ChartTooltip
                                     cursor={false}

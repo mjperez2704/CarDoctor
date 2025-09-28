@@ -7,7 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "Mi Taller Mecánico",
+  title: "Car Doctor",
   description: "Sistema de administración para talleres mecánicos",
 };
 

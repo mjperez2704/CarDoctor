@@ -30,7 +30,7 @@ export const SaleReceipt = React.forwardRef<HTMLDivElement, SaleReceiptProps>(({
         <div ref={ref} className="p-4 bg-white text-black font-mono text-xs w-[302px]">
             {/* Encabezado */}
             <div className="text-center mb-2">
-                <h2 className="text-lg font-bold">Mi Taller Mecánico</h2>
+                <h2 className="text-lg font-bold">Car Doctor</h2>
                 <p>{data.branch.nombre}</p>
                 <p>Fecha: {new Date(data.date).toLocaleString('es-MX')}</p>
                 <p>Folio Venta: {data.folio}</p>

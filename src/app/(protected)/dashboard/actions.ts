@@ -1,13 +1,16 @@
-// src/app/(protected)/dashboard/actions.ts
 "use server";
 
 import pool from '@/lib/db';
 import type { RowDataPacket } from 'mysql2';
 
-// Tipos para los datos que leeremos de la BD
+// Tipos actualizados para los datos que leeremos de la BD
 interface CardStats {
     activeWorkOrders: number;
     lowStockItems: number;
+    monthlyRevenue: number;
+    revenueChange: number;
+    recentActivity: number;
+    activityChange: number;
 }
 
 interface WorkOrderByStatus {
@@ -39,14 +42,68 @@ export async function getDashboardCardStats(): Promise<CardStats> {
         );
         const lowStockItems = lowStockResult[0].count;
 
-        return { activeWorkOrders, lowStockItems };
+        // --- NUEVAS QUERIES ---
+
+        // Ingresos del mes actual (basado en órdenes ENTREGADAS)
+        const [currentMonthRevenueResult] = await db.query<RowDataPacket[]>(
+            "SELECT SUM(total) as revenue FROM ordenes_servicio WHERE estado = 'ENTREGADO' AND fecha_entrega >= DATE_FORMAT(NOW(), '%Y-%m-01')"
+        );
+        const monthlyRevenue = currentMonthRevenueResult[0].revenue || 0;
+
+        // Ingresos del mes anterior
+        const [prevMonthRevenueResult] = await db.query<RowDataPacket[]>(
+            "SELECT SUM(total) as revenue FROM ordenes_servicio WHERE estado = 'ENTREGADO' AND fecha_entrega >= DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%Y-%m-01') AND fecha_entrega < DATE_FORMAT(NOW(), '%Y-%m-01')"
+        );
+        const prevMonthRevenue = prevMonthRevenueResult[0].revenue || 0;
+
+        // Actividad reciente (nuevas órdenes en los últimos 7 días)
+        const [recentActivityResult] = await db.query<RowDataPacket[]>(
+            "SELECT COUNT(id) as count FROM ordenes_servicio WHERE fecha_creacion >= NOW() - INTERVAL 7 DAY"
+        );
+        const recentActivity = recentActivityResult[0].count;
+
+        // Actividad de la semana anterior (días 14 a 7)
+        const [prevWeekActivityResult] = await db.query<RowDataPacket[]>(
+            "SELECT COUNT(id) as count FROM ordenes_servicio WHERE fecha_creacion BETWEEN NOW() - INTERVAL 14 DAY AND NOW() - INTERVAL 7 DAY"
+        );
+        const prevWeekActivity = prevWeekActivityResult[0].count;
+        
+        // --- FIN NUEVAS QUERIES ---
+
+        // Cálculo del cambio porcentual de ingresos
+        const revenueChange = prevMonthRevenue > 0 
+            ? ((monthlyRevenue - prevMonthRevenue) / prevMonthRevenue) * 100 
+            : monthlyRevenue > 0 ? 100 : 0;
+        
+        // Cálculo del cambio numérico de actividad
+        const activityChange = recentActivity - prevWeekActivity;
+
+        return { 
+            activeWorkOrders, 
+            lowStockItems, 
+            monthlyRevenue, 
+            revenueChange,
+            recentActivity,
+            activityChange
+        };
+
     } catch (error) {
         console.error("Error fetching dashboard card stats:", error);
-        return { activeWorkOrders: 0, lowStockItems: 0 };
+        // Retornar un objeto con valores por defecto en caso de error
+        return { 
+            activeWorkOrders: 0, 
+            lowStockItems: 0, 
+            monthlyRevenue: 0, 
+            revenueChange: 0,
+            recentActivity: 0,
+            activityChange: 0
+        };
     } finally {
         if (db) db.release();
     }
 }
+
+// ... (resto de las acciones sin cambios)
 
 // Acción para obtener las órdenes de servicio agrupadas por estado para la gráfica
 export async function getWorkOrdersByStatus(): Promise<WorkOrderByStatus[]> {
