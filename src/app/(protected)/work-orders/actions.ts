@@ -5,17 +5,26 @@ import pool from '@/lib/db';
 import type { RowDataPacket } from 'mysql2';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
+import type { ProductForQuote } from '../quotes/actions';
 
 export interface WorkOrder extends RowDataPacket {
     id: number;
     folio: string;
     fecha: string;
+    cliente_id: number;
+    vehiculo_id: number;
     cliente_razon_social: string;
     vehiculo_descripcion: string;
     tecnico_id: number | null;
     tecnico_nombre: string | null;
     estado: string;
+    diagnostico_ini: string | null;
 }
+
+export interface WorkOrderDetails extends WorkOrder {
+    // Aquí se podrían añadir más detalles si es necesario, como los items o servicios ya agregados.
+}
+
 
 export async function getWorkOrders(): Promise<WorkOrder[]> {
     let db;
@@ -24,11 +33,13 @@ export async function getWorkOrders(): Promise<WorkOrder[]> {
         const [rows] = await db.query<WorkOrder[]>(`
             SELECT
                 os.id, os.folio, os.fecha,
+                os.cliente_id, os.vehiculo_id,
                 c.razon_social as cliente_razon_social,
                 CONCAT(m.nombre, ' ', mo.nombre, ' ', v.anio) as vehiculo_descripcion,
                 os.tecnico_id,
                 CONCAT(e.nombre, ' ', e.apellido_p) as tecnico_nombre,
-                os.estado
+                os.estado,
+                os.diagnostico_ini
             FROM ordenes_servicio os
                      JOIN clientes c ON os.cliente_id = c.id
                      LEFT JOIN vehiculos v ON os.vehiculo_id = v.id
@@ -45,6 +56,61 @@ export async function getWorkOrders(): Promise<WorkOrder[]> {
         if (db) db.release();
     }
 }
+
+// --- NUEVA ACCIÓN ---
+export async function getWorkOrderDetails(orderId: number): Promise<WorkOrderDetails | null> {
+    let db;
+    try {
+        db = await pool.getConnection();
+        const [rows] = await db.query<WorkOrder[]>(`
+            SELECT
+                os.id, os.folio, os.fecha,
+                os.cliente_id, os.vehiculo_id,
+                c.razon_social as cliente_razon_social,
+                CONCAT(m.nombre, ' ', mo.nombre, ' ', v.anio, ' (', v.placas, ')') as vehiculo_descripcion,
+                os.tecnico_id,
+                CONCAT(e.nombre, ' ', e.apellido_p) as tecnico_nombre,
+                os.estado,
+                os.diagnostico_ini
+            FROM ordenes_servicio os
+                     JOIN clientes c ON os.cliente_id = c.id
+                     LEFT JOIN vehiculos v ON os.vehiculo_id = v.id
+                     LEFT JOIN empleados e ON os.tecnico_id = e.id
+                     LEFT JOIN marcas m ON v.marca_id = m.id
+                     LEFT JOIN modelos mo ON v.modelo_id = mo.id
+            WHERE os.id = ?
+        `, [orderId]);
+        
+        if (rows.length === 0) return null;
+        
+        // Devolvemos el primer resultado como WorkOrderDetails
+        return rows[0] as WorkOrderDetails;
+
+    } catch (error) {
+        console.error("Error fetching work order details:", error);
+        return null;
+    } finally {
+        if (db) db.release();
+    }
+}
+
+// --- NUEVA ACCIÓN --- (Reutilizada de cotizaciones para simplicidad)
+export async function getProductsForQuote(): Promise<ProductForQuote[]> {
+    let db;
+    try {
+        db = await pool.getConnection();
+        const [rows] = await db.query<ProductForQuote[]>(
+            `SELECT id, nombre, sku, precio_lista FROM productos WHERE activo = 1 ORDER BY nombre ASC`
+        );
+        return rows;
+    } catch (error) {
+        console.error("Error fetching products for quote:", error);
+        return [];
+    } finally {
+        if (db) db.release();
+    }
+}
+
 
 const workOrderSchema = z.object({
     id: z.string().optional(),

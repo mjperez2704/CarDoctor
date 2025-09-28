@@ -1,31 +1,29 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+// src/app/(protected)/work-orders/[id]/diagnose/page.tsx
 import { PageHeader } from "@/components/page-header";
+import { getWorkOrderDetails, getProductsForQuote } from "@/app/(protected)/work-orders/actions";
+import { DiagnoseWorkOrder } from "@/components/diagnose-work-order";
+import { notFound } from "next/navigation";
 
-export default function DiagnosePage({ params }: { params: { id: string } }) {
+export default async function DiagnosePage({ params }: { params: { id: string } }) {
+  const orderId = Number(params.id);
+  if (isNaN(orderId)) {
+    return notFound();
+  }
+
+  const orderDetails = await getWorkOrderDetails(orderId);
+  const products = await getProductsForQuote();
+
+  if (!orderDetails) {
+    return notFound();
+  }
+
   return (
     <>
         <PageHeader
-            title={`Diagnóstico de Orden de Servicio #${params.id}`}
-            description="Documenta el diagnóstico, agrega refacciones y define los servicios requeridos."
+            title={`Diagnóstico de Orden de Servicio #${orderDetails.folio}`}
+            description={`Gestionando el vehículo: ${orderDetails.vehiculo_descripcion}`}
         />
-        <Card>
-            <CardHeader>
-                <CardTitle>Módulo de Diagnóstico</CardTitle>
-                <CardDescription>
-                    Esta interfaz permitirá al técnico detallar el diagnóstico del vehículo.
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <p className="text-muted-foreground">Próximamente:</p>
-                <ul className="list-disc list-inside mt-2 space-y-1 text-sm">
-                    <li>Formulario para documentar el diagnóstico detallado.</li>
-                    <li>Opción para adjuntar fotografías y videos.</li>
-                    <li>Buscador para agregar refacciones desde el catálogo.</li>
-                    <li>Formulario para añadir servicios (mano de obra).</li>
-                    <li>Botón para generar una cotización para el cliente.</li>
-                </ul>
-            </CardContent>
-        </Card>
+        <DiagnoseWorkOrder order={orderDetails} products={products} />
     </>
   );
 }
