@@ -1,11 +1,11 @@
 // src/app/login/page.tsx
 "use client";
 
-// Se regresa a 'useActionState' de 'react-dom'
 import React, { useActionState } from "react";
 import { useFormStatus } from 'react-dom';
 import { useRouter } from "next/navigation";
 import { useEffect } from 'react';
+import NextImage from "next/image"; // Renamed import
 
 import { Button } from "@/components/ui/button";
 import {
@@ -34,7 +34,6 @@ function LoginButton() {
 
 export default function LoginPage() {
     const { toast } = useToast();
-    // Se regresa a 'useActionState'
     const [state, formAction] = useActionState(validateCredentials, undefined);
 
     useEffect(() => {
@@ -54,9 +53,10 @@ export default function LoginPage() {
                 <form action={formAction}>
                     <CardHeader className="text-center">
                         <div className="flex justify-center mb-4">
-                            <Wrench className="h-16 w-16 text-primary" />
+                        <NextImage src="/assets/letras_login.png" alt="Car Doctor" width={300} height={160} className="h-12 w-auto"/>
+                            {/*<Wrench className="h-16 w-16 text-primary" />*/}
                         </div>
-                        <CardTitle className="text-2xl">Mi Taller Mecánico</CardTitle>
+                        <CardTitle className="text-2xl"></CardTitle>
                         <CardDescription>
                             Ingresa tus credenciales para acceder al sistema.
                         </CardDescription>
