@@ -1,16 +1,17 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { File, ListFilter, MoreHorizontal, PlusCircle } from "lucide-react";
+import { File, ListFilter, MoreHorizontal, PlusCircle, Wrench } from "lucide-react";
 import type { Cliente, Empleado } from "@/lib/types";
 import type { WorkOrder } from "@/app/(protected)/work-orders/actions";
 import { Badge } from "./ui/badge";
 import { WorkOrderFormModal } from "./work-order-form-modal";
-import { WorkOrderCancelDialog } from "./work-order-cancel-dialog"; // Importar
+import { WorkOrderCancelDialog } from "./work-order-cancel-dialog";
 
 type WorkOrdersProps = {
     initialWorkOrders: WorkOrder[];
@@ -96,7 +97,12 @@ export function WorkOrders({ initialWorkOrders, clients, employees }: WorkOrders
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                                                <DropdownMenuItem onSelect={() => { /* Abrir modal de detalles */ }}>Ver Detalles</DropdownMenuItem>
+                                                <DropdownMenuItem asChild>
+                                                    <Link href={`/work-orders/${order.id}/diagnose`}>
+                                                        <Wrench className="mr-2 h-4 w-4" />
+                                                        Diagnosticar
+                                                    </Link>
+                                                </DropdownMenuItem>
                                                 <DropdownMenuItem onSelect={() => handleOpenFormModal(order)}>Editar</DropdownMenuItem>
                                                 <DropdownMenuSeparator />
                                                 <DropdownMenuItem className="text-destructive" onSelect={() => handleOpenCancelDialog(order)}>

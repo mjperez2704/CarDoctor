@@ -1,11 +1,10 @@
 "use client";
 
+import * as React from "react";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import {
   Table,
@@ -23,20 +22,30 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { File, ListFilter, MoreHorizontal, PlusCircle } from "lucide-react";
+import { File, ListFilter, MoreHorizontal, Eye, FileText } from "lucide-react";
+import type { Sale } from "@/app/(protected)/sales/actions";
+import { Badge } from "./ui/badge";
 
+type SalesProps = {
+    initialSales: Sale[];
+}
 
-export function Sales() {
+export function Sales({ initialSales }: SalesProps) {
+  const [sales, setSales] = React.useState(initialSales);
+
+  React.useEffect(() => {
+    setSales(initialSales);
+  }, [initialSales]);
+
+  const typeVariant: Record<Sale['tipo_venta'], "default" | "secondary"> = {
+    'TPV': "secondary",
+    'Servicio': "default",
+  };
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Ventas</CardTitle>
-        <CardDescription>
-          Revisa el historial de ventas.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-         <div className="flex justify-end gap-2 mb-4">
+        <div className="flex justify-end gap-2">
            <Button variant="outline" size="sm" className="h-7 gap-1">
               <ListFilter className="h-3.5 w-3.5" />
               <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
@@ -49,72 +58,56 @@ export function Sales() {
                 Exportar
               </span>
             </Button>
-            <Button size="sm" className="h-7 gap-1">
-              <PlusCircle className="h-3.5 w-3.5" />
-              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Agregar Venta
-              </span>
-            </Button>
         </div>
+      </CardHeader>
+      <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>ID Venta</TableHead>
-              <TableHead>Cliente</TableHead>
+              <TableHead>Folio</TableHead>
               <TableHead>Fecha</TableHead>
-              <TableHead>Total</TableHead>
+              <TableHead>Cliente</TableHead>
+              <TableHead>Tipo</TableHead>
+              <TableHead>Método de Pago</TableHead>
+              <TableHead className="text-right">Total</TableHead>
               <TableHead>
                 <span className="sr-only">Acciones</span>
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>VENTA-001</TableCell>
-              <TableCell>Cliente Final</TableCell>
-              <TableCell>2024-07-30</TableCell>
-              <TableCell>$250.00</TableCell>
-              <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button aria-haspopup="true" size="icon" variant="ghost">
-                      <MoreHorizontal className="h-4 w-4" />
-                      <span className="sr-only">Abrir menú</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                    <DropdownMenuItem>Editar</DropdownMenuItem>
-                    <DropdownMenuItem className="text-destructive">
-                      Eliminar
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>VENTA-002</TableCell>
-              <TableCell>Cliente Final</TableCell>
-              <TableCell>2024-07-30</TableCell>
-              <TableCell>$99.99</TableCell>
-               <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button aria-haspopup="true" size="icon" variant="ghost">
-                      <MoreHorizontal className="h-4 w-4" />
-                      <span className="sr-only">Abrir menú</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                    <DropdownMenuItem>Editar</DropdownMenuItem>
-                    <DropdownMenuItem className="text-destructive">
-                      Eliminar
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
+            {sales.map((sale) => (
+                <TableRow key={sale.id}>
+                    <TableCell className="font-medium">{sale.folio}</TableCell>
+                    <TableCell>{new Date(sale.fecha).toLocaleDateString()}</TableCell>
+                    <TableCell>{sale.cliente_nombre}</TableCell>
+                    <TableCell><Badge variant={typeVariant[sale.tipo_venta]}>{sale.tipo_venta}</Badge></TableCell>
+                    <TableCell>{sale.metodo_pago}</TableCell>
+                    <TableCell className="text-right font-semibold">${Number(sale.total).toFixed(2)}</TableCell>
+                    <TableCell>
+                        <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button aria-haspopup="true" size="icon" variant="ghost">
+                            <MoreHorizontal className="h-4 w-4" />
+                            <span className="sr-only">Abrir menú</span>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                            <DropdownMenuItem><Eye className="mr-2 h-4 w-4" /> Ver Detalle</DropdownMenuItem>
+                            <DropdownMenuItem><FileText className="mr-2 h-4 w-4" /> Descargar PDF</DropdownMenuItem>
+                        </DropdownMenuContent>
+                        </DropdownMenu>
+                    </TableCell>
+                </TableRow>
+            ))}
+            {sales.length === 0 && (
+                <TableRow>
+                    <TableCell colSpan={7} className="h-24 text-center">
+                        No hay ventas registradas.
+                    </TableCell>
+                </TableRow>
+            )}
           </TableBody>
         </Table>
       </CardContent>
