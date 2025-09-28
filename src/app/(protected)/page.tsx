@@ -1,14 +1,23 @@
+// src/app/(protected)/page.tsx
 import { Dashboard } from "@/components/dashboard";
-import { getDashboardData } from "@/lib/data";
+// SOLUCIÓN: Importamos las acciones del dashboard
+import {
+    getDashboardCardStats,
+    getWorkOrdersByStatus,
+    getInventoryByCategory
+} from "./dashboard/actions"; // Asegúrate que la ruta sea correcta
 
 export default async function HomePage() {
-  const { inventoryData, workOrdersData, auditLogsData } = await getDashboardData();
+    // SOLUCIÓN: Obtenemos los datos reales para el dashboard
+    const cardStats = await getDashboardCardStats();
+    const workOrdersByStatus = await getWorkOrdersByStatus();
+    const inventoryByCategory = await getInventoryByCategory();
 
-  return (
-    <Dashboard
-      initialInventory={inventoryData}
-      initialWorkOrders={workOrdersData}
-      initialAuditLogs={auditLogsData}
-    />
-  );
+    return (
+        <Dashboard
+            cardStats={cardStats}
+            workOrdersByStatus={workOrdersByStatus}
+            inventoryByCategory={inventoryByCategory}
+        />
+    );
 }

@@ -7,7 +7,7 @@
   packages = [
     pkgs.nodejs_20
     pkgs.zulu
-    pkgs.mysql
+    
   ];
   # Sets environment variables in the workspace
   env = {};

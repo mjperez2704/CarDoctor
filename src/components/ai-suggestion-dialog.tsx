@@ -17,13 +17,13 @@ import { getAiSuggestionAction } from "@/app/actions";
 type AiSuggestionDialogProps = {
   item: Producto;
   open: boolean;
-  onOpenChange: (open: boolean) => void;
+  onOpenChangeAction: (open: boolean) => void;
 };
 
 export function AiSuggestionDialog({
   item,
   open,
-  onOpenChange,
+  onOpenChangeAction,
 }: AiSuggestionDialogProps) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [suggestion, setSuggestion] = React.useState<number | null>(null);
@@ -36,7 +36,7 @@ export function AiSuggestionDialog({
       setError(null);
       setSuggestion(null);
       setReasoning(null);
-      
+
       getAiSuggestionAction(String(item.id))
         .then((result) => {
           if ("error" in result) {
@@ -56,7 +56,7 @@ export function AiSuggestionDialog({
   }, [open, item.id]);
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChangeAction}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
@@ -101,7 +101,7 @@ export function AiSuggestionDialog({
           )}
         </div>
         <DialogFooter>
-          <Button onClick={() => onOpenChange(false)}>Cerrar</Button>
+          <Button onClick={() => onOpenChangeAction(false)}>Cerrar</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

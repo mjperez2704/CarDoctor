@@ -1,423 +1,130 @@
-
 "use client";
 
-import * as React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import React, { useActionState, useEffect, useRef } from "react";
+import { useFormStatus } from "react-dom";
 import { useToast } from "@/hooks/use-toast";
 import type { Proveedor, Marca } from "@/lib/types";
-
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+import { saveProduct } from "@/app/(protected)/inventory/actions";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { Checkbox } from "./ui/checkbox";
-import { Switch } from "./ui/switch";
-import { Textarea } from "./ui/textarea";
+import { Label } from "./ui/label";
+import { Loader2 } from "lucide-react";
+import type { ProductWithStock } from "@/app/(protected)/inventory/actions";
 
-const formSchema = z.object({
-  sku: z.string().min(1, "El SKU es requerido."),
-  generateSku: z.boolean().default(false),
-  providerId: z.string().optional(),
-  alternateProviderId: z.string().optional(),
-  providerSku: z.string().optional(),
-  deliveryTime: z.coerce.number().int().min(0).default(0),
-  minPurchase: z.coerce.number().int().min(1).default(1),
-  hasExpiry: z.boolean().default(false),
-  expiryDays: z.coerce.number().int().min(1).default(1),
-  description: z.string().min(1, "La descripción es requerida."),
-  brandId: z.string().optional(),
-  unit: z.string().min(1, "La unidad es requerida."),
-  cost: z.coerce.number().min(0).default(0),
-  minStock: z.coerce.number().int().min(0).default(0),
-  maxStock: z.coerce.number().int().min(0).default(0),
-  isInventoriable: z.boolean().default(true),
-  isBlocked: z.boolean().default(false),
-  isKitPart: z.boolean().default(false),
-  kitSku: z.string().optional(),
-}).refine(data => !data.isKitPart || (data.isKitPart && data.kitSku), {
-    message: "La clave del kit es requerida si el producto es parte de un kit.",
-    path: ["kitSku"]
-});
+function SubmitButton({ isEditing }: { isEditing: boolean }) {
+    const { pending } = useFormStatus();
+    return (
+        <Button type="submit" disabled={pending}>
+            {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isEditing ? "Guardar Cambios" : "Guardar Producto"}
+        </Button>
+    );
+}
 
 type ProductFormModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (values: z.infer<typeof formSchema>) => void;
-  providers: Proveedor[];
-  brands: Marca[];
+    isOpen: boolean;
+    onCloseActionAction: () => void;
+    providers: Proveedor[];
+    brands: Marca[];
+    product?: ProductWithStock | null;
 };
 
-export function ProductFormModal({
-  isOpen,
-  onClose,
-  onSave,
-  providers,
-  brands,
-}: ProductFormModalProps) {
-  const { toast } = useToast();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      generateSku: false,
-      deliveryTime: 0,
-      minPurchase: 1,
-      hasExpiry: false,
-      expiryDays: 1,
-      cost: 0,
-      minStock: 0,
-      maxStock: 0,
-      isInventoriable: true,
-      isBlocked: false,
-      isKitPart: false,
-    },
-  });
-  
-  const generateSku = form.watch("generateSku");
-  const hasExpiry = form.watch("hasExpiry");
-  const isKitPart = form.watch("isKitPart");
+export function ProductFormModal({ isOpen, onCloseActionAction, providers, brands, product }: ProductFormModalProps) {
+    const { toast } = useToast();
+    const formRef = React.useRef<HTMLFormElement>(null);
+    const [state, formAction] = useActionState(saveProduct, undefined);
+    const isEditing = !!product;
 
-  React.useEffect(() => {
-    if(generateSku) {
-        // TODO: Implement actual SKU generation logic
-        form.setValue("sku", "SKU-AUTO-12345");
-    } else {
-        form.setValue("sku", "");
-    }
-  }, [generateSku, form]);
+    useEffect(() => {
+        if (state?.message) {
+            toast({
+                title: state.success ? "Éxito" : "Error",
+                description: state.message,
+                variant: state.success ? "default" : "destructive",
+            });
+            if (state.success) onCloseActionAction();
+        }
+    }, [state, toast, onCloseActionAction]);
 
-  const handleSubmit = (values: z.infer<typeof formSchema>) => {
-    onSave(values);
-    form.reset();
-     toast({
-      title: "Producto Guardado",
-      description: "El nuevo producto ha sido guardado exitosamente (Demo).",
-    });
-  };
+    useEffect(() => {
+        if (!isOpen) formRef.current?.reset();
+    }, [isOpen]);
 
-  return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl h-[90vh]">
-        <DialogHeader>
-          <DialogTitle>Agregar Nuevo Producto</DialogTitle>
-          <DialogDescription>
-            Complete los campos para registrar un nuevo producto en el catálogo.
-          </DialogDescription>
-        </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-            <div className="overflow-y-auto pr-6 h-[calc(90vh-200px)]">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {/* Column 1 */}
-                <div className="space-y-4">
-                    <FormField
-                        control={form.control}
-                        name="sku"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>SKU</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Ej. PAR-IP15-PAN" {...field} disabled={generateSku} />
-                            </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="generateSku"
-                        render={({ field }) => (
-                            <FormItem className="flex flex-row items-center space-x-2">
-                            <FormControl>
-                                <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                />
-                            </FormControl>
-                            <FormLabel className="!mt-0">Generar automáticamente</FormLabel>
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="providerId"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Proveedor</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                <FormControl><SelectTrigger><SelectValue placeholder="Seleccione un proveedor"/></SelectTrigger></FormControl>
-                                <SelectContent>{providers.map(p => <SelectItem key={p.id} value={String(p.id)}>{p.razon_social}</SelectItem>)}</SelectContent>
-                            </Select>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                     <FormField
-                        control={form.control}
-                        name="alternateProviderId"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Proveedor Alterno</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                <FormControl><SelectTrigger><SelectValue placeholder="Seleccione un proveedor"/></SelectTrigger></FormControl>
-                                <SelectContent>{providers.map(p => <SelectItem key={p.id} value={String(p.id)}>{p.razon_social}</SelectItem>)}</SelectContent>
-                            </Select>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                     <FormField
-                        control={form.control}
-                        name="providerSku"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Clave Proveedor</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Clave del producto para el proveedor" {...field}/>
-                            </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="deliveryTime"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Tiempo de Entrega (días)</FormLabel>
-                            <FormControl>
-                                <Input type="number" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                     <FormField
-                        control={form.control}
-                        name="minPurchase"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Compra Mínima</FormLabel>
-                            <FormControl>
-                                <Input type="number" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
-
-                {/* Column 2 */}
-                <div className="space-y-4">
-                    <FormField
-                        control={form.control}
-                        name="description"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Descripción</FormLabel>
-                            <FormControl>
-                                <Textarea placeholder="Descripción detallada del producto" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="brandId"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Marca</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                <FormControl><SelectTrigger><SelectValue placeholder="Seleccione una marca"/></SelectTrigger></FormControl>
-                                <SelectContent>{brands.map(b => <SelectItem key={b.id} value={String(b.id)}>{b.nombre}</SelectItem>)}</SelectContent>
-                            </Select>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="unit"
-                        render={({ field }) => (
-                             <FormItem>
-                                <FormLabel>Unidad</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl><SelectTrigger><SelectValue placeholder="Seleccione una unidad"/></SelectTrigger></FormControl>
+    return (
+        <Dialog open={isOpen} onOpenChange={onCloseActionAction}>
+            <DialogContent className="max-w-4xl h-[90vh]">
+                <DialogHeader>
+                    <DialogTitle>{isEditing ? 'Editar Producto' : 'Agregar Nuevo Producto'}</DialogTitle>
+                    <DialogDescription>
+                        {isEditing ? `Modifica los datos de ${product.nombre}` : 'Complete los campos para registrar un nuevo producto en el catálogo.'}
+                    </DialogDescription>
+                </DialogHeader>
+                <form ref={formRef} action={formAction}>
+                    <div className="overflow-y-auto pr-6 h-[calc(90vh-200px)] space-y-4">
+                        {isEditing && <input type="hidden" name="id" value={product.id} />}
+                        <div className="space-y-2">
+                            <Label htmlFor="sku">SKU</Label>
+                            <Input id="sku" name="sku" placeholder="Ej. FIL-ACE-01" required defaultValue={product?.sku ?? ''} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="nombre">Nombre / Descripción</Label>
+                            <Input id="nombre" name="nombre" placeholder="Ej. Filtro de Aceite para Versa" required defaultValue={product?.nombre ?? ''} />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="precio_lista">Precio de Lista</Label>
+                                <Input id="precio_lista" name="precio_lista" type="number" step="0.01" required defaultValue={product?.precio_lista ?? ''} />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="costo_promedio">Costo</Label>
+                                <Input id="costo_promedio" name="costo_promedio" type="number" step="0.01" required defaultValue={product?.costo_promedio ?? ''} />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="stock_min">Stock Mínimo</Label>
+                                <Input id="stock_min" name="stock_min" type="number" defaultValue={product?.stock_min ?? 0}/>
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="stock_max">Stock Máximo</Label>
+                                <Input id="stock_max" name="stock_max" type="number" defaultValue={product?.stock_max ?? 0}/>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="unidad">Unidad</Label>
+                                <Select name="unidad" required defaultValue={product?.unidad ?? ''}>
+                                    <SelectTrigger><SelectValue placeholder="Seleccione una unidad"/></SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="PZA">Pieza (PZA)</SelectItem>
                                         <SelectItem value="KIT">Kit</SelectItem>
                                         <SelectItem value="SRV">Servicio</SelectItem>
-                                        <SelectItem value="PAQ">Paquete</SelectItem>
                                     </SelectContent>
                                 </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                     <FormField
-                        control={form.control}
-                        name="cost"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Costo</FormLabel>
-                            <FormControl>
-                                <Input type="number" step="0.01" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                     <div className="flex gap-4">
-                        <FormField
-                            control={form.control}
-                            name="minStock"
-                            render={({ field }) => (
-                                <FormItem className="w-full">
-                                <FormLabel>Mínimo</FormLabel>
-                                <FormControl>
-                                    <Input type="number" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                         <FormField
-                            control={form.control}
-                            name="maxStock"
-                            render={({ field }) => (
-                                <FormItem className="w-full">
-                                <FormLabel>Máximo</FormLabel>
-                                <FormControl>
-                                    <Input type="number" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                     </div>
-                </div>
-
-                {/* Column 3 */}
-                <div className="space-y-4">
-                    <FormField
-                        control={form.control}
-                        name="hasExpiry"
-                        render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3">
-                                <FormLabel>Tiene Vigencia/Caducidad</FormLabel>
-                                <FormControl>
-                                    <Switch
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                    />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
-                     <FormField
-                        control={form.control}
-                        name="expiryDays"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Días de Vigencia</FormLabel>
-                            <FormControl>
-                                <Input type="number" {...field} disabled={!hasExpiry}/>
-                            </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                     <FormField
-                        control={form.control}
-                        name="isInventoriable"
-                        render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3">
-                                <FormLabel>Inventariable</FormLabel>
-                                <FormControl>
-                                    <Switch
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                    />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
-                     <FormField
-                        control={form.control}
-                        name="isBlocked"
-                        render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3">
-                                <FormLabel>Bloqueado</FormLabel>
-                                <FormControl>
-                                    <Switch
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                    />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
-                     <FormField
-                        control={form.control}
-                        name="isKitPart"
-                        render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3">
-                                <FormLabel>Es Parte de un Kit</FormLabel>
-                                <FormControl>
-                                    <Switch
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                    />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="kitSku"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Clave del Kit</FormLabel>
-                            <FormControl>
-                                <Input placeholder="SKU del producto kit" {...field} disabled={!isKitPart}/>
-                            </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
-            </div>
-            </div>
-            <DialogFooter className="pt-4 border-t">
-                <Button type="button" variant="ghost" onClick={onClose}>Cancelar</Button>
-                <Button type="submit">Guardar Producto</Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
-  );
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="categoria_id">Categoría</Label>
+                                <Select name="categoria_id" required defaultValue={String(product?.categoria_id ?? '')}>
+                                    <SelectTrigger><SelectValue placeholder="Seleccione una categoría"/></SelectTrigger>
+                                    <SelectContent>
+                                        {/* TODO: Cargar categorías desde la BD */}
+                                        <SelectItem value="1">Filtros</SelectItem>
+                                        <SelectItem value="2">Lubricantes</SelectItem>
+                                        <SelectItem value="3">Frenos</SelectItem>
+                                        <SelectItem value="4">Servicios</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+                    </div>
+                    <DialogFooter className="pt-4 border-t">
+                        <Button type="button" variant="ghost" onClick={onCloseActionAction}>Cancelar</Button>
+                        <SubmitButton isEditing={isEditing} />
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
+    );
 }

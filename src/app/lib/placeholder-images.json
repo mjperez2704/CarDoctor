@@ -4,22 +4,39 @@
         {
             "id": 1,
             "hint": "white sedan",
-            "url_600_337": "/assets/vehiculo_1.jpg"
+            "imagen": "/assets/vehiculo_1.png"
         },
         {
             "id": 2,
             "hint": "black sedan",
-            "url_600_337": "/assets/vehiculo_2.jpg"
+            "imagen": "/assets/vehiculo_2.png"
         },
         {
             "id": 3,
             "hint": "red sportscar",
-            "url_600_337": "/assets/vehiculo_3.jpg"
+            "imagen": "/assets/vehiculo_3.png"
         },
         {
             "id": 4,
             "hint": "silver compact",
-            "url_600_337": "/assets/vehiculo_4.jpg"
+            "imagen": "/assets/vehiculo_4.png"
         }
+    ],
+    "logos": [
+      {
+        "id": 1,
+        "hint": "logo negro rojo",
+        "imagen": "/assets/logo_negro_rojo.png"
+      },
+      {
+        "id": 2,
+        "hint": "logo azul blanco rojo",
+        "imagen": "/assets/logo_azul_blanco_rojo.png"
+      },
+      {
+        "id": 3,
+        "hint": "logo blanco negro rojo",
+        "imagen": "/assets/logo_blanco_negro_rojo.png"
+      }
     ]
 }

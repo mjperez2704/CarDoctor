@@ -1,293 +1,113 @@
-
 "use client";
 
-import * as React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import React, { useActionState, useEffect, useRef } from "react";
+import { useFormStatus } from "react-dom";
 import { useToast } from "@/hooks/use-toast";
 import type { Rol } from "@/lib/types";
-
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  FormDescription,
-} from "@/components/ui/form";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+import { saveUser } from "@/app/(protected)/users/actions";
+import type { UserWithRoles } from "@/app/(protected)/users/actions";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { Switch } from "./ui/switch";
-import { Separator } from "./ui/separator";
+import { Label } from "./ui/label";
 import { ScrollArea } from "./ui/scroll-area";
 import { Checkbox } from "./ui/checkbox";
+import { Loader2 } from "lucide-react";
 
-const formSchema = z.object({
-  nombre: z.string().min(1, "El nombre es requerido."),
-  apellido_p: z.string().min(1, "El apellido es requerido."),
-  email: z.string().email("El email no es válido."),
-  password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres."),
-  roles: z.array(z.string()).refine((value) => value.length > 0, {
-    message: "Debe seleccionar al menos un rol.",
-  }),
-  forcePasswordChange: z.boolean().default(false),
-  passwordNeverExpires: z.boolean().default(false),
-  expiryValue: z.coerce.number().int().min(1).default(3),
-  expiryUnit: z.enum(["dias", "meses", "anios"]).default("meses"),
-});
+function SubmitButton({ isEditing }: { isEditing: boolean }) {
+    const { pending } = useFormStatus();
+    return (
+        <Button type="submit" disabled={pending}>
+            {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isEditing ? 'Guardar Cambios' : 'Guardar Usuario'}
+        </Button>
+    );
+}
 
 type UserFormModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (values: z.infer<typeof formSchema>) => void;
-  roles: Rol[];
+    isOpen: boolean;
+    onCloseActionAction: () => void;
+    roles: Rol[];
+    user?: UserWithRoles | null;
 };
 
-export function UserFormModal({
-  isOpen,
-  onClose,
-  onSave,
-  roles,
-}: UserFormModalProps) {
-  const { toast } = useToast();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      forcePasswordChange: true,
-      passwordNeverExpires: false,
-      expiryValue: 3,
-      expiryUnit: "meses",
-      roles: [],
-    },
-  });
+export function UserFormModal({ isOpen, onCloseActionAction, roles, user }: UserFormModalProps) {
+    const { toast } = useToast();
+    const formRef = React.useRef<HTMLFormElement>(null);
+    const [state, formAction] = useActionState(saveUser, undefined);
+    const isEditing = !!user;
 
-  const passwordNeverExpires = form.watch("passwordNeverExpires");
+    useEffect(() => {
+        if (state?.message) {
+            toast({
+                title: state.success ? "Éxito" : "Error",
+                description: state.message,
+                variant: state.success ? "default" : "destructive",
+            });
+            if (state.success) onCloseActionAction();
+        }
+    }, [state, toast, onCloseActionAction]);
 
-  const handleSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log("Saving user:", values);
-    onSave(values);
-    form.reset();
-    toast({
-      title: "Usuario Guardado",
-      description: "El nuevo usuario ha sido guardado exitosamente (Demo).",
-    });
-    onClose();
-  };
+    useEffect(() => {
+        if (!isOpen) formRef.current?.reset();
+    }, [isOpen]);
 
-  return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px]">
-        <DialogHeader>
-          <DialogTitle>Agregar Nuevo Usuario</DialogTitle>
-          <DialogDescription>
-            Complete los campos para registrar un nuevo usuario en el sistema.
-          </DialogDescription>
-        </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField
-                    control={form.control}
-                    name="nombre"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Nombre(s)</FormLabel>
-                        <FormControl>
-                            <Input placeholder="Ej. Juan" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
+    const defaultRoleIds = user?.roles.map(r => String(r.id)) || [];
+
+    return (
+        <Dialog open={isOpen} onOpenChange={onCloseActionAction}>
+            <DialogContent className="sm:max-w-[600px]">
+                <DialogHeader>
+                    <DialogTitle>{isEditing ? 'Editar Usuario' : 'Agregar Nuevo Usuario'}</DialogTitle>
+                    <DialogDescription>
+                        {isEditing ? `Modifica los datos de ${user.nombre}` : "Complete los campos para registrar un nuevo usuario."}
+                    </DialogDescription>
+                </DialogHeader>
+                <form ref={formRef} action={formAction} className="space-y-4 py-2">
+                    {isEditing && <input type="hidden" name="id" value={user.id} />}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <Label htmlFor="nombre">Nombre(s)</Label>
+                            <Input id="nombre" name="nombre" placeholder="Ej. Juan" required defaultValue={user?.nombre ?? ''} />
+                        </div>
+                        <div>
+                            <Label htmlFor="apellido_p">Apellido(s)</Label>
+                            <Input id="apellido_p" name="apellido_p" placeholder="Ej. Pérez" required defaultValue={user?.apellido_p ?? ''} />
+                        </div>
+                    </div>
+                    <div>
+                        <Label htmlFor="email">Email</Label>
+                        <Input id="email" name="email" type="email" placeholder="usuario@ejemplo.com" required defaultValue={user?.email ?? ''} />
+                    </div>
+                    {!isEditing && (
+                        <div>
+                            <Label htmlFor="password">Contraseña</Label>
+                            <Input id="password" name="password" type="password" required />
+                        </div>
                     )}
-                />
-                 <FormField
-                    control={form.control}
-                    name="apellido_p"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Apellido(s)</FormLabel>
-                        <FormControl>
-                            <Input placeholder="Ej. Pérez" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                />
-            </div>
-             <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                        <Input type="email" placeholder="usuario@ejemplo.com" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-            />
-            <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Contraseña Temporal</FormLabel>
-                    <FormControl>
-                        <Input type="password" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-            />
-            <FormField
-                control={form.control}
-                name="roles"
-                render={() => (
-                    <FormItem>
-                        <FormLabel>Roles</FormLabel>
-                         <FormDescription>
-                            Seleccione uno o más roles para el usuario.
-                        </FormDescription>
-                        <ScrollArea className="h-32 w-full rounded-md border p-4">
+                    <div>
+                        <Label>Roles</Label>
+                        <ScrollArea className="h-32 w-full rounded-md border p-4 mt-2">
                             {roles.map((rol) => (
-                                <FormField
-                                key={rol.id}
-                                control={form.control}
-                                name="roles"
-                                render={({ field }) => {
-                                    return (
-                                    <FormItem
-                                        key={rol.id}
-                                        className="flex flex-row items-start space-x-3 space-y-0 mb-3"
-                                    >
-                                        <FormControl>
-                                        <Checkbox
-                                            checked={field.value?.includes(String(rol.id))}
-                                            onCheckedChange={(checked) => {
-                                            return checked
-                                                ? field.onChange([...(field.value || []), String(rol.id)])
-                                                : field.onChange(
-                                                    (field.value || []).filter(
-                                                    (value) => value !== String(rol.id)
-                                                    )
-                                                );
-                                            }}
-                                        />
-                                        </FormControl>
-                                        <FormLabel className="font-normal">
-                                            {rol.nombre}
-                                        </FormLabel>
-                                    </FormItem>
-                                    );
-                                }}
-                                />
+                                <div key={rol.id} className="flex items-center space-x-2 mb-2">
+                                    <Checkbox
+                                        id={`role-${rol.id}`}
+                                        name="roles"
+                                        value={String(rol.id)}
+                                        defaultChecked={defaultRoleIds.includes(String(rol.id))}
+                                    />
+                                    <Label htmlFor={`role-${rol.id}`} className="font-normal">{rol.nombre}</Label>
+                                </div>
                             ))}
                         </ScrollArea>
-                        <FormMessage />
-                    </FormItem>
-                )}
-            />
-            
-            <Separator />
-            <h3 className="text-lg font-medium">Políticas de Contraseña</h3>
-
-            <FormField
-                control={form.control}
-                name="forcePasswordChange"
-                render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3">
-                        <div className="space-y-0.5">
-                            <FormLabel>Forzar cambio de contraseña</FormLabel>
-                            <FormDescription>
-                                El usuario deberá cambiar su contraseña en el próximo inicio de sesión.
-                            </FormDescription>
-                        </div>
-                        <FormControl>
-                            <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                            />
-                        </FormControl>
-                    </FormItem>
-                )}
-            />
-
-            <FormField
-                control={form.control}
-                name="passwordNeverExpires"
-                render={({ field }) => (
-                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3">
-                        <div className="space-y-0.5">
-                            <FormLabel>La contraseña nunca caduca</FormLabel>
-                        </div>
-                        <FormControl>
-                            <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                            />
-                        </FormControl>
-                    </FormItem>
-                )}
-            />
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
-                <FormField
-                    control={form.control}
-                    name="expiryValue"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Caduca cada</FormLabel>
-                        <FormControl>
-                            <Input type="number" {...field} disabled={passwordNeverExpires}/>
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="expiryUnit"
-                    render={({ field }) => (
-                         <FormItem>
-                            <FormLabel>&nbsp;</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value} disabled={passwordNeverExpires}>
-                                <FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl>
-                                <SelectContent>
-                                    <SelectItem value="dias">día(s)</SelectItem>
-                                    <SelectItem value="meses">mes(es)</SelectItem>
-                                    <SelectItem value="anios">año(s)</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-            </div>
-            
-            <DialogFooter className="pt-4 border-t">
-              <Button type="button" variant="ghost" onClick={onClose}>Cancelar</Button>
-              <Button type="submit">Guardar Usuario</Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
-  );
+                    </div>
+                    <DialogFooter className="pt-4 border-t">
+                        <Button type="button" variant="ghost" onClick={onCloseActionAction}>Cancelar</Button>
+                        <SubmitButton isEditing={isEditing}/>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
+    );
 }

@@ -1,16 +1,25 @@
-import { Dashboard } from "@/components/dashboard";
-import { getProducts } from "@/lib/data";
+// src/app/(protected)/inventory/page.tsx
+import { ProductCatalog } from "@/components/product-catalog";
+import { getProveedores, getMarcas } from "@/lib/data";
+import { getProductsWithStock } from "./actions";
+import { PageHeader } from "@/components/page-header";
 
 export default async function InventoryPage() {
-  const inventoryData = await getProducts();
-  // TODO: Cargar registros de auditoría cuando estén disponibles
-  const auditLogsData: any[] = []; 
+    const products = await getProductsWithStock();
+    const providers = await getProveedores();
+    const brands = await getMarcas();
 
-  return (
-    <Dashboard
-      initialInventory={inventoryData}
-      initialAuditLogs={auditLogsData}
-      defaultTab="inventory"
-    />
-  );
+    return (
+        <>
+            <PageHeader
+                title="Inventario General"
+                description="Consulta el catálogo de productos y sus existencias."
+            />
+            <ProductCatalog
+                initialProducts={products}
+                providers={providers}
+                brands={brands}
+            />
+        </>
+    );
 }

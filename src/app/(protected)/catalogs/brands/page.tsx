@@ -1,11 +1,13 @@
+// src/app/(protected)/catalogs/brands/page.tsx
 import { BrandsManager } from "@/components/brands-manager";
-import { getMarcas, getModelos } from "@/lib/data";
+// Importamos la nueva acción
+import { getBrandsWithDetails } from "./actions";
 
-export default function BrandsCatalogPage() {
-  const brands = getMarcas();
-  const models = getModelos();
+export default async function BrandsCatalogPage() {
+    // Obtenemos las marcas con todos sus detalles desde la base de datos
+    const brands = await getBrandsWithDetails();
 
-  return (
-    <BrandsManager initialBrands={brands} initialModels={models} />
-  );
+    return (
+        <BrandsManager initialBrands={brands} />
+    );
 }

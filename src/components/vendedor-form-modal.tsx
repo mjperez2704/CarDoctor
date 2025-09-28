@@ -43,16 +43,16 @@ const formSchema = z.object({
 
 type VendedorFormModalProps = {
   isOpen: boolean;
-  onClose: () => void;
-  onSave: (values: z.infer<typeof formSchema>) => void;
+  onCloseActionAction: () => void;
+  onSaveAction: (values: z.infer<typeof formSchema>) => void;
   allEmployees: Empleado[];
   allUsers: Usuario[];
 };
 
 export function VendedorFormModal({
   isOpen,
-  onClose,
-  onSave,
+  onCloseActionAction,
+  onSaveAction,
   allEmployees,
   allUsers,
 }: VendedorFormModalProps) {
@@ -76,17 +76,17 @@ export function VendedorFormModal({
   const linkedUser = getLinkedUser();
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
-    onSave(values);
+    onSaveAction(values);
     form.reset();
     toast({
       title: "Vendedor Guardado",
       description: "La configuración del vendedor ha sido guardada (Demo).",
     });
-    onClose();
+    onCloseActionAction();
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={onCloseActionAction}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Agregar/Configurar Vendedor</DialogTitle>
@@ -160,9 +160,9 @@ export function VendedorFormModal({
                     </p>
                 </div>
             )}
-            
+
             <DialogFooter className="pt-4">
-              <Button type="button" variant="ghost" onClick={onClose}>Cancelar</Button>
+              <Button type="button" variant="ghost" onClick={onCloseActionAction}>Cancelar</Button>
               <Button type="submit">Guardar Configuración</Button>
             </DialogFooter>
           </form>

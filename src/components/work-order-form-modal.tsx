@@ -1,192 +1,135 @@
-
+// src/components/work-order-form-modal.tsx
 "use client";
 
-import * as React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import React, { useActionState, useEffect, useRef } from "react";
+import { useFormStatus } from "react-dom";
 import { useToast } from "@/hooks/use-toast";
 import type { Cliente, Empleado } from "@/lib/types";
-
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  FormDescription,
-} from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "./ui/input";
+import { getVehiclesByCustomerId, type Vehicle } from "@/app/(protected)/customers/actions";
+import { saveWorkOrder } from "@/app/(protected)/work-orders/actions";
+import type { WorkOrder } from "@/app/(protected)/work-orders/actions";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
+import { Loader2 } from "lucide-react";
+import { Label } from "./ui/label";
 
-const formSchema = z.object({
-  clientId: z.string().min(1, "Debe seleccionar un cliente."),
-  vehicleId: z.string().min(1, "Debe seleccionar un vehículo."), // Asumiendo que el ID es un string por ahora
-  technicianId: z.string().optional(),
-  initialDiagnosis: z.string().min(10, "El diagnóstico debe tener al menos 10 caracteres."),
-  notes: z.string().optional(),
-});
+function SubmitButton({ isEditing }: { isEditing: boolean }) {
+    const { pending } = useFormStatus();
+    return (
+        <Button type="submit" disabled={pending}>
+            {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isEditing ? 'Guardar Cambios' : 'Crear Orden'}
+        </Button>
+    );
+}
 
 type WorkOrderFormModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (values: z.infer<typeof formSchema>) => void;
-  clients: Cliente[];
-  employees: Empleado[];
+    isOpen: boolean;
+    onCloseActionAction: () => void;
+    clients: Cliente[];
+    employees: Empleado[];
+    order?: WorkOrder | null;
 };
 
-export function WorkOrderFormModal({
-  isOpen,
-  onClose,
-  onSave,
-  clients,
-  employees,
-}: WorkOrderFormModalProps) {
-  const { toast } = useToast();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {},
-  });
+export function WorkOrderFormModal({ isOpen, onCloseActionAction, clients, employees, order }: WorkOrderFormModalProps) {
+    const { toast } = useToast();
+    const [state, formAction] = useActionState(saveWorkOrder, undefined);
+    const formRef = React.useRef<HTMLFormElement>(null);
+    const [vehicles, setVehicles] = React.useState<Vehicle[]>([]);
+    const [selectedClientId, setSelectedClientId] = React.useState<string>(String(order?.cliente_id || ""));
+    const isEditing = !!order;
+    const technicians = employees.filter(e => e.puesto?.toLowerCase().includes('mecánico') || e.puesto?.toLowerCase().includes('técnico'));
 
-  const handleSubmit = (values: z.infer<typeof formSchema>) => {
-    onSave(values);
-    form.reset();
-    toast({
-      title: "Orden de Servicio Creada",
-      description: "La nueva orden ha sido guardada exitosamente (Demo).",
-    });
-    onClose();
-  };
+    useEffect(() => {
+        if (selectedClientId) {
+            getVehiclesByCustomerId(Number(selectedClientId)).then(setVehicles);
+        } else {
+            setVehicles([]);
+        }
+    }, [selectedClientId]);
 
-  const technicians = employees.filter(e => e.puesto?.toLowerCase().includes('mecánico') || e.puesto?.toLowerCase().includes('técnico'));
+    useEffect(() => {
+        if (state?.message) {
+            toast({
+                title: state.success ? "Éxito" : "Error",
+                description: state.message,
+                variant: state.success ? "default" : "destructive",
+            });
+            if (state.success) onCloseActionAction();
+        }
+    }, [state, toast, onCloseActionAction]);
 
-  return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px]">
-        <DialogHeader>
-          <DialogTitle>Crear Nueva Orden de Servicio</DialogTitle>
-          <DialogDescription>
-            Complete los datos para registrar un nuevo vehículo en el taller.
-          </DialogDescription>
-        </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 py-2">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="clientId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Cliente</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Seleccione un cliente" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {clients.map((client) => (
-                          <SelectItem key={client.id} value={String(client.id)}>
-                            {client.razon_social}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="vehicleId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Vehículo</FormLabel>
-                     <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!form.watch('clientId')}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Seleccione un vehículo" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {/* TODO: Cargar vehículos del cliente seleccionado */}
-                        <SelectItem value="1">Nissan Versa 2020 (ABC-123)</SelectItem>
-                        <SelectItem value="3">Ford Mustang 2022 (XYZ-789)</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>
-                        Seleccione un cliente primero.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+    useEffect(() => {
+        if (!isOpen) {
+            formRef.current?.reset();
+            setSelectedClientId("");
+        }
+    }, [isOpen]);
 
-             <FormField
-                control={form.control}
-                name="initialDiagnosis"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Falla o Servicio Solicitado (Diagnóstico Inicial)</FormLabel>
-                    <FormControl>
-                        <Textarea placeholder="Ej. El motor hace un ruido extraño al acelerar, revisar frenos..." {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-            />
-             <FormField
-                control={form.control}
-                name="technicianId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Asignar a Técnico (Opcional)</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Asignar a un técnico" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {technicians.map((tech) => (
-                          <SelectItem key={tech.id} value={String(tech.id)}>
-                            {tech.nombre} {tech.apellido_p}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-            <DialogFooter className="pt-4 border-t">
-              <Button type="button" variant="ghost" onClick={onClose}>
-                Cancelar
-              </Button>
-              <Button type="submit">Crear Orden</Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
-  );
+    return (
+        <Dialog open={isOpen} onOpenChange={onCloseActionAction}>
+            <DialogContent className="sm:max-w-[600px]">
+                <DialogHeader>
+                    <DialogTitle>{isEditing ? `Editar Orden de Servicio: ${order.folio}` : 'Crear Nueva Orden de Servicio'}</DialogTitle>
+                    <DialogDescription>
+                        {isEditing ? 'Modifica los datos de la orden.' : 'Complete los datos para registrar un nuevo vehículo en el taller.'}
+                    </DialogDescription>
+                </DialogHeader>
+                <form ref={formRef} action={formAction} className="space-y-4 py-2">
+                    {isEditing && <input type="hidden" name="id" value={order.id} />}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="clientId">Cliente</Label>
+                            <Select name="clientId" onValueChange={setSelectedClientId} defaultValue={String(order?.cliente_id ?? '')}>
+                                <SelectTrigger><SelectValue placeholder="Seleccione un cliente" /></SelectTrigger>
+                                <SelectContent>{clients.map((c) => (<SelectItem key={c.id} value={String(c.id)}>{c.razon_social}</SelectItem>))}</SelectContent>
+                            </Select>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="vehicleId">Vehículo</Label>
+                            <Select name="vehicleId" disabled={!selectedClientId} defaultValue={String(order?.vehiculo_id ?? '')}>
+                                <SelectTrigger><SelectValue placeholder="Seleccione un vehículo" /></SelectTrigger>
+                                <SelectContent>{vehicles.map((v) => (<SelectItem key={v.id} value={String(v.id)}>{`${v.marca} ${v.modelo} (${v.placas || 'N/A'})`}</SelectItem>))}</SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="initialDiagnosis">Falla o Servicio Solicitado</Label>
+                        <Textarea id="initialDiagnosis" name="initialDiagnosis" placeholder="Ej. El motor hace un ruido extraño..." defaultValue={order?.diagnostico_ini ?? ''}/>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="technicianId">Asignar a Técnico (Opcional)</Label>
+                            <Select name="technicianId" defaultValue={String(order?.tecnico_id ?? '')}>
+                                <SelectTrigger><SelectValue placeholder="Asignar a un técnico" /></SelectTrigger>
+                                <SelectContent>{technicians.map((t) => (<SelectItem key={t.id} value={String(t.id)}>{t.nombre} {t.apellido_p}</SelectItem>))}</SelectContent>
+                            </Select>
+                        </div>
+                        {isEditing && (
+                            <div className="space-y-2">
+                                <Label htmlFor="estado">Estado de la Orden</Label>
+                                <Select name="estado" defaultValue={order.estado}>
+                                    <SelectTrigger><SelectValue/></SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="RECEPCION">Recepción</SelectItem>
+                                        <SelectItem value="DIAGNOSTICO">Diagnóstico</SelectItem>
+                                        <SelectItem value="AUTORIZACION">En Autorización</SelectItem>
+                                        <SelectItem value="EN_REPARACION">En Reparación</SelectItem>
+                                        <SelectItem value="LISTO">Listo para Entrega</SelectItem>
+                                        <SelectItem value="ENTREGADO">Entregado</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        )}
+                    </div>
+                    <DialogFooter className="pt-4 border-t">
+                        <Button type="button" variant="ghost" onClick={onCloseActionAction}>Cancelar</Button>
+                        <SubmitButton isEditing={isEditing} />
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
+    );
 }

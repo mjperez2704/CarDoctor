@@ -1,18 +1,25 @@
-
+// src/app/(protected)/reception/page.tsx
 import { ReceptionManager } from "@/components/reception-manager";
-import { getClientes, getEmpleados, getOrdenesServicio } from "@/lib/data";
+import { getReceptions } from "./actions";
+import { getClientes, getEmpleados } from "@/lib/data";
+import { PageHeader } from "@/components/page-header";
 
-export default function ReceptionPage() {
-  // Para la fase inicial, reutilizamos los mismos datos que las órdenes de servicio.
-  const recentReceptions = getOrdenesServicio(); 
-  const clients = getClientes();
-  const employees = getEmpleados();
+export default async function ReceptionPage() {
+    const recentReceptions = await getReceptions();
+    const clients = await getClientes();
+    const employees = await getEmpleados();
 
-  return (
-    <ReceptionManager
-      initialReceptions={recentReceptions}
-      clients={clients}
-      employees={employees}
-    />
-  );
+    return (
+        <>
+            <PageHeader
+                title="Recepción de Vehículos"
+                description="Registra nuevos vehículos en el taller y genera órdenes de servicio."
+            />
+            <ReceptionManager
+                initialReceptions={recentReceptions}
+                clients={clients}
+                employees={employees}
+            />
+        </>
+    );
 }

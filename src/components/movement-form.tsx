@@ -41,10 +41,10 @@ const formSchema = z.object({
 
 type MovementFormProps = {
   inventory: Producto[];
-  onSave: (updatedItem: any, newLog: any) => void;
+  onSaveAction: (updatedItem: any, newLog: any) => void;
 };
 
-export function MovementForm({ inventory, onSave }: MovementFormProps) {
+export function MovementForm({ inventory, onSaveAction }: MovementFormProps) {
   const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -69,14 +69,14 @@ export function MovementForm({ inventory, onSave }: MovementFormProps) {
 
     // TODO: Re-implement save logic with the new data structure
     console.log("Valores del formulario de movimiento:", values);
-    
+
     toast({
       title: "Movimiento Guardado (Demo)",
       description: `Se registró el movimiento de ${values.quantity} x ${selectedItem.nombre}.`,
     });
 
     // Esta es una simulación. La lógica real necesitaría actualizar el estado.
-    // onSave(updatedItem, newLog);
+    // onSaveAction(updatedItem, newLog);
 
     form.reset();
   }
@@ -201,7 +201,7 @@ export function MovementForm({ inventory, onSave }: MovementFormProps) {
               <FormItem>
                 <FormLabel>Razón</FormLabel>
                 <Select
-                  onValuechange={field.onChange}
+                  onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>

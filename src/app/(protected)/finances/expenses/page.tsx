@@ -1,9 +1,19 @@
+// src/app/(protected)/finances/expenses/page.tsx
 import { ExpensesManager } from "@/components/expenses-manager";
-import { getGastos, getEmpleados } from "@/lib/data";
+import { getEmpleados, getExpenses } from "./actions";
+import { PageHeader } from "@/components/page-header";
 
-export default function ExpensesPage() {
-  const expenses = getGastos();
-  const employees = getEmpleados();
+export default async function ExpensesPage() {
+    const expenses = await getExpenses();
+    const employees = await getEmpleados();
 
-  return <ExpensesManager initialExpenses={expenses} employees={employees} />;
+    return (
+        <>
+            <PageHeader
+                title="Gestión de Gastos"
+                description="Administra los gastos registrados en el sistema."
+            />
+            <ExpensesManager initialExpenses={expenses} employees={employees} />
+        </>
+    );
 }

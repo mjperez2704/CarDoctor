@@ -40,7 +40,7 @@ import { Calendar } from "./ui/calendar";
 
 const filterSchema = z.object({
   dateRange: z.object({
-    from: z.date().optional(),
+    from: z.date(),
     to: z.date().optional(),
   }).optional(),
   category: z.string().optional(),
@@ -53,18 +53,18 @@ export type ExpensesFilterValues = z.infer<typeof filterSchema>;
 
 type ExpensesFilterDialogProps = {
   isOpen: boolean;
-  onClose: () => void;
-  onApply: (filters: ExpensesFilterValues) => void;
-  onClear: () => void;
+  onCloseActionAction: () => void;
+  onApplyAction: (filters: ExpensesFilterValues) => void;
+  onClearAction: () => void;
   employees: Empleado[];
   allCategories: string[];
 };
 
 export function ExpensesFilterDialog({
   isOpen,
-  onClose,
-  onApply,
-  onClear,
+  onCloseActionAction,
+  onApplyAction,
+  onClearAction,
   employees,
   allCategories,
 }: ExpensesFilterDialogProps) {
@@ -79,18 +79,18 @@ export function ExpensesFilterDialog({
   });
 
   const handleSubmit = (values: ExpensesFilterValues) => {
-    onApply(values);
-    onClose();
+    onApplyAction(values);
+    onCloseActionAction();
   };
 
   const handleClear = () => {
     form.reset();
-    onClear();
-    onClose();
+    onClearAction();
+    onCloseActionAction();
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={onCloseActionAction}>
       <DialogContent className="sm:max-w-[480px]">
         <DialogHeader>
           <DialogTitle>Filtrar Gastos</DialogTitle>
@@ -165,7 +165,7 @@ export function ExpensesFilterDialog({
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="employeeId"

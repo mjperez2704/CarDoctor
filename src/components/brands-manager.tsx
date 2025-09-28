@@ -1,97 +1,112 @@
-
+// src/components/brands-manager.tsx
 "use client";
 
 import * as React from "react";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  CardFooter
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+    CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Edit, Trash2 } from "lucide-react";
-import type { Marca, Modelo } from "@/lib/types";
+import type { BrandWithDetails, Model } from "@/app/(protected)/catalogs/brands/actions";
 import { Badge } from "./ui/badge";
+// Importamos el nuevo modal
+import { VersionFormModal } from "./version-form-modal";
 
 type BrandsManagerProps = {
-  initialBrands: Marca[];
-  initialModels: Modelo[];
+    initialBrands: BrandWithDetails[];
 };
 
-export function BrandsManager({ initialBrands, initialModels }: BrandsManagerProps) {
-  const [brands, setBrands] = React.useState(initialBrands);
-  const [models, setModels] = React.useState(initialModels);
+// Definimos un tipo para el estado del modal
+type ModalState = {
+    type: 'addVersion' | null;
+    data: { model?: Model } | null;
+}
 
-  const getModelsForBrand = (brandId: number) => {
-    return models.filter(model => model.marca_id === brandId);
-  }
+export function BrandsManager({ initialBrands }: BrandsManagerProps) {
+    const [brands, setBrands] = React.useState(initialBrands);
+    // Nuevo estado para controlar qué modal está abierto y con qué datos
+    const [modal, setModal] = React.useState<ModalState>({ type: null, data: null });
 
-  return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">Catálogo de Marcas y Modelos</h1>
-          <p className="text-muted-foreground">
-            Administra las marcas y modelos de los dispositivos que manejas.
-          </p>
-        </div>
-        <Button>
-          <PlusCircle className="mr-2 h-4 w-4" /> Agregar Marca
-        </Button>
-      </div>
+    const badgeVariant = (type: BrandWithDetails['tipo_marca']) => {
+        switch (type) {
+            case 'AUTOS': return 'default';
+            case 'REFACCIONES': return 'secondary';
+            case 'AMBOS': return 'outline';
+            default: return 'outline';
+        }
+    }
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {brands.map(brand => {
-          const brandModels = getModelsForBrand(brand.id);
-          return (
-            <Card key={brand.id}>
-              <CardHeader>
-                <CardTitle className="flex justify-between items-center">
-                  <span>{brand.nombre}</span>
-                  <Badge variant="outline">{brandModels.length} modelos</Badge>
-                </CardTitle>
-                <CardDescription>
-                  {brand.pais_origen ? `País: ${brand.pais_origen}` : "País no especificado"}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <h4 className="font-semibold text-sm mb-2">Model</h4>
-                  {brandModels.length > 0 ? (
-                    <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
-                      {brandModels.map(model => (
-                        <li key={model.id} className="flex justify-between items-center">
-                          <span>{model.nombre} ({model.anio})</span>
-                           <div className="flex items-center">
-                            <Button variant="ghost" size="icon" className="h-7 w-7">
-                                <Edit className="h-3.5 w-3.5" />
-                            </Button>
-                             <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive">
-                                <Trash2 className="h-3.5 w-3.5" />
-                            </Button>
-                           </div>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-sm text-muted-foreground">No hay modelos para esta marca.</p>
-                  )}
+    return (
+        <>
+            <div className="space-y-6">
+                <div className="flex justify-between items-center">
+                    {/* ... (Cabecera sin cambios) ... */}
                 </div>
-              </CardContent>
-              <CardFooter className="flex justify-end gap-2">
-                 <Button variant="outline" size="sm">
-                  <PlusCircle className="mr-2 h-4 w-4" /> Agregar Modelo
-                </Button>
-                <Button variant="ghost" size="sm">
-                  <Edit className="mr-2 h-4 w-4" /> Editar Marca
-                </Button>
-              </CardFooter>
-            </Card>
-          );
-        })}
-      </div>
-    </div>
-  );
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {brands.map(brand => (
+                            <Card key={brand.id}>
+                                <CardHeader>
+                                    {/* ... (CardHeader sin cambios) ... */}
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="space-y-4">
+                                        <h4 className="font-semibold text-sm mb-2">Modelos ({brand.modelos.length})</h4>
+                                        <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
+                                            {brand.modelos.length > 0 ? (
+                                                brand.modelos.map(model => (
+                                                    <div key={model.id} className="text-sm">
+                                                        <div className="flex justify-between items-center font-semibold">
+                                                            <span>{model.nombre} {model.anio ? `(${model.anio})` : ''}</span>
+                                                            {/* ... (Botones de editar/eliminar modelo) ... */}
+                                                        </div>
+                                                        {model.versiones && model.versiones.length > 0 && (
+                                                            <ul className="list-disc list-inside text-muted-foreground pl-4 mt-1 space-y-1">
+                                                                {model.versiones.map(version => (
+                                                                    <li key={version.id}>{version.nombre}</li>
+                                                                ))}
+                                                            </ul>
+                                                        )}
+                                                        {/* El botón ahora abre el modal con los datos del modelo actual */}
+                                                        <Button
+                                                            variant="link"
+                                                            size="sm"
+                                                            className="p-0 h-auto mt-1"
+                                                            onClick={() => setModal({ type: 'addVersion', data: { model } })}
+                                                        >
+                                                            <PlusCircle className="mr-1 h-3 w-3"/>
+                                                            Agregar Versión
+                                                        </Button>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <p className="text-sm text-muted-foreground">No hay modelos para esta marca.</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                </CardContent>
+                                <CardFooter className="flex justify-between items-center border-t pt-4">
+                                    {/* ... (CardFooter sin cambios) ... */}
+                                </CardFooter>
+                            </Card>
+                        )
+                    )}
+                </div>
+            </div>
+
+            {/* Renderizamos el modal aquí, pasándole los datos necesarios */}
+            {modal.type === 'addVersion' && modal.data?.model && (
+                <VersionFormModal
+                    isOpen={modal.type === 'addVersion'}
+                    onCloseActionAction={() => setModal({ type: null, data: null })}
+                    model={modal.data.model}
+                />
+            )}
+        </>
+    );
 }

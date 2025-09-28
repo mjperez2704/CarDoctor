@@ -10,10 +10,10 @@
             "server": "195.250.27.25",
             "port": 3306,
             "driver": "MariaDB",
-            "name": "megaspots_taller",
-            "database": "megaspots_taller",
-            "username": "megaspots_taller",
-            "password": "megaspots_taller"
+            "name": "cardoctor",
+            "database": "cardoctor_db",
+            "username": "cardoctor_user",
+            "password": "GAOE560718qq6@"
         }
     ]
 }

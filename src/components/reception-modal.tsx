@@ -21,11 +21,11 @@ import { Label } from "./ui/label";
 
 type ReceptionModalProps = {
   isOpen: boolean;
-  onClose: () => void;
+  onCloseActionAction: () => void;
   purchase: Purchase;
 };
 
-export function ReceptionModal({ isOpen, onClose, purchase }: ReceptionModalProps) {
+export function ReceptionModal({ isOpen, onCloseActionAction, purchase }: ReceptionModalProps) {
   const [receptionItems, setReceptionItems] = React.useState<ReceptionItem[]>([]);
   const [notes, setNotes] = React.useState("");
 
@@ -59,7 +59,7 @@ export function ReceptionModal({ isOpen, onClose, purchase }: ReceptionModalProp
       )
     );
   };
-  
+
   const handleCostChange = (itemName: string, value: string) => {
     const newCost = parseFloat(value) || 0;
      setReceptionItems((prev) =>
@@ -88,7 +88,7 @@ export function ReceptionModal({ isOpen, onClose, purchase }: ReceptionModalProp
   const totalAmount = receptionItems.reduce((acc, item) => acc + (item.receivedQuantity * item.unitCost), 0);
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={onCloseActionAction}>
       <DialogContent className="max-w-6xl">
         <DialogHeader>
           <DialogTitle>Recibir Mercancía de Compra: {purchase.id}</DialogTitle>
@@ -130,7 +130,7 @@ export function ReceptionModal({ isOpen, onClose, purchase }: ReceptionModalProp
                                         <Input
                                             type="number"
                                             step="0.01"
-                                            value={item.unitCost.toFixed(2)}
+                                            value={Number(item.unitCost.toFixed(2))}
                                             onChange={(e) => handleCostChange(item.name, e.target.value)}
                                             className="w-24 mx-auto h-8"
                                         />
@@ -152,12 +152,12 @@ export function ReceptionModal({ isOpen, onClose, purchase }: ReceptionModalProp
                 <div className="p-4 border rounded-lg space-y-2 bg-muted/50">
                      <div className="flex justify-between items-center text-sm">
                         <span>Importe Total Recibido:</span>
-                        <span className="font-bold text-lg">${totalAmount.toFixed(2)}</span>
+                        <span className="font-bold text-lg">${Number(totalAmount.toFixed(2))}</span>
                      </div>
                 </div>
                  <div className="space-y-2">
                     <Label htmlFor="reception-notes">Notas de Recepción</Label>
-                    <Textarea 
+                    <Textarea
                         id="reception-notes"
                         placeholder="Ej. Mercancía para revisión, empaque en mal estado..."
                         value={notes}
@@ -169,7 +169,7 @@ export function ReceptionModal({ isOpen, onClose, purchase }: ReceptionModalProp
 
         </div>
         <DialogFooter>
-            <Button variant="outline" onClick={onClose}>Cancelar</Button>
+            <Button variant="outline" onClick={onCloseActionAction}>Cancelar</Button>
             <Button>
                 <Warehouse className="mr-2 h-4 w-4" />
                 Ingresar Mercancía al Inventario

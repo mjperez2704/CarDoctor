@@ -1,19 +1,18 @@
-
+// src/app/(protected)/catalogs/vehicles/page.tsx
 import { VehicleStatus } from "@/components/vehicle-status";
-import { getOrdenesServicio, getClientes } from "@/lib/data";
+import { getVehiclesInService } from "./actions";
+import { PageHeader } from "@/components/page-header";
 
-export default function VehiclesPage() {
-  const workOrders = getOrdenesServicio();
-  const clients = getClientes();
+export default async function VehiclesPage() {
+    const vehiclesInService = await getVehiclesInService();
 
-  // Para esta pantalla, las órdenes de servicio representan los vehículos en el taller
-  const vehiclesInService = workOrders.map(order => ({
-    ...order,
-    clientName: clients.find(c => c.id === order.cliente_id)?.razon_social || 'N/A',
-    vehicleIdentifier: `Vehículo #${order.equipo_id}` // Usando el ID del equipo como identificador
-  }));
-
-  return (
-    <VehicleStatus initialVehicles={vehiclesInService} />
-  );
+    return (
+        <>
+            <PageHeader
+                title="Vehículos en Taller"
+                description="Listado de vehículos actualmente en servicio o reparación."
+            />
+            <VehicleStatus initialVehicles={vehiclesInService} />
+        </>
+    );
 }
