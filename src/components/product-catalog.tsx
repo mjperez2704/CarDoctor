@@ -134,7 +134,7 @@ export function ProductCatalog({ initialProducts, providers, brands }: {
 
             <ProductFormModal
                 isOpen={modalState.isFormOpen}
-                onCloseActionAction={() => closeModal('isFormOpen')}
+                onCloseAction={() => closeModal('isFormOpen')}
                 providers={providers}
                 brands={brands}
                 product={selectedItem}
@@ -143,7 +143,7 @@ export function ProductCatalog({ initialProducts, providers, brands }: {
             {selectedItem && (
                 <ProductDetailModal
                     isOpen={modalState.isDetailOpen}
-                    onCloseActionAction={() => closeModal('isDetailOpen')}
+                    onCloseAction={() => closeModal('isDetailOpen')}
                     item={selectedItem}
                     brands={brands}
                 />
@@ -152,7 +152,7 @@ export function ProductCatalog({ initialProducts, providers, brands }: {
             {selectedItem && (
                 <StockLocationModal
                     isOpen={modalState.isStockOpen}
-                    onCloseActionAction={() => closeModal('isStockOpen')}
+                    onCloseAction={() => closeModal('isStockOpen')}
                     item={selectedItem}
                 />
             )}
