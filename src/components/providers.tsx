@@ -111,7 +111,7 @@ export function Providers({ initialProviders }: { initialProviders: Provider[] }
 
             <ProviderFormModal
                 isOpen={isFormModalOpen}
-                onCloseActionAction={() => setFormModalOpen(false)}
+                onCloseAction={() => setFormModalOpen(false)}
                 provider={selectedProvider}
             />
 

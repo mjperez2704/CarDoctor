@@ -32,11 +32,11 @@ function SubmitButton() {
 
 type VersionFormModalProps = {
     isOpen: boolean;
-    onCloseActionAction: () => void;
+    onCloseAction: () => void;
     model: { id: number; nombre: string }; // Pasamos el objeto del modelo
 };
 
-export function VersionFormModal({ isOpen, onCloseActionAction, model }: VersionFormModalProps) {
+export function VersionFormModal({ isOpen, onCloseAction, model }: VersionFormModalProps) {
     const { toast } = useToast();
     const [state, formAction] = useActionState(createVersion, undefined);
     const formRef = React.useRef<HTMLFormElement>(null);
@@ -50,10 +50,10 @@ export function VersionFormModal({ isOpen, onCloseActionAction, model }: Version
                 variant: state.success ? "default" : "destructive",
             });
             if (state.success) {
-                onCloseActionAction();
+                onCloseAction();
             }
         }
-    }, [state, toast, onCloseActionAction]);
+    }, [state, toast, onCloseAction]);
 
     // Reseteamos el formulario cuando se cierra el modal
     React.useEffect(() => {
@@ -65,7 +65,7 @@ export function VersionFormModal({ isOpen, onCloseActionAction, model }: Version
     if (!model) return null;
 
     return (
-        <Dialog open={isOpen} onOpenChange={onCloseActionAction}>
+        <Dialog open={isOpen} onOpenChange={onCloseAction}>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Agregar Versión</DialogTitle>
@@ -88,7 +88,7 @@ export function VersionFormModal({ isOpen, onCloseActionAction, model }: Version
                     </div>
 
                     <DialogFooter>
-                        <Button type="button" variant="ghost" onClick={onCloseActionAction}>
+                        <Button type="button" variant="ghost" onClick={onCloseAction}>
                             Cancelar
                         </Button>
                         <SubmitButton />

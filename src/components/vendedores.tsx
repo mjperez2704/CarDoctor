@@ -112,10 +112,10 @@ export function Vendedores({
 
             <VendedorFormModal
                 isOpen={isModalOpen}
-                onCloseActionAction={() => setIsModalOpen(false)}
+                onCloseAction={() => setIsModalOpen(false)}
                 onSaveAction={handleSave}
                 allEmployees={allEmployees}
-                allUsers={systemUsers}
+                systemUsers={systemUsers}
             />
         </>
     );

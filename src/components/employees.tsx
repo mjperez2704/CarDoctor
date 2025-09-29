@@ -97,7 +97,7 @@ export function Employees({ initialEmployees }: { initialEmployees: Employee[] }
 
             <EmployeeFormModal
                 isOpen={isFormModalOpen}
-                onCloseActionAction={() => setFormModalOpen(false)}
+                onCloseAction={() => setFormModalOpen(false)}
                 employee={selectedEmployee}
             />
 

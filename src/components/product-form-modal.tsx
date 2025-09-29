@@ -25,13 +25,13 @@ function SubmitButton({ isEditing }: { isEditing: boolean }) {
 
 type ProductFormModalProps = {
     isOpen: boolean;
-    onCloseActionAction: () => void;
+    onCloseAction: () => void;
     providers: Proveedor[];
     brands: Marca[];
     product?: ProductWithStock | null;
 };
 
-export function ProductFormModal({ isOpen, onCloseActionAction, providers, brands, product }: ProductFormModalProps) {
+export function ProductFormModal({ isOpen, onCloseAction, providers, brands, product }: ProductFormModalProps) {
     const { toast } = useToast();
     const formRef = React.useRef<HTMLFormElement>(null);
     const [state, formAction] = useActionState(saveProduct, undefined);
@@ -44,16 +44,16 @@ export function ProductFormModal({ isOpen, onCloseActionAction, providers, brand
                 description: state.message,
                 variant: state.success ? "default" : "destructive",
             });
-            if (state.success) onCloseActionAction();
+            if (state.success) onCloseAction();
         }
-    }, [state, toast, onCloseActionAction]);
+    }, [state, toast, onCloseAction]);
 
     useEffect(() => {
         if (!isOpen) formRef.current?.reset();
     }, [isOpen]);
 
     return (
-        <Dialog open={isOpen} onOpenChange={onCloseActionAction}>
+        <Dialog open={isOpen} onOpenChange={onCloseAction}>
             <DialogContent className="max-w-4xl h-[90vh]">
                 <DialogHeader>
                     <DialogTitle>{isEditing ? 'Editar Producto' : 'Agregar Nuevo Producto'}</DialogTitle>
@@ -120,7 +120,7 @@ export function ProductFormModal({ isOpen, onCloseActionAction, providers, brand
                         </div>
                     </div>
                     <DialogFooter className="pt-4 border-t">
-                        <Button type="button" variant="ghost" onClick={onCloseActionAction}>Cancelar</Button>
+                        <Button type="button" variant="ghost" onClick={onCloseAction}>Cancelar</Button>
                         <SubmitButton isEditing={isEditing} />
                     </DialogFooter>
                 </form>

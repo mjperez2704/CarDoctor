@@ -22,11 +22,11 @@ function SubmitButton({ isEditing }: { isEditing: boolean }) {
 
 type ProviderFormModalProps = {
     isOpen: boolean;
-    onCloseActionAction: () => void;
+    onCloseAction: () => void;
     provider?: Provider | null;
 };
 
-export function ProviderFormModal({ isOpen, onCloseActionAction, provider }: ProviderFormModalProps) {
+export function ProviderFormModal({ isOpen, onCloseAction, provider }: ProviderFormModalProps) {
     const { toast } = useToast();
     const formRef = useRef<HTMLFormElement>(null);
     const [state, formAction] = useActionState(saveProvider, undefined);
@@ -39,16 +39,16 @@ export function ProviderFormModal({ isOpen, onCloseActionAction, provider }: Pro
                 description: state.message,
                 variant: state.success ? "default" : "destructive",
             });
-            if (state.success) onCloseActionAction();
+            if (state.success) onCloseAction();
         }
-    }, [state, toast, onCloseActionAction]);
+    }, [state, toast, onCloseAction]);
 
     useEffect(() => {
         if (!isOpen) formRef.current?.reset();
     }, [isOpen]);
 
     return (
-        <Dialog open={isOpen} onOpenChange={onCloseActionAction}>
+        <Dialog open={isOpen} onOpenChange={onCloseAction}>
             <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
                     <DialogTitle>{isEditing ? 'Editar Proveedor' : 'Agregar Nuevo Proveedor'}</DialogTitle>
@@ -82,7 +82,7 @@ export function ProviderFormModal({ isOpen, onCloseActionAction, provider }: Pro
                     </div>
 
                     <DialogFooter className="pt-4">
-                        <Button type="button" variant="ghost" onClick={onCloseActionAction}>Cancelar</Button>
+                        <Button type="button" variant="ghost" onClick={onCloseAction}>Cancelar</Button>
                         <SubmitButton isEditing={isEditing} />
                     </DialogFooter>
                 </form>

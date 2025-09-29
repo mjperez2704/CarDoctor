@@ -27,12 +27,12 @@ function SubmitButton({ isEditing }: { isEditing: boolean }) {
 
 type UserFormModalProps = {
     isOpen: boolean;
-    onCloseActionAction: () => void;
+    onCloseAction: () => void;
     roles: Rol[];
     user?: UserWithRoles | null;
 };
 
-export function UserFormModal({ isOpen, onCloseActionAction, roles, user }: UserFormModalProps) {
+export function UserFormModal({ isOpen, onCloseAction, roles, user }: UserFormModalProps) {
     const { toast } = useToast();
     const formRef = React.useRef<HTMLFormElement>(null);
     const [state, formAction] = useActionState(saveUser, undefined);
@@ -45,9 +45,9 @@ export function UserFormModal({ isOpen, onCloseActionAction, roles, user }: User
                 description: state.message,
                 variant: state.success ? "default" : "destructive",
             });
-            if (state.success) onCloseActionAction();
+            if (state.success) onCloseAction();
         }
-    }, [state, toast, onCloseActionAction]);
+    }, [state, toast, onCloseAction]);
 
     useEffect(() => {
         if (!isOpen) formRef.current?.reset();
@@ -56,7 +56,7 @@ export function UserFormModal({ isOpen, onCloseActionAction, roles, user }: User
     const defaultRoleIds = user?.roles.map(r => String(r.id)) || [];
 
     return (
-        <Dialog open={isOpen} onOpenChange={onCloseActionAction}>
+        <Dialog open={isOpen} onOpenChange={onCloseAction}>
             <DialogContent className="sm:max-w-[600px]">
                 <DialogHeader>
                     <DialogTitle>{isEditing ? 'Editar Usuario' : 'Agregar Nuevo Usuario'}</DialogTitle>
@@ -103,7 +103,7 @@ export function UserFormModal({ isOpen, onCloseActionAction, roles, user }: User
                         </ScrollArea>
                     </div>
                     <DialogFooter className="pt-4 border-t">
-                        <Button type="button" variant="ghost" onClick={onCloseActionAction}>Cancelar</Button>
+                        <Button type="button" variant="ghost" onClick={onCloseAction}>Cancelar</Button>
                         <SubmitButton isEditing={isEditing}/>
                     </DialogFooter>
                 </form>

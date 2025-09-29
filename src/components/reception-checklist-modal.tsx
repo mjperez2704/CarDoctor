@@ -43,14 +43,14 @@ function SubmitButton() {
 
 type ReceptionChecklistModalProps = {
     isOpen: boolean;
-    onCloseActionAction: () => void;
+    onCloseAction: () => void;
     clients: Cliente[];
     employees: Empleado[];
 };
 
 export function ReceptionChecklistModal({
                                             isOpen,
-                                            onCloseActionAction,
+                                            onCloseAction,
                                             clients,
                                         }: ReceptionChecklistModalProps) {
     const { toast } = useToast();
@@ -79,10 +79,10 @@ export function ReceptionChecklistModal({
                 variant: state.success ? "default" : "destructive",
             });
             if (state.success) {
-                onCloseActionAction();
+                onCloseAction();
             }
         }
-    }, [state, toast, onCloseActionAction]);
+    }, [state, toast, onCloseAction]);
 
     React.useEffect(() => {
         if (!isOpen) {
@@ -96,7 +96,7 @@ export function ReceptionChecklistModal({
 
     return (
         <>
-            <Dialog open={isOpen} onOpenChange={onCloseActionAction}>
+            <Dialog open={isOpen} onOpenChange={onCloseAction}>
                 <DialogContent className="max-w-3xl">
                     <DialogHeader>
                         <DialogTitle>Registrar Recepción de Vehículo</DialogTitle>
@@ -180,7 +180,7 @@ export function ReceptionChecklistModal({
                             </div>
                         </div>
                         <DialogFooter className="pt-4 border-t">
-                            <Button type="button" variant="ghost" onClick={onCloseActionAction}>Cancelar</Button>
+                            <Button type="button" variant="ghost" onClick={onCloseAction}>Cancelar</Button>
                             <SubmitButton />
                         </DialogFooter>
                     </form>

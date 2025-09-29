@@ -26,11 +26,11 @@ import { getStockDetails, type StockDetail } from "@/app/(protected)/inventory/a
 
 type StockLocationModalProps = {
     isOpen: boolean;
-    onCloseActionAction: () => void;
+    onCloseAction: () => void;
     item: Producto & { stock: number }; // Aseguramos que el item tenga el stock total
 };
 
-export function StockLocationModal({ isOpen, onCloseActionAction, item }: StockLocationModalProps) {
+export function StockLocationModal({ isOpen, onCloseAction, item }: StockLocationModalProps) {
     const [locations, setLocations] = React.useState<StockDetail[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
 
@@ -48,7 +48,7 @@ export function StockLocationModal({ isOpen, onCloseActionAction, item }: StockL
     }, [isOpen, item]);
 
     return (
-        <Dialog open={isOpen} onOpenChange={onCloseActionAction}>
+        <Dialog open={isOpen} onOpenChange={onCloseAction}>
             <DialogContent className="max-w-3xl">
                 <DialogHeader>
                     <DialogTitle>Desglose de Stock: {item.nombre}</DialogTitle>
@@ -96,7 +96,7 @@ export function StockLocationModal({ isOpen, onCloseActionAction, item }: StockL
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button onClick={onCloseActionAction}>Cerrar</Button>
+                    <Button onClick={onCloseAction}>Cerrar</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

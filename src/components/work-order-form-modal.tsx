@@ -27,13 +27,13 @@ function SubmitButton({ isEditing }: { isEditing: boolean }) {
 
 type WorkOrderFormModalProps = {
     isOpen: boolean;
-    onCloseActionAction: () => void;
+    onCloseAction: () => void;
     clients: Cliente[];
     employees: Empleado[];
     order?: WorkOrder | null;
 };
 
-export function WorkOrderFormModal({ isOpen, onCloseActionAction, clients, employees, order }: WorkOrderFormModalProps) {
+export function WorkOrderFormModal({ isOpen, onCloseAction, clients, employees, order }: WorkOrderFormModalProps) {
     const { toast } = useToast();
     const [state, formAction] = useActionState(saveWorkOrder, undefined);
     const formRef = React.useRef<HTMLFormElement>(null);
@@ -57,9 +57,9 @@ export function WorkOrderFormModal({ isOpen, onCloseActionAction, clients, emplo
                 description: state.message,
                 variant: state.success ? "default" : "destructive",
             });
-            if (state.success) onCloseActionAction();
+            if (state.success) onCloseAction();
         }
-    }, [state, toast, onCloseActionAction]);
+    }, [state, toast, onCloseAction]);
 
     useEffect(() => {
         if (!isOpen) {
@@ -69,7 +69,7 @@ export function WorkOrderFormModal({ isOpen, onCloseActionAction, clients, emplo
     }, [isOpen]);
 
     return (
-        <Dialog open={isOpen} onOpenChange={onCloseActionAction}>
+        <Dialog open={isOpen} onOpenChange={onCloseAction}>
             <DialogContent className="sm:max-w-[600px]">
                 <DialogHeader>
                     <DialogTitle>{isEditing ? `Editar Orden de Servicio: ${order.folio}` : 'Crear Nueva Orden de Servicio'}</DialogTitle>
@@ -125,7 +125,7 @@ export function WorkOrderFormModal({ isOpen, onCloseActionAction, clients, emplo
                         )}
                     </div>
                     <DialogFooter className="pt-4 border-t">
-                        <Button type="button" variant="ghost" onClick={onCloseActionAction}>Cancelar</Button>
+                        <Button type="button" variant="ghost" onClick={onCloseAction}>Cancelar</Button>
                         <SubmitButton isEditing={isEditing} />
                     </DialogFooter>
                 </form>

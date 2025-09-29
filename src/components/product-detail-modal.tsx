@@ -18,12 +18,12 @@ import type { ProductWithStock } from "@/app/(protected)/inventory/actions";
 
 type ProductDetailModalProps = {
     isOpen: boolean;
-    onCloseActionAction: () => void;
+    onCloseAction: () => void;
     item: ProductWithStock;
     brands: Marca[];
 };
 
-export function ProductDetailModal({ isOpen, onCloseActionAction, item, brands }: ProductDetailModalProps) {
+export function ProductDetailModal({ isOpen, onCloseAction, item, brands }: ProductDetailModalProps) {
     const brandName = brands.find(b => b.id === item.marca_id)?.nombre || "Genérica";
 
     const DetailItem = ({ label, value }: { label: string, value: React.ReactNode }) => (
@@ -34,7 +34,7 @@ export function ProductDetailModal({ isOpen, onCloseActionAction, item, brands }
     );
 
     return (
-        <Dialog open={isOpen} onOpenChange={onCloseActionAction}>
+        <Dialog open={isOpen} onOpenChange={onCloseAction}>
             <DialogContent className="max-w-3xl">
                 <DialogHeader>
                     <DialogTitle>{item.nombre}</DialogTitle>
@@ -66,14 +66,14 @@ export function ProductDetailModal({ isOpen, onCloseActionAction, item, brands }
                             {/* SOLUCIÓN: Convertimos a número antes de formatear */}
                             <DetailItem label="Precio de Lista" value={`$${Number(item.precio_lista).toFixed(2)}`} />
                             <DetailItem label="Costo Promedio" value={`$${Number(item.costo_promedio).toFixed(4)}`} />
-                            <DetailItem label="Stock Mínimo" value={item.stock_minimo ?? 'N/A'} />
+                            <DetailItem label="Stock Mínimo" value={item.stock_min ?? 'N/A'} />
                             <DetailItem label="Stock Máximo" value={item.stock_max ?? 'N/A'} />
                         </div>
                         <DetailItem label="Descripción" value={item.descripcion || "Sin descripción."} />
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button onClick={onCloseActionAction}>Cerrar</Button>
+                    <Button onClick={onCloseAction}>Cerrar</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

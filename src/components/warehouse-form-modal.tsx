@@ -16,7 +16,6 @@ function SubmitButton({ isEditing }: { isEditing: boolean }) {
     return <Button type="submit" disabled={pending}>{pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}{isEditing ? 'Guardar Cambios' : 'Crear Almacén'}</Button>;
 }
 
-// CORRECCIÓN: Se renombra la prop 'onClose'
 type WarehouseFormModalProps = { isOpen: boolean; onCloseAction: () => void; warehouse?: Almacen | null; };
 
 export function WarehouseFormModal({ isOpen, onCloseAction, warehouse }: WarehouseFormModalProps) {
@@ -28,7 +27,6 @@ export function WarehouseFormModal({ isOpen, onCloseAction, warehouse }: Warehou
     useEffect(() => {
         if (state?.message) {
             toast({ title: state.success ? "Éxito" : "Error", description: state.message, variant: state.success ? "default" : "destructive" });
-            // CORRECCIÓN: Se llama a la prop con el nuevo nombre
             if (state.success) onCloseAction();
         }
     }, [state, toast, onCloseAction]);
@@ -36,7 +34,6 @@ export function WarehouseFormModal({ isOpen, onCloseAction, warehouse }: Warehou
     useEffect(() => { if (!isOpen) formRef.current?.reset(); }, [isOpen]);
 
     return (
-        // CORRECCIÓN: Se pasa la prop con el nuevo nombre
         <Dialog open={isOpen} onOpenChange={onCloseAction}>
             <DialogContent>
                 <DialogHeader><DialogTitle>{isEditing ? 'Editar Almacén' : 'Nuevo Almacén'}</DialogTitle></DialogHeader>
@@ -56,7 +53,6 @@ export function WarehouseFormModal({ isOpen, onCloseAction, warehouse }: Warehou
                         </Select>
                     </div>
                     <DialogFooter>
-                        {/* CORRECCIÓN: Se llama a la prop con el nuevo nombre */}
                         <Button type="button" variant="ghost" onClick={onCloseAction}>Cancelar</Button>
                         <SubmitButton isEditing={isEditing} />
                     </DialogFooter>

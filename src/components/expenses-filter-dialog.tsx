@@ -53,7 +53,7 @@ export type ExpensesFilterValues = z.infer<typeof filterSchema>;
 
 type ExpensesFilterDialogProps = {
   isOpen: boolean;
-  onCloseActionAction: () => void;
+  onCloseAction: () => void;
   onApplyAction: (filters: ExpensesFilterValues) => void;
   onClearAction: () => void;
   employees: Empleado[];
@@ -62,7 +62,7 @@ type ExpensesFilterDialogProps = {
 
 export function ExpensesFilterDialog({
   isOpen,
-  onCloseActionAction,
+  onCloseAction,
   onApplyAction,
   onClearAction,
   employees,
@@ -80,17 +80,17 @@ export function ExpensesFilterDialog({
 
   const handleSubmit = (values: ExpensesFilterValues) => {
     onApplyAction(values);
-    onCloseActionAction();
+    onCloseAction();
   };
 
   const handleClear = () => {
     form.reset();
     onClearAction();
-    onCloseActionAction();
+    onCloseAction();
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onCloseActionAction}>
+    <Dialog open={isOpen} onOpenChange={onCloseAction}>
       <DialogContent className="sm:max-w-[480px]">
         <DialogHeader>
           <DialogTitle>Filtrar Gastos</DialogTitle>

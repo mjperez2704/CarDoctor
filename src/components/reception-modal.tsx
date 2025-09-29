@@ -21,11 +21,11 @@ import { Label } from "./ui/label";
 
 type ReceptionModalProps = {
   isOpen: boolean;
-  onCloseActionAction: () => void;
+  onCloseAction: () => void;
   purchase: Purchase;
 };
 
-export function ReceptionModal({ isOpen, onCloseActionAction, purchase }: ReceptionModalProps) {
+export function ReceptionModal({ isOpen, onCloseAction, purchase }: ReceptionModalProps) {
   const [receptionItems, setReceptionItems] = React.useState<ReceptionItem[]>([]);
   const [notes, setNotes] = React.useState("");
 
@@ -88,7 +88,7 @@ export function ReceptionModal({ isOpen, onCloseActionAction, purchase }: Recept
   const totalAmount = receptionItems.reduce((acc, item) => acc + (item.receivedQuantity * item.unitCost), 0);
 
   return (
-    <Dialog open={isOpen} onOpenChange={onCloseActionAction}>
+    <Dialog open={isOpen} onOpenChange={onCloseAction}>
       <DialogContent className="max-w-6xl">
         <DialogHeader>
           <DialogTitle>Recibir Mercancía de Compra: {purchase.id}</DialogTitle>
@@ -169,7 +169,7 @@ export function ReceptionModal({ isOpen, onCloseActionAction, purchase }: Recept
 
         </div>
         <DialogFooter>
-            <Button variant="outline" onClick={onCloseActionAction}>Cancelar</Button>
+            <Button variant="outline" onClick={onCloseAction}>Cancelar</Button>
             <Button>
                 <Warehouse className="mr-2 h-4 w-4" />
                 Ingresar Mercancía al Inventario

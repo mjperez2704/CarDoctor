@@ -25,11 +25,11 @@ import { Card, CardContent } from "./ui/card";
 
 type VehicleDetailModalProps = {
     isOpen: boolean;
-    onCloseActionAction: () => void;
+    onCloseAction: () => void;
     vehicle: VehicleInService;
 };
 
-export function VehicleDetailModal({ isOpen, onCloseActionAction, vehicle }: VehicleDetailModalProps) {
+export function VehicleDetailModal({ isOpen, onCloseAction, vehicle }: VehicleDetailModalProps) {
 
     const statusVariant: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
         RECEPCION: "outline",
@@ -45,7 +45,7 @@ export function VehicleDetailModal({ isOpen, onCloseActionAction, vehicle }: Veh
     const imageUrl = vehicle.imagen_url || "/assets/vehiculo_1.png"; // Fallback
 
     return (
-        <Dialog open={isOpen} onOpenChange={onCloseActionAction}>
+        <Dialog open={isOpen} onOpenChange={onCloseAction}>
             <DialogContent className="max-w-4xl">
                 <DialogHeader>
                     <DialogTitle>{vehicle.vehicleIdentifier}</DialogTitle>
@@ -102,7 +102,7 @@ export function VehicleDetailModal({ isOpen, onCloseActionAction, vehicle }: Veh
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button onClick={onCloseActionAction}>Cerrar</Button>
+                    <Button onClick={onCloseAction}>Cerrar</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

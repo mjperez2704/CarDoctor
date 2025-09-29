@@ -30,11 +30,11 @@ function SubmitButton({ isEditing }: { isEditing: boolean }) {
 
 type ToolFormModalProps = {
     isOpen: boolean;
-    onCloseActionAction: () => void;
+    onCloseAction: () => void;
     tool?: Tool | null;
 };
 
-export function ToolFormModal({ isOpen, onCloseActionAction, tool }: ToolFormModalProps) {
+export function ToolFormModal({ isOpen, onCloseAction, tool }: ToolFormModalProps) {
     const { toast } = useToast();
     const formRef = useRef<HTMLFormElement>(null);
     const [state, formAction] = useActionState(saveTool, undefined);
@@ -50,9 +50,9 @@ export function ToolFormModal({ isOpen, onCloseActionAction, tool }: ToolFormMod
                 description: state.message,
                 variant: state.success ? "default" : "destructive",
             });
-            if (state.success) onCloseActionAction();
+            if (state.success) onCloseAction();
         }
-    }, [state, toast, onCloseActionAction]);
+    }, [state, toast, onCloseAction]);
 
     useEffect(() => {
         if (!isOpen) {
@@ -64,7 +64,7 @@ export function ToolFormModal({ isOpen, onCloseActionAction, tool }: ToolFormMod
     }, [isOpen, tool]);
 
     return (
-        <Dialog open={isOpen} onOpenChange={onCloseActionAction}>
+        <Dialog open={isOpen} onOpenChange={onCloseAction}>
             <DialogContent className="sm:max-w-[600px]">
                 <DialogHeader>
                     <DialogTitle>{isEditing ? 'Editar Herramienta' : 'Agregar Nueva Herramienta'}</DialogTitle>
@@ -95,7 +95,7 @@ export function ToolFormModal({ isOpen, onCloseActionAction, tool }: ToolFormMod
                         <div><Label htmlFor="costo">Costo</Label><Input id="costo" name="costo" type="number" step="0.01" defaultValue={tool?.costo ?? 0}/></div>
                     </div>
                     <DialogFooter className="pt-4 border-t">
-                        <Button type="button" variant="ghost" onClick={onCloseActionAction}>Cancelar</Button>
+                        <Button type="button" variant="ghost" onClick={onCloseAction}>Cancelar</Button>
                         <SubmitButton isEditing={isEditing}/>
                     </DialogFooter>
                 </form>

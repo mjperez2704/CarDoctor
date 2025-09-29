@@ -97,13 +97,12 @@ export function ToolsManager({ initialTools, employees }: {
 
             <ToolFormModal
                 isOpen={isFormModalOpen}
-                onCloseActionAction={() => setFormModalOpen(false)}
+                onCloseAction={() => setFormModalOpen(false)}
                 tool={selectedTool}
             />
 
             <ToolStatusDialog
                 isOpen={isStatusDialogOpen}
-                // CORRECCIÓN: Se usa el nuevo nombre de la prop
                 onCloseAction={() => setStatusDialogOpen(false)}
                 tool={selectedTool}
                 targetStatus={targetStatus}

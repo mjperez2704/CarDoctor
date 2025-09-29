@@ -22,11 +22,11 @@ function SubmitButton({ isEditing }: { isEditing: boolean }) {
 
 type EmployeeFormModalProps = {
     isOpen: boolean;
-    onCloseActionAction: () => void;
+    onCloseAction: () => void;
     employee?: Employee | null;
 };
 
-export function EmployeeFormModal({ isOpen, onCloseActionAction, employee }: EmployeeFormModalProps) {
+export function EmployeeFormModal({ isOpen, onCloseAction, employee }: EmployeeFormModalProps) {
     const { toast } = useToast();
     const formRef = useRef<HTMLFormElement>(null);
     const [state, formAction] = useActionState(saveEmployee, undefined);
@@ -39,16 +39,16 @@ export function EmployeeFormModal({ isOpen, onCloseActionAction, employee }: Emp
                 description: state.message,
                 variant: state.success ? "default" : "destructive",
             });
-            if (state.success) onCloseActionAction();
+            if (state.success) onCloseAction();
         }
-    }, [state, toast, onCloseActionAction]);
+    }, [state, toast, onCloseAction]);
 
     useEffect(() => {
         if (!isOpen) formRef.current?.reset();
     }, [isOpen]);
 
     return (
-        <Dialog open={isOpen} onOpenChange={onCloseActionAction}>
+        <Dialog open={isOpen} onOpenChange={onCloseAction}>
             <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
                     <DialogTitle>{isEditing ? 'Editar Empleado' : 'Agregar Nuevo Empleado'}</DialogTitle>
@@ -78,7 +78,7 @@ export function EmployeeFormModal({ isOpen, onCloseActionAction, employee }: Emp
                     </div>
 
                     <DialogFooter className="pt-4">
-                        <Button type="button" variant="ghost" onClick={onCloseActionAction}>Cancelar</Button>
+                        <Button type="button" variant="ghost" onClick={onCloseAction}>Cancelar</Button>
                         <SubmitButton isEditing={isEditing} />
                     </DialogFooter>
                 </form>

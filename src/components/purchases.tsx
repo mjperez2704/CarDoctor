@@ -93,7 +93,7 @@ export function Purchases({ initialPurchases, initialProviders, initialProducts 
 
             <PurchaseOrderFormModal
                 isOpen={isFormModalOpen}
-                onCloseActionAction={() => setFormModalOpen(false)}
+                onCloseAction={() => setFormModalOpen(false)}
                 providers={initialProviders}
                 products={initialProducts}
                 orderId={selectedOrder?.id}

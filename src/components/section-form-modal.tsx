@@ -28,7 +28,6 @@ function SubmitButton({ isEditing }: { isEditing: boolean }) {
     );
 }
 
-// CORRECCIÓN: Se renombra la prop 'onClose'
 export type SectionFormModalProps = {
     isOpen: boolean;
     onCloseAction: () => void;
@@ -49,7 +48,6 @@ export function SectionFormModal({ isOpen, onCloseAction, section, warehouseId }
                 description: state.message,
                 variant: state.success ? "default" : "destructive",
             });
-            // CORRECCIÓN: Se llama a la prop con el nuevo nombre
             if (state.success) onCloseAction();
         }
     }, [state, toast, onCloseAction]);
@@ -59,7 +57,6 @@ export function SectionFormModal({ isOpen, onCloseAction, section, warehouseId }
     }, [isOpen]);
 
     return (
-        // CORRECCIÓN: Se pasa la prop con el nuevo nombre
         <Dialog open={isOpen} onOpenChange={onCloseAction}>
             <DialogContent>
                 <DialogHeader>
@@ -84,7 +81,6 @@ export function SectionFormModal({ isOpen, onCloseAction, section, warehouseId }
                         </Select>
                     </div>
                     <DialogFooter>
-                        {/* CORRECCIÓN: Se llama a la prop con el nuevo nombre */}
                         <Button type="button" variant="ghost" onClick={onCloseAction}>
                             Cancelar
                         </Button>

@@ -105,7 +105,7 @@ export function Users({ initialUsers, availableRoles }: { initialUsers: UserWith
 
             <UserFormModal
                 isOpen={isFormModalOpen}
-                onCloseActionAction={() => setFormModalOpen(false)}
+                onCloseAction={() => setFormModalOpen(false)}
                 roles={availableRoles}
                 user={selectedUser}
             />

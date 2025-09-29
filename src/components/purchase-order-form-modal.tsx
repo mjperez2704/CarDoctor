@@ -31,7 +31,7 @@ const formSchema = z.object({
 
 type PurchaseOrderFormModalProps = {
     isOpen: boolean;
-    onCloseActionAction: () => void;
+    onCloseAction: () => void;
     providers: Proveedor[];
     products: Producto[];
     orderId?: number | null;
@@ -47,7 +47,7 @@ function SubmitButton({ isEditing }: { isEditing: boolean }) {
     );
 }
 
-export function PurchaseOrderFormModal({ isOpen, onCloseActionAction, providers, products, orderId }: PurchaseOrderFormModalProps) {
+export function PurchaseOrderFormModal({ isOpen, onCloseAction, providers, products, orderId }: PurchaseOrderFormModalProps) {
     const { toast } = useToast();
     const [state, formAction] = useActionState(savePurchaseOrder, undefined);
     const form = useForm<z.infer<typeof formSchema>>({
@@ -85,9 +85,9 @@ export function PurchaseOrderFormModal({ isOpen, onCloseActionAction, providers,
                 description: state.message,
                 variant: state.success ? "default" : "destructive",
             });
-            if (state.success) onCloseActionAction();
+            if (state.success) onCloseAction();
         }
-    }, [state, toast, onCloseActionAction]);
+    }, [state, toast, onCloseAction]);
 
     const handleProductChange = (productId: string, index: number) => {
         const product = products.find(p => String(p.id) === productId);
@@ -105,7 +105,7 @@ export function PurchaseOrderFormModal({ isOpen, onCloseActionAction, providers,
     });
 
     return (
-        <Dialog open={isOpen} onOpenChange={onCloseActionAction}>
+        <Dialog open={isOpen} onOpenChange={onCloseAction}>
             <DialogContent className="max-w-4xl">
                 <DialogHeader>
                     <DialogTitle>{isEditing ? 'Editar Orden de Compra' : 'Crear Nueva Orden de Compra'}</DialogTitle>
@@ -166,7 +166,7 @@ export function PurchaseOrderFormModal({ isOpen, onCloseActionAction, providers,
                             </Button>
                         </div>
                         <DialogFooter className="pt-4 border-t">
-                            <Button type="button" variant="ghost" onClick={onCloseActionAction}>Cancelar</Button>
+                            <Button type="button" variant="ghost" onClick={onCloseAction}>Cancelar</Button>
                             <SubmitButton isEditing={isEditing} />
                         </DialogFooter>
                     </form>

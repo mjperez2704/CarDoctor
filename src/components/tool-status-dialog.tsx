@@ -8,7 +8,6 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Label } from "./ui/label";
 
-// CORRECCIÓN: Se renombra la prop 'onClose'
 interface ToolStatusDialogProps {
     isOpen: boolean;
     onCloseAction: () => void;
@@ -35,7 +34,6 @@ export function ToolStatusDialog({ isOpen, onCloseAction, tool, targetStatus, em
             description: result.message,
             variant: result.success ? "default" : "destructive",
         });
-        // CORRECCIÓN: Se llama a la prop con el nuevo nombre
         onCloseAction();
     };
 
@@ -47,7 +45,6 @@ export function ToolStatusDialog({ isOpen, onCloseAction, tool, targetStatus, em
     }
 
     return (
-        // CORRECCIÓN: Se pasa la prop con el nuevo nombre
         <AlertDialog open={isOpen} onOpenChange={onCloseAction}>
             <AlertDialogContent>
                 <AlertDialogHeader>
