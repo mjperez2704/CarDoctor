@@ -10,7 +10,7 @@ import type { ProductForQuote } from '../quotes/actions';
 export interface WorkOrder extends RowDataPacket {
     id: number;
     folio: string;
-    fecha: string;
+    fecha_creacion: string;
     cliente_id: number;
     vehiculo_id: number;
     cliente_razon_social: string;
@@ -32,7 +32,7 @@ export async function getWorkOrders(): Promise<WorkOrder[]> {
         db = await pool.getConnection();
         const [rows] = await db.query<WorkOrder[]>(`
             SELECT
-                os.id, os.folio, os.fecha,
+                os.id, os.folio, os.fecha_creacion,
                 os.cliente_id, os.vehiculo_id,
                 c.razon_social as cliente_razon_social,
                 CONCAT(m.nombre, ' ', mo.nombre, ' ', v.anio) as vehiculo_descripcion,
@@ -46,7 +46,7 @@ export async function getWorkOrders(): Promise<WorkOrder[]> {
                      LEFT JOIN empleados e ON os.tecnico_id = e.id
                      LEFT JOIN marcas m ON v.marca_id = m.id
                      LEFT JOIN modelos mo ON v.modelo_id = mo.id
-            ORDER BY os.fecha DESC;
+            ORDER BY os.fecha_creacion DESC;
         `);
         return rows;
     } catch (error) {
@@ -64,7 +64,7 @@ export async function getWorkOrderDetails(orderId: number): Promise<WorkOrderDet
         db = await pool.getConnection();
         const [rows] = await db.query<WorkOrder[]>(`
             SELECT
-                os.id, os.folio, os.fecha,
+                os.id, os.folio, os.fecha_creacion,
                 os.cliente_id, os.vehiculo_id,
                 c.razon_social as cliente_razon_social,
                 CONCAT(m.nombre, ' ', mo.nombre, ' ', v.anio, ' (', v.placas, ')') as vehiculo_descripcion,
@@ -142,7 +142,7 @@ export async function saveWorkOrder(prevState: any, formData: FormData) {
             // Lógica de CREACIÓN
             const folio = `OS-${new Date().getFullYear()}-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
             await db.query(
-                `INSERT INTO ordenes_servicio (folio, fecha, cliente_id, vehiculo_id, diagnostico_ini, tecnico_id, estado) VALUES (?, NOW(), ?, ?, ?, ?, 'RECEPCION')`,
+                `INSERT INTO ordenes_servicio (folio, fecha_creacion, cliente_id, vehiculo_id, diagnostico_ini, tecnico_id, estado) VALUES (?, NOW(), ?, ?, ?, ?, 'RECEPCION')`,
                 [folio, clientId, vehicleId, initialDiagnosis, techId]
             );
         }

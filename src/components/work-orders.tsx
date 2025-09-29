@@ -80,7 +80,11 @@ export function WorkOrders({ initialWorkOrders, clients, employees }: WorkOrders
                         <TableBody>
                             {workOrders.map((order) => (
                                 <TableRow key={order.id}>
-                                    <TableCell className="font-medium">{order.folio}</TableCell>
+                                    <TableCell className="font-medium">
+                                        <Link href={`/work-orders/${order.id}/diagnose`} className="text-primary hover:underline">
+                                            {order.folio}
+                                        </Link>
+                                    </TableCell>
                                     <TableCell>{order.cliente_razon_social}</TableCell>
                                     <TableCell>{order.vehiculo_descripcion}</TableCell>
                                     <TableCell>{new Date(order.fecha).toLocaleDateString()}</TableCell>

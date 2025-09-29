@@ -33,7 +33,7 @@ export async function getReceptions(): Promise<Reception[]> {
             SELECT 
                 os.id, 
                 os.folio, 
-                os.fecha, 
+                os.fecha_creacion, 
                 os.cliente_id,
                 c.razon_social as cliente_razon_social,
                 os.vehiculo_id,
@@ -45,7 +45,7 @@ export async function getReceptions(): Promise<Reception[]> {
             JOIN vehiculos v ON os.vehiculo_id = v.id
             LEFT JOIN marcas m ON v.marca_id = m.id
             LEFT JOIN modelos mo ON v.modelo_id = mo.id
-            ORDER BY os.fecha DESC
+            ORDER BY os.fecha_creacion DESC
             LIMIT 50;
         `);
         return rows;

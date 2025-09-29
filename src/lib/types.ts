@@ -341,7 +341,7 @@ export interface EquipoTaller extends RowDataPacket {
 export interface OrdenServicio extends RowDataPacket {
     id: number;
     folio: string;
-    fecha: string;
+    fecha_creacion: string;
     cliente_id: number;
     equipo_id: number;
     diagnostico_ini?: string;
@@ -355,6 +355,9 @@ export interface OrdenServicio extends RowDataPacket {
         | "ENTREGADO"
         | "CANCELADO";
     tecnico_id?: number;
+    fecha_entrega?: string;
+    subtotal: number;
+    total: number;
 };
 
 export interface Venta extends RowDataPacket {

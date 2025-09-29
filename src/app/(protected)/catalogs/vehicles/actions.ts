@@ -25,7 +25,7 @@ export async function getVehiclesInService(): Promise<VehicleInService[]> {
             SELECT
                 os.id,
                 os.folio,
-                os.fecha,
+                os.fecha_creacion,
                 os.cliente_id,
                 os.vehiculo_id,
                 os.diagnostico_ini,
@@ -40,7 +40,7 @@ export async function getVehiclesInService(): Promise<VehicleInService[]> {
                      LEFT JOIN marcas m ON v.marca_id = m.id
                      LEFT JOIN modelos mo ON v.modelo_id = mo.id
             WHERE os.estado NOT IN ('ENTREGADO', 'CANCELADO')
-            ORDER BY os.fecha ASC;
+            ORDER BY os.fecha_creacion ASC;
         `);
         return rows;
     } catch (error) {
