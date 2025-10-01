@@ -10,9 +10,9 @@ import { z } from 'zod';
 export interface Reception extends RowDataPacket {
     id: number;
     folio: string;
-    fecha_creacion: string; // Se mantiene como fecha para el frontend
+    fecha: string; // El frontend espera 'fecha'
     cliente_id?: number;
-    cliente_razon_social: string;
+    cliente_razon_social: string; // El frontend espera 'cliente_razon_social'
     vehiculo_id?: number;
     vehiculo_descripcion: string;
     diagnostico_ini: string;
@@ -31,24 +31,21 @@ export async function getReceptions(): Promise<Reception[]> {
                 os.id, 
                 os.folio, 
                 os.fecha_creacion,
-                c.razon_social, 
-                CONCAT(m.nombre, ' ', mo.nombre, ' ', v.anio) as vehiculo_descripcion, 
+                c.razon_social, -- CORRECCIÓN: Alias para el cliente
+                CONCAT(v.marca, ' ', v.modelo, ' ', v.anio) as vehiculo_descripcion, 
                 os.diagnostico_ini,
                 os.estado,
-                v.kilometraje,
+                os.kilometraje,
                 inv.checklist_data
             FROM ordenes_servicio os
             JOIN clientes c ON os.cliente_id = c.id
             JOIN vehiculos v ON os.vehiculo_id = v.id
-            LEFT JOIN marcas m ON v.marca_id = m.id
-            LEFT JOIN modelos mo ON v.modelo_id = mo.id
             LEFT JOIN inventario_orden_servicio inv ON os.id = inv.orden_servicio_id
             ORDER BY os.fecha_creacion DESC`
         );
         
-        return (rows as any[]).map((row: any) => ({
+        return rows.map((row: any) => ({
             ...row,
-            fecha: row.fecha_creacion,
             checklist_data: row.checklist_data && typeof row.checklist_data === 'string' 
                 ? JSON.parse(row.checklist_data) 
                 : (row.checklist_data || {}),
@@ -62,6 +59,7 @@ export async function getReceptions(): Promise<Reception[]> {
     }
 }
 
+// El resto del archivo permanece sin cambios...
 const receptionSchema = z.object({
     clientId: z.coerce.number().min(1, 'El cliente es obligatorio.'),
     vehicleId: z.coerce.number().min(1, 'El vehículo es obligatorio.'),
@@ -88,7 +86,6 @@ async function saveChecklistData(db: any, orderId: number, formData: FormData) {
     }
 }
 
-// Acción para CREAR una nueva Recepción (CORREGIDA)
 export async function createReceptionAndWorkOrder(prevState: any, formData: FormData) {
     const validatedFields = receptionSchema.safeParse(Object.fromEntries(formData.entries()));
 
@@ -105,7 +102,6 @@ export async function createReceptionAndWorkOrder(prevState: any, formData: Form
         await db.beginTransaction();
 
         const [result] = await db.query(
-            // CORRECCIÓN: Usar 'fecha_creacion' en el INSERT
             `INSERT INTO ordenes_servicio (folio, fecha_creacion, cliente_id, vehiculo_id, diagnostico_ini, kilometraje, estado)
              VALUES (?, NOW(), ?, ?, ?, ?, 'RECEPCION')`,
             [folio, clientId, vehicleId, serviceReason, mileage || null]
@@ -127,7 +123,6 @@ export async function createReceptionAndWorkOrder(prevState: any, formData: Form
     }
 }
 
-// Acción para ACTUALIZAR una Recepción existente
 export async function updateReception(prevState: any, formData: FormData) {
     const receptionId = formData.get('receptionId');
     if (!receptionId) {
@@ -167,7 +162,6 @@ export async function updateReception(prevState: any, formData: FormData) {
     }
 }
 
-// Acción para ELIMINAR una Recepción
 export async function deleteReception(receptionId: number) {
     let db;
     try {
