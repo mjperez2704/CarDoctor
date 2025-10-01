@@ -30,9 +30,9 @@ export async function getReceptions(): Promise<Reception[]> {
            `SELECT 
                 os.id, 
                 os.folio, 
-                os.fecha_creacion,
-                c.razon_social, -- CORRECCIÓN: Alias para el cliente
-                CONCAT(v.marca, ' ', v.modelo, ' ', v.anio) as vehiculo_descripcion, 
+                os.fecha_creacion as fecha,
+                c.razon_social as cliente_razon_social,
+                CONCAT(mar.nombre, ' ', model.nombre, ' ', v.anio) as vehiculo_descripcion, 
                 os.diagnostico_ini,
                 os.estado,
                 os.kilometraje,
@@ -40,6 +40,8 @@ export async function getReceptions(): Promise<Reception[]> {
             FROM ordenes_servicio os
             JOIN clientes c ON os.cliente_id = c.id
             JOIN vehiculos v ON os.vehiculo_id = v.id
+            JOIN marcas mar ON v.marca_id = mar.id
+            JOIN modelos model ON v.modelo_id =  model.id 
             LEFT JOIN inventario_orden_servicio inv ON os.id = inv.orden_servicio_id
             ORDER BY os.fecha_creacion DESC`
         );

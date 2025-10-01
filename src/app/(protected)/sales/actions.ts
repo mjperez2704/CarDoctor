@@ -27,7 +27,7 @@ export async function getSalesHistory(): Promise<Sale[]> {
                 v.total,
                 v.metodo_pago,
                 CASE 
-                    WHEN v.orden_id IS NOT NULL THEN 'Servicio'
+                    WHEN v.id IS NOT NULL THEN 'Servicio'
                     ELSE 'TPV'
                 END AS tipo_venta
             FROM ventas v
