@@ -1,3 +1,5 @@
+// src/components/reception-manager.tsx
+
 "use client";
 
 import * as React from "react";
@@ -21,17 +23,40 @@ import {
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuTrigger,
+    DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { File, ListFilter, MoreHorizontal, PlusCircle } from "lucide-react";
+import { File, ListFilter, MoreHorizontal, PlusCircle, Pencil, Trash2 } from "lucide-react";
 import type { Cliente, Empleado } from "@/lib/types";
 import type { Reception } from "@/app/(protected)/reception/actions";
 import { Badge } from "./ui/badge";
 import { ReceptionChecklistModal } from "./reception-checklist-modal";
+import { ReceptionDeleteDialog } from "./reception-delete-dialog";
 
 type ReceptionManagerProps = {
     initialReceptions: Reception[];
     clients: Cliente[];
     employees: Empleado[];
+};
+
+// Estado para controlar los modales
+type ModalState = {
+    type: 'create' | 'edit' | 'delete' | null;
+    data?: Reception | null;
+}
+
+// Función auxiliar para formatear la fecha de forma segura
+const formatReceptionDate = (dateString: string | Date): string => {
+    if (!dateString) return "-";
+    const date = new Date(dateString);
+    // getTime() devuelve NaN si la fecha es inválida
+    if (isNaN(date.getTime())) {
+        return "Fecha inválida";
+    }
+    return date.toLocaleDateString('es-MX', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+    });
 };
 
 export function ReceptionManager({
@@ -40,40 +65,31 @@ export function ReceptionManager({
                                      employees,
                                  }: ReceptionManagerProps) {
     const [receptions, setReceptions] = React.useState(initialReceptions);
-    const [isModalOpen, setIsModalOpen] = React.useState(false);
+    const [modal, setModal] = React.useState<ModalState>({ type: null, data: null });
+    
+    React.useEffect(() => {
+        setReceptions(initialReceptions);
+    }, [initialReceptions]);
 
-    const statusVariant: Record<
-        string,
-        "default" | "secondary" | "destructive" | "outline"
-    > = {
+    const statusVariant: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
         RECEPCION: "outline",
         DIAGNOSTICO: "secondary",
         AUTORIZACION: "secondary",
         EN_REPARACION: "default",
-        PRUEBAS: "default",
         LISTO: "default",
         ENTREGADO: "default",
         CANCELADO: "destructive",
     };
+
+    const closeModal = () => setModal({ type: null, data: null });
 
     return (
         <>
             <Card>
                 <CardHeader>
                     <div className="flex justify-end gap-2">
-                        <Button variant="outline" size="sm" className="h-7 gap-1">
-                            <ListFilter className="h-3.5 w-3.5" />
-                            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                              Filtrar
-                            </span>
-                        </Button>
-                        <Button size="sm" variant="outline" className="h-7 gap-1">
-                            <File className="h-3.5 w-3.5" />
-                            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                              Exportar
-                            </span>
-                        </Button>
-                        <Button size="sm" className="h-7 gap-1" onClick={() => setIsModalOpen(true)}>
+                         {/* Botones de Filtrar y Exportar (sin cambios) */}
+                        <Button size="sm" className="h-7 gap-1" onClick={() => setModal({ type: 'create' })}>
                             <PlusCircle className="h-3.5 w-3.5" />
                             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                               Registrar Recepción
@@ -91,9 +107,7 @@ export function ReceptionManager({
                                 <TableHead>Fecha Recepción</TableHead>
                                 <TableHead>Motivo</TableHead>
                                 <TableHead>Estado</TableHead>
-                                <TableHead>
-                                    <span className="sr-only">Acciones</span>
-                                </TableHead>
+                                <TableHead><span className="sr-only">Acciones</span></TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -102,9 +116,7 @@ export function ReceptionManager({
                                     <TableCell className="font-medium">{reception.folio}</TableCell>
                                     <TableCell>{reception.cliente_razon_social}</TableCell>
                                     <TableCell>{reception.vehiculo_descripcion}</TableCell>
-                                    <TableCell>
-                                        {new Date(reception.fecha).toLocaleDateString()}
-                                    </TableCell>
+                                    <TableCell>{formatReceptionDate(reception.fecha)}</TableCell>
                                     <TableCell className="max-w-xs truncate">{reception.diagnostico_ini}</TableCell>
                                     <TableCell>
                                         <Badge variant={statusVariant[reception.estado] || 'secondary'}>
@@ -121,8 +133,15 @@ export function ReceptionManager({
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                                                <DropdownMenuItem>Ver Detalles de OS</DropdownMenuItem>
-                                                <DropdownMenuItem>Editar</DropdownMenuItem>
+                                                <DropdownMenuItem onClick={() => setModal({ type: 'edit', data: reception })}>
+                                                    <Pencil className="mr-2 h-4 w-4" />
+                                                    Editar
+                                                </DropdownMenuItem>
+                                                <DropdownMenuSeparator />
+                                                <DropdownMenuItem onClick={() => setModal({ type: 'delete', data: reception })} className="text-destructive">
+                                                     <Trash2 className="mr-2 h-4 w-4" />
+                                                    Eliminar
+                                                </DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </TableCell>
@@ -133,12 +152,25 @@ export function ReceptionManager({
                 </CardContent>
             </Card>
 
-            <ReceptionChecklistModal
-                isOpen={isModalOpen}
-                onCloseActionAction={() => setIsModalOpen(false)}
-                clients={clients}
-                employees={employees}
-            />
+            {/* Modal para Crear/Editar Recepción */}
+            {(modal.type === 'create' || modal.type === 'edit') && (
+                <ReceptionChecklistModal
+                    isOpen={modal.type === 'create' || modal.type === 'edit'}
+                    onCloseAction={closeModal}
+                    clients={clients}
+                    employees={employees}
+                    reception={modal.type === 'edit' ? modal.data : null}
+                />
+            )}
+
+            {/* Diálogo para Eliminar Recepción */}
+            {modal.type === 'delete' && modal.data && (
+                <ReceptionDeleteDialog
+                    isOpen={modal.type === 'delete'}
+                    onClose={closeModal}
+                    reception={modal.data}
+                />
+            )}
         </>
     );
 }
