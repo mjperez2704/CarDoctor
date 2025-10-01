@@ -10,7 +10,7 @@ import { z } from 'zod';
 export interface Reception extends RowDataPacket {
     id: number;
     folio: string;
-    fecha: string; // Se mantiene como fecha para el frontend
+    fecha_creacion: string; // Se mantiene como fecha para el frontend
     cliente_id?: number;
     cliente_razon_social: string;
     vehiculo_id?: number;
@@ -31,11 +31,11 @@ export async function getReceptions(): Promise<Reception[]> {
                 os.id, 
                 os.folio, 
                 os.fecha_creacion,
-                c.razon_social as cliente_razon_social, 
+                c.razon_social, 
                 CONCAT(m.nombre, ' ', mo.nombre, ' ', v.anio) as vehiculo_descripcion, 
                 os.diagnostico_ini,
                 os.estado,
-                os.kilometraje,
+                v.kilometraje,
                 inv.checklist_data
             FROM ordenes_servicio os
             JOIN clientes c ON os.cliente_id = c.id
